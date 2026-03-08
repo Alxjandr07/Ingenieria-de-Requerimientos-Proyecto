@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIGRAT — Sistema de Gestión de Transporte Interprovincial</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-950: #03071e;
+    --blue-900: #041633;
+    --blue-800: #062a5e;
+    --blue-700: #0a3d8f;
+    --blue-600: #1358c4;
+    --blue-500: #1e72f0;
+    --blue-400: #4d94ff;
+    --blue-300: #7db3ff;
+    --blue-100: #dbeafe;
+    --accent: #00e5ff;
+    --accent2: #f0b429;
+    --danger: #ff4d6d;
+    --success: #00c896;
+    --bg: #04111f;
+    --surface: #071c2e;
+    --surface2: #0a2540;
+    --border: rgba(30, 114, 240, 0.18);
+    --text: #e8f1ff;
+    --text-muted: #7a9abf;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed; top: 0; left: 0;
+    width: 260px; height: 100vh;
+    background: linear-gradient(180deg, #051626 0%, #041122 100%);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    z-index: 100;
+    overflow: hidden;
+  }
+  .sidebar::before {
+    content:''; position:absolute; top:-80px; left:-80px;
+    width:300px; height:300px;
+    background: radial-gradient(circle, rgba(30,114,240,.15) 0%, transparent 70%);
+    pointer-events:none;
+  }
+
+  .logo {
+    padding: 28px 24px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-tag {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px; font-weight: 800;
+    letter-spacing: -.5px;
+    background: linear-gradient(120deg, #fff 0%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .logo-sub {
+    font-size: 10px; color: var(--text-muted);
+    letter-spacing: 1.5px; text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .nav { flex: 1; padding: 18px 12px; overflow-y: auto; }
+  .nav-section { margin-bottom: 22px; }
+  .nav-label {
+    font-size: 9px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--text-muted);
+    padding: 0 12px; margin-bottom: 8px;
+  }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px; border-radius: 10px;
+    cursor: pointer; transition: all .2s;
+    color: var(--text-muted); font-size: 14px; font-weight: 500;
+    position: relative;
+  }
+  .nav-item:hover { background: rgba(30,114,240,.1); color: var(--text); }
+  .nav-item.active {
+    background: linear-gradient(135deg, rgba(30,114,240,.25), rgba(0,229,255,.08));
+    color: #fff;
+    border: 1px solid rgba(30,114,240,.3);
+    box-shadow: 0 2px 12px rgba(30,114,240,.15);
+  }
+  .nav-item.active::before {
+    content:''; position:absolute; left:0; top:20%; height:60%; width:3px;
+    background: var(--accent); border-radius: 0 3px 3px 0;
+  }
+  .nav-icon { font-size: 18px; width: 22px; text-align: center; }
+  .nav-badge {
+    margin-left: auto; background: var(--danger);
+    color: #fff; font-size: 10px; font-weight: 700;
+    padding: 1px 6px; border-radius: 20px;
+  }
+
+  .ai-badge {
+    margin: 0 12px 20px;
+    background: linear-gradient(135deg, rgba(0,229,255,.12), rgba(30,114,240,.08));
+    border: 1px solid rgba(0,229,255,.2);
+    border-radius: 12px; padding: 12px 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .ai-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s infinite;
+  }
+  .ai-text { font-size: 12px; color: var(--accent); font-weight: 500; }
+
+  /* MAIN */
+  .main {
+    margin-left: 260px;
+    min-height: 100vh;
+    background: var(--bg);
+  }
+
+  /* TOPBAR */
+  .topbar {
+    height: 64px;
+    background: rgba(4,17,31,.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px; font-weight: 700;
+    color: #fff;
+  }
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  .search-bar {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 14px; color: var(--text-muted); font-size: 13px;
+    width: 200px;
+  }
+  .btn-notif {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--surface2); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px; position: relative;
+  }
+  .btn-notif .dot { position: absolute; top: 7px; right: 7px;
+    width: 7px; height: 7px; background: var(--danger); border-radius: 50%; }
+  .avatar {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--blue-600), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #fff; cursor: pointer;
+  }
+
+  /* CONTENT */
+  .content { padding: 32px; }
+
+  /* PAGE SECTIONS - show/hide */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* DASHBOARD PAGE */
+  .greeting { margin-bottom: 28px; }
+  .greeting h1 { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: #fff; }
+  .greeting p { color: var(--text-muted); font-size: 14px; margin-top: 4px; }
+
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-bottom: 28px; }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 22px 24px;
+    position: relative; overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,.3); }
+  .stat-card::after {
+    content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
+  }
+  .stat-card.c1::after { background: linear-gradient(90deg, var(--blue-500), var(--accent)); }
+  .stat-card.c2::after { background: linear-gradient(90deg, var(--success), #00e5b0); }
+  .stat-card.c3::after { background: linear-gradient(90deg, var(--accent2), #ffd166); }
+  .stat-card.c4::after { background: linear-gradient(90deg, var(--danger), #ff85a1); }
+  .stat-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: #fff; }
+  .stat-change { font-size: 12px; margin-top: 6px; }
+  .stat-change.up { color: var(--success); }
+  .stat-change.dn { color: var(--danger); }
+  .stat-icon { position: absolute; top: 18px; right: 18px; font-size: 28px; opacity: .18; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; margin-bottom: 28px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden;
+  }
+  .card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 24px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: #fff; }
+  .chip {
+    font-size: 11px; padding: 4px 10px; border-radius: 20px;
+    background: rgba(30,114,240,.15); color: var(--blue-300);
+    border: 1px solid rgba(30,114,240,.25);
+  }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    padding: 10px 16px; font-size: 11px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text-muted); text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr { border-bottom: 1px solid rgba(30,114,240,.07); transition: background .15s; }
+  tbody tr:hover { background: rgba(30,114,240,.06); }
+  tbody td { padding: 12px 16px; font-size: 13px; color: var(--text); }
+  .status {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+  .status.en-ruta { background: rgba(0,200,150,.12); color: var(--success); border: 1px solid rgba(0,200,150,.25); }
+  .status.pendiente { background: rgba(240,180,41,.12); color: var(--accent2); border: 1px solid rgba(240,180,41,.25); }
+  .status.alerta { background: rgba(255,77,109,.12); color: var(--danger); border: 1px solid rgba(255,77,109,.25); }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  /* AI PANEL */
+  .ai-panel { padding: 20px 24px; }
+  .ai-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .ai-insight {
+    background: rgba(0,229,255,.05); border: 1px solid rgba(0,229,255,.15);
+    border-radius: 10px; padding: 12px 14px; margin-bottom: 10px;
+    font-size: 12.5px; color: var(--text-muted); line-height: 1.5;
+  }
+  .ai-insight strong { color: var(--accent); }
+
+  /* MAP PLACEHOLDER */
+  .map-placeholder {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px; height: 220px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; margin-bottom: 28px;
+    position: relative; overflow: hidden;
+  }
+  .map-placeholder::before {
+    content:''; position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 30% 50%, rgba(30,114,240,.12) 0%, transparent 60%),
+      radial-gradient(circle at 70% 30%, rgba(0,229,255,.08) 0%, transparent 50%);
+  }
+  .map-grid {
+    position: absolute; inset: 0; opacity: .07;
+    background-image: linear-gradient(var(--blue-500) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--blue-500) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .map-label { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text-muted); z-index:1; }
+  .map-sub { font-size: 12px; color: var(--text-muted); opacity: .6; z-index:1; }
+
+  /* ROUTE DOTS */
+  .route-dots {
+    display: flex; align-items: center; gap: 0; z-index:1;
+  }
+  .rdot {
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid var(--blue-400);
+    background: var(--blue-700);
+    position: relative;
+  }
+  .rdot.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 12px var(--accent); }
+  .rline { width: 40px; height: 2px; background: linear-gradient(90deg, var(--blue-700), var(--blue-500)); }
+
+  /* SECTION GENERIC */
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #fff; }
+  .btn {
+    padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: none; transition: all .2s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--blue-600), var(--blue-500));
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(30,114,240,.35);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(30,114,240,.45); }
+  .btn-ghost {
+    background: var(--surface2); color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  /* USERS GRID */
+  .users-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .user-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    transition: all .2s;
+  }
+  .user-card:hover { border-color: rgba(30,114,240,.4); transform: translateY(-2px); }
+  .user-avatar {
+    width: 52px; height: 52px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--blue-700), var(--blue-500));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: #fff;
+  }
+  .user-name { font-weight: 600; font-size: 14px; color: #fff; text-align: center; }
+  .user-role { font-size: 11px; color: var(--text-muted); }
+  .user-status { font-size: 11px; }
+
+  /* SCHEDULE */
+  .schedule-grid { display: grid; gap: 12px; }
+  .schedule-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+    display: grid; grid-template-columns: 80px 1fr auto;
+    align-items: center; gap: 16px;
+    transition: all .2s;
+  }
+  .schedule-item:hover { border-color: rgba(30,114,240,.35); }
+  .sched-time { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--blue-400); }
+  .sched-route { font-weight: 600; color: #fff; font-size: 14px; }
+  .sched-detail { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .sched-progress { width: 100px; }
+  .progress-bar { height: 6px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--blue-600), var(--accent)); }
+
+  /* SECURITY */
+  .security-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .alert-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 18px 20px;
+  }
+  .alert-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .alert-icon { font-size: 22px; }
+  .alert-title { font-weight: 600; font-size: 14px; color: #fff; }
+  .alert-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .alert-card.danger { border-color: rgba(255,77,109,.3); }
+  .alert-card.warn { border-color: rgba(240,180,41,.25); }
+  .alert-card.ok { border-color: rgba(0,200,150,.25); }
+
+  /* ANIMATIONS */
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:none;} }
+  .page.active { animation: fadeIn .3s ease; }
+
+  /* Responsive mini */
+  @media(max-width:1100px) {
+    .stats-grid { grid-template-columns: repeat(2,1fr); }
+    .two-col { grid-template-columns: 1fr; }
+    .users-grid { grid-template-columns: repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-tag">SIGRAT</div>
+    <div class="logo-sub">Gestión de Transporte Interprovincial</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">
+      <div class="nav-label">Principal</div>
+      <div class="nav-item active" onclick="showPage('dashboard',this)">
+        <span class="nav-icon">🏠</span> Dashboard
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Operaciones</div>
+      <div class="nav-item" onclick="showPage('rutas',this)">
+        <span class="nav-icon">🗺️</span> Rutas
+      </div>
+      <div class="nav-item" onclick="showPage('horarios',this)">
+        <span class="nav-icon">🕐</span> Horarios
+      </div>
+      <div class="nav-item" onclick="showPage('flota',this)">
+        <span class="nav-icon">🚌</span> Flota
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Administración</div>
+      <div class="nav-item" onclick="showPage('usuarios',this)">
+        <span class="nav-icon">👥</span> Usuarios
+      </div>
+      <div class="nav-item" onclick="showPage('reportes',this)">
+        <span class="nav-icon">📊</span> Reportes
+      </div>
+      <div class="nav-item" onclick="showPage('finanzas',this)">
+        <span class="nav-icon">💰</span> Finanzas
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Seguridad</div>
+      <div class="nav-item" onclick="showPage('seguridad',this)">
+        <span class="nav-icon">🛡️</span> Seguridad
+        <span class="nav-badge">3</span>
+      </div>
+      <div class="nav-item" onclick="showPage('ia',this)">
+        <span class="nav-icon">🤖</span> Módulo IA
+      </div>
+    </div>
+  </nav>
+  <div class="ai-badge">
+    <div class="ai-dot"></div>
+    <div class="ai-text">IA Activa — Monitoreo 24/7</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbarTitle">Dashboard Principal</div>
+    <div class="topbar-right">
+      <div class="search-bar">🔍 Buscar en el sistema...</div>
+      <div class="btn-notif">🔔<span class="dot"></span></div>
+      <div class="avatar">AM</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ===== DASHBOARD ===== -->
+    <div id="dashboard" class="page active">
+      <div class="greeting">
+        <h1>Bienvenido, Admin 👋</h1>
+        <p>Miércoles, 25 de febrero de 2026 · Resumen operativo del día</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card c1">
+          <div class="stat-label">Unidades Activas</div>
+          <div class="stat-num">47</div>
+          <div class="stat-change up">↑ 4 desde ayer</div>
+          <div class="stat-icon">🚌</div>
+        </div>
+        <div class="stat-card c2">
+          <div class="stat-label">Viajes Completados</div>
+          <div class="stat-num">128</div>
+          <div class="stat-change up">↑ 12% esta semana</div>
+          <div class="stat-icon">✅</div>
+        </div>
+        <div class="stat-card c3">
+          <div class="stat-label">Pasajeros Hoy</div>
+          <div class="stat-num">3,241</div>
+          <div class="stat-change up">↑ 8% vs ayer</div>
+          <div class="stat-icon">👤</div>
+        </div>
+        <div class="stat-card c4">
+          <div class="stat-label">Alertas Activas</div>
+          <div class="stat-num">3</div>
+          <div class="stat-change dn">⚠ Revisión requerida</div>
+          <div class="stat-icon">🚨</div>
+        </div>
+      </div>
+
+      <div class="map-placeholder">
+        <div class="map-grid"></div>
+        <div class="route-dots">
+          <div class="rdot active"></div><div class="rline"></div>
+          <div class="rdot"></div><div class="rline"></div>
+          <div class="rdot active"></div><div class="rline"></div>
+          <div class="rdot"></div><div class="rline"></div>
+          <div class="rdot active"></div>
+        </div>
+        <div class="map-label">🗺️ Mapa de Rastreo en Tiempo Real</div>
+        <div class="map-sub">GPS integrado · 47 unidades monitoreadas</div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Viajes en Curso</div>
+            <div class="chip">En vivo</div>
+          </div>
+          <table>
+            <thead><tr>
+              <th>Unidad</th><th>Ruta</th><th>Chofer</th><th>Estado</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>#U-042</td><td>Quito → Guayaquil</td><td>R. Morales</td><td><span class="status en-ruta"><span class="status-dot"></span>En ruta</span></td></tr>
+              <tr><td>#U-018</td><td>Cuenca → Quito</td><td>M. Salazar</td><td><span class="status en-ruta"><span class="status-dot"></span>En ruta</span></td></tr>
+              <tr><td>#U-031</td><td>Loja → Machala</td><td>P. Torres</td><td><span class="status pendiente"><span class="status-dot"></span>Pendiente</span></td></tr>
+              <tr><td>#U-007</td><td>Ambato → Riobamba</td><td>C. Vega</td><td><span class="status alerta"><span class="status-dot"></span>Alerta</span></td></tr>
+              <tr><td>#U-055</td><td>Esmeraldas → Quito</td><td>J. Ríos</td><td><span class="status en-ruta"><span class="status-dot"></span>En ruta</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🤖 Análisis IA</div>
+          </div>
+          <div class="ai-panel">
+            <div class="ai-insight">
+              <strong>Predicción de demanda:</strong> Se espera un incremento del 23% en la ruta Quito–Guayaquil este fin de semana.
+            </div>
+            <div class="ai-insight">
+              <strong>Alerta de mantenimiento:</strong> Unidad #U-007 requiere revisión de frenos en las próximas 48h según telemetría.
+            </div>
+            <div class="ai-insight">
+              <strong>Optimización de ruta:</strong> La ruta Cuenca→Quito puede reducir 18 min evitando El Tambo (tráfico detectado).
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== USUARIOS ===== -->
+    <div id="usuarios" class="page">
+      <div class="section-header">
+        <div class="section-title">Gestión de Usuarios</div>
+        <button class="btn btn-primary">+ Nuevo Usuario</button>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:20px;">
+        <button class="btn btn-ghost">Todos</button>
+        <button class="btn btn-ghost">Conductores</button>
+        <button class="btn btn-ghost">Administrativos</button>
+        <button class="btn btn-ghost">Supervisores</button>
+      </div>
+      <div class="users-grid">
+        <div class="user-card">
+          <div class="user-avatar">RM</div>
+          <div class="user-name">Roberto Morales</div>
+          <div class="user-role">Conductor · 8 años</div>
+          <span class="status en-ruta"><span class="status-dot"></span>Activo</span>
+        </div>
+        <div class="user-card">
+          <div class="user-avatar">MS</div>
+          <div class="user-name">María Salazar</div>
+          <div class="user-role">Conductora · 5 años</div>
+          <span class="status en-ruta"><span class="status-dot"></span>Activo</span>
+        </div>
+        <div class="user-card">
+          <div class="user-avatar">JL</div>
+          <div class="user-name">José López</div>
+          <div class="user-role">Supervisor · 12 años</div>
+          <span class="status en-ruta"><span class="status-dot"></span>Activo</span>
+        </div>
+        <div class="user-card">
+          <div class="user-avatar">CV</div>
+          <div class="user-name">Carmen Vega</div>
+          <div class="user-role">Administradora</div>
+          <span class="status en-ruta"><span class="status-dot"></span>Activo</span>
+        </div>
+        <div class="user-card">
+          <div class="user-avatar">PT</div>
+          <div class="user-name">Pedro Torres</div>
+          <div class="user-role">Conductor · 3 años</div>
+          <span class="status pendiente"><span class="status-dot"></span>Vacaciones</span>
+        </div>
+        <div class="user-card">
+          <div class="user-avatar">AG</div>
+          <div class="user-name">Ana Guerrero</div>
+          <div class="user-role">Técnica Mantenimiento</div>
+          <span class="status en-ruta"><span class="status-dot"></span>Activo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== RUTAS ===== -->
+    <div id="rutas" class="page">
+      <div class="section-header">
+        <div class="section-title">Gestión de Rutas</div>
+        <button class="btn btn-primary">+ Nueva Ruta</button>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Rutas Registradas</div>
+          <div class="chip">12 activas</div>
+        </div>
+        <table>
+          <thead><tr><th>Código</th><th>Origen</th><th>Destino</th><th>Distancia</th><th>Duración Est.</th><th>Frecuencia</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>#R-01</td><td>Quito</td><td>Guayaquil</td><td>420 km</td><td>8h</td><td>Cada 2h</td><td><span class="status en-ruta"><span class="status-dot"></span>Activa</span></td></tr>
+            <tr><td>#R-02</td><td>Cuenca</td><td>Quito</td><td>470 km</td><td>9h</td><td>4 diarios</td><td><span class="status en-ruta"><span class="status-dot"></span>Activa</span></td></tr>
+            <tr><td>#R-03</td><td>Loja</td><td>Machala</td><td>210 km</td><td>4h</td><td>6 diarios</td><td><span class="status en-ruta"><span class="status-dot"></span>Activa</span></td></tr>
+            <tr><td>#R-04</td><td>Ambato</td><td>Riobamba</td><td>58 km</td><td>1h 30m</td><td>Cada hora</td><td><span class="status alerta"><span class="status-dot"></span>Con alerta</span></td></tr>
+            <tr><td>#R-05</td><td>Esmeraldas</td><td>Quito</td><td>320 km</td><td>6h</td><td>3 diarios</td><td><span class="status pendiente"><span class="status-dot"></span>Revisión</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== HORARIOS ===== -->
+    <div id="horarios" class="page">
+      <div class="section-header">
+        <div class="section-title">Gestión de Horarios</div>
+        <button class="btn btn-primary">+ Programar Salida</button>
+      </div>
+      <div class="schedule-grid">
+        <div class="schedule-item">
+          <div class="sched-time">06:00</div>
+          <div>
+            <div class="sched-route">Quito → Guayaquil</div>
+            <div class="sched-detail">Unidad #U-042 · Roberto Morales · 38/40 pasajeros</div>
+          </div>
+          <div class="sched-progress">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;text-align:right;">68%</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:68%"></div></div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="sched-time">07:30</div>
+          <div>
+            <div class="sched-route">Cuenca → Quito</div>
+            <div class="sched-detail">Unidad #U-018 · María Salazar · 40/40 pasajeros</div>
+          </div>
+          <div class="sched-progress">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;text-align:right;">45%</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="sched-time">09:00</div>
+          <div>
+            <div class="sched-route">Loja → Machala</div>
+            <div class="sched-detail">Unidad #U-031 · Pedro Torres · 22/40 pasajeros</div>
+          </div>
+          <div class="sched-progress">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;text-align:right;">12%</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:12%"></div></div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="sched-time">10:15</div>
+          <div>
+            <div class="sched-route">Ambato → Riobamba</div>
+            <div class="sched-detail">Unidad #U-007 · Carlos Vega · Programado</div>
+          </div>
+          <div class="sched-progress">
+            <div style="font-size:11px;color:var(--accent2);margin-bottom:4px;text-align:right;">Pendiente</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="schedule-item">
+          <div class="sched-time">12:00</div>
+          <div>
+            <div class="sched-route">Esmeraldas → Quito</div>
+            <div class="sched-detail">Unidad #U-055 · Jorge Ríos · 35/40 pasajeros</div>
+          </div>
+          <div class="sched-progress">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;text-align:right;">22%</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:22%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SEGURIDAD ===== -->
+    <div id="seguridad" class="page">
+      <div class="section-header">
+        <div class="section-title">Panel de Seguridad</div>
+        <span class="status alerta"><span class="status-dot"></span>3 alertas activas</span>
+      </div>
+      <div class="security-grid">
+        <div class="alert-card danger">
+          <div class="alert-header"><span class="alert-icon">🚨</span><div class="alert-title">Exceso de Velocidad</div></div>
+          <div class="alert-desc">Unidad <strong>#U-007</strong> detectada a 95 km/h en zona de 60 km/h. Ruta Ambato–Riobamba. Conductor: Carlos Vega. <strong>Hace 12 min.</strong></div>
+        </div>
+        <div class="alert-card warn">
+          <div class="alert-header"><span class="alert-icon">⚠️</span><div class="alert-title">Alerta de Fatiga</div></div>
+          <div class="alert-desc">Sistema IA detectó posibles signos de fatiga en conductor de unidad <strong>#U-042</strong>. Se recomienda parada de descanso en próxima estación.</div>
+        </div>
+        <div class="alert-card warn">
+          <div class="alert-header"><span class="alert-icon">🔧</span><div class="alert-title">Mantenimiento Vencido</div></div>
+          <div class="alert-desc">Unidad <strong>#U-031</strong> supera el kilometraje de mantenimiento preventivo en 2,300 km. Programar revisión urgente.</div>
+        </div>
+        <div class="alert-card ok">
+          <div class="alert-header"><span class="alert-icon">✅</span><div class="alert-title">Sistema GPS Activo</div></div>
+          <div class="alert-desc">47 de 52 unidades con GPS activo y funcionando. 5 unidades en mantenimiento sin cobertura. Última sincronización: hace 2 min.</div>
+        </div>
+        <div class="alert-card ok">
+          <div class="alert-header"><span class="alert-icon">🔐</span><div class="alert-title">Accesos del Sistema</div></div>
+          <div class="alert-desc">24 usuarios activos hoy. Sin intentos de acceso no autorizado en las últimas 24 horas. Último login: Admin — 08:42 AM.</div>
+        </div>
+        <div class="alert-card ok">
+          <div class="alert-header"><span class="alert-icon">📹</span><div class="alert-title">Cámaras a Bordo</div></div>
+          <div class="alert-desc">Sistema de videovigilancia activo en 44/47 unidades en ruta. Grabación en la nube habilitada. Retención: 30 días.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FLOTA ===== -->
+    <div id="flota" class="page">
+      <div class="section-header">
+        <div class="section-title">Gestión de Flota</div>
+        <button class="btn btn-primary">+ Registrar Unidad</button>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Unidades Registradas</div><div class="chip">52 total</div></div>
+        <table>
+          <thead><tr><th>Unidad</th><th>Placa</th><th>Modelo</th><th>Año</th><th>KM Recorridos</th><th>Último Mant.</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>#U-007</td><td>PBK-3421</td><td>Mercedes Sprinter</td><td>2020</td><td>148,320 km</td><td>hace 90 días</td><td><span class="status alerta"><span class="status-dot"></span>Alerta</span></td></tr>
+            <tr><td>#U-018</td><td>AZR-0912</td><td>Scania K360</td><td>2022</td><td>87,400 km</td><td>hace 15 días</td><td><span class="status en-ruta"><span class="status-dot"></span>Óptimo</span></td></tr>
+            <tr><td>#U-031</td><td>CGT-5566</td><td>Volvo B11R</td><td>2019</td><td>212,100 km</td><td>hace 62 días</td><td><span class="status pendiente"><span class="status-dot"></span>Revisión</span></td></tr>
+            <tr><td>#U-042</td><td>LKP-7734</td><td>Mercedes-Benz 0500</td><td>2021</td><td>103,800 km</td><td>hace 8 días</td><td><span class="status en-ruta"><span class="status-dot"></span>Óptimo</span></td></tr>
+            <tr><td>#U-055</td><td>MRT-2201</td><td>Scania K410</td><td>2023</td><td>54,200 km</td><td>hace 5 días</td><td><span class="status en-ruta"><span class="status-dot"></span>Óptimo</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== REPORTES ===== -->
+    <div id="reportes" class="page">
+      <div class="section-header"><div class="section-title">Reportes y Estadísticas</div>
+        <button class="btn btn-primary">⬇ Exportar PDF</button>
+      </div>
+      <div class="stats-grid" style="margin-bottom:24px;">
+        <div class="stat-card c1"><div class="stat-label">Ingresos Feb.</div><div class="stat-num">$84K</div><div class="stat-change up">↑ 9% vs enero</div><div class="stat-icon">💵</div></div>
+        <div class="stat-card c2"><div class="stat-label">Viajes mes</div><div class="stat-num">2,318</div><div class="stat-change up">↑ 7% vs enero</div><div class="stat-icon">🚌</div></div>
+        <div class="stat-card c3"><div class="stat-label">Ocupación prom.</div><div class="stat-num">87%</div><div class="stat-change up">↑ 3%</div><div class="stat-icon">📈</div></div>
+        <div class="stat-card c4"><div class="stat-label">Incidentes</div><div class="stat-num">5</div><div class="stat-change dn">↓ 2 vs enero</div><div class="stat-icon">📋</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Rutas más Rentables — Febrero</div></div>
+        <table>
+          <thead><tr><th>Ruta</th><th>Viajes</th><th>Pasajeros</th><th>Ingresos</th><th>Ocupación</th></tr></thead>
+          <tbody>
+            <tr><td>Quito → Guayaquil</td><td>624</td><td>23,480</td><td>$32,400</td><td><span class="status en-ruta"><span class="status-dot"></span>93%</span></td></tr>
+            <tr><td>Cuenca → Quito</td><td>420</td><td>15,200</td><td>$21,800</td><td><span class="status en-ruta"><span class="status-dot"></span>88%</span></td></tr>
+            <tr><td>Loja → Machala</td><td>380</td><td>12,100</td><td>$14,200</td><td><span class="status pendiente"><span class="status-dot"></span>75%</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== FINANZAS ===== -->
+    <div id="finanzas" class="page">
+      <div class="section-header"><div class="section-title">Gestión Financiera</div>
+        <button class="btn btn-primary">+ Nuevo Registro</button>
+      </div>
+      <div class="stats-grid" style="margin-bottom:24px;">
+        <div class="stat-card c1"><div class="stat-label">Ingresos Hoy</div><div class="stat-num">$3.2K</div><div class="stat-change up">↑ 11% vs ayer</div></div>
+        <div class="stat-card c2"><div class="stat-label">Gastos Operativos</div><div class="stat-num">$1.1K</div><div class="stat-change up">Dentro del presupuesto</div></div>
+        <div class="stat-card c3"><div class="stat-label">Balance Neto</div><div class="stat-num">$2.1K</div><div class="stat-change up">↑ Margen 65%</div></div>
+        <div class="stat-card c4"><div class="stat-label">Mantenimiento</div><div class="stat-num">$480</div><div class="stat-change dn">↑ 8% vs promedio</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Últimas Transacciones</div></div>
+        <table>
+          <thead><tr><th>Fecha</th><th>Descripción</th><th>Tipo</th><th>Monto</th></tr></thead>
+          <tbody>
+            <tr><td>25/02/26</td><td>Recaudación rutas matutinas</td><td><span class="status en-ruta">Ingreso</span></td><td>+$1,840</td></tr>
+            <tr><td>25/02/26</td><td>Combustible flota norte</td><td><span class="status alerta">Gasto</span></td><td>-$620</td></tr>
+            <tr><td>24/02/26</td><td>Mantenimiento #U-031</td><td><span class="status alerta">Gasto</span></td><td>-$380</td></tr>
+            <tr><td>24/02/26</td><td>Recaudación rutas vespertinas</td><td><span class="status en-ruta">Ingreso</span></td><td>+$2,100</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== IA ===== -->
+    <div id="ia" class="page">
+      <div class="section-header"><div class="section-title">Módulo de Inteligencia Artificial</div>
+        <div class="ai-dot" style="width:10px;height:10px;"></div>
+      </div>
+      <div class="two-col">
+        <div>
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-header"><div class="card-title">🤖 Predicciones Activas</div></div>
+            <div class="ai-panel">
+              <div class="ai-insight"><strong>Demanda del fin de semana:</strong> Se proyecta aumento del 28% en rutas Quito–Guayaquil y Cuenca–Quito. Se recomienda activar 6 unidades adicionales.</div>
+              <div class="ai-insight"><strong>Optimización de horarios:</strong> Retrasar salida #R-03 de 09:00 a 09:30 reduciría tiempo de espera promedio en 18 minutos.</div>
+              <div class="ai-insight"><strong>Mantenimiento predictivo:</strong> Probabilidad del 78% de falla en sistema de frenos de #U-007 en los próximos 5 días según datos de telemetría.</div>
+              <div class="ai-insight"><strong>Rutas alternativas:</strong> Congestión detectada en Panamericana Sur km 42. Rutas #R-01 y #R-02 redirigidas automáticamente (+12 min).</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">📊 Métricas IA</div></div>
+          <div class="ai-panel">
+            <div style="display:grid;gap:14px;">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;"><span style="color:var(--text-muted)">Precisión predicciones</span><span style="color:var(--accent);font-weight:700;">94.2%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:94%"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;"><span style="color:var(--text-muted)">Alertas procesadas hoy</span><span style="color:#fff;font-weight:700;">127</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:70%;background:linear-gradient(90deg,var(--success),#00e5b0)"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;"><span style="color:var(--text-muted)">Modelos activos</span><span style="color:var(--accent2);font-weight:700;">5/5</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--accent2),#ffd166)"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<script>
+const titles = {
+  dashboard: 'Dashboard Principal', usuarios: 'Gestión de Usuarios',
+  rutas: 'Gestión de Rutas', horarios: 'Gestión de Horarios',
+  seguridad: 'Panel de Seguridad', flota: 'Gestión de Flota',
+  reportes: 'Reportes y Estadísticas', finanzas: 'Gestión Financiera',
+  ia: 'Módulo de Inteligencia Artificial'
+};
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('topbarTitle').textContent = titles[id];
+}
+</script>
+</body>
+</html>
