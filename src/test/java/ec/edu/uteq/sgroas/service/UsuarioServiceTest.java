@@ -85,6 +85,19 @@ class UsuarioServiceTest {
     }
 
     @Test
+    void listarConBusquedaEnBlancoDebeUsarFindByActivoTrue() {
+        PageRequest pageable = PageRequest.of(0, 10);
+        when(usuarioRepository.findByActivoTrue(pageable))
+                .thenReturn(new PageImpl<>(List.of(usuarioEjemplo())));
+
+        Page<UsuarioResponse> pagina = usuarioService.listar("   ", pageable);
+
+        assertEquals(1, pagina.getTotalElements());
+        verify(usuarioRepository).findByActivoTrue(pageable);
+        verify(usuarioRepository, never()).buscarActivos(any(), any());
+    }
+
+    @Test
     void buscarPorIdDebeRetornarUsuario() {
         when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuarioEjemplo()));
 
@@ -194,6 +207,20 @@ class UsuarioServiceTest {
 
         UsuarioRequest request = new UsuarioRequest(
                 "Carlos Mendoza", "carlos@sgroas.com", null, "ROLE_ADMIN");
+
+        UsuarioResponse response = usuarioService.actualizar(1L, request);
+
+        assertEquals("Carlos Mendoza", response.nombre());
+        verify(passwordEncoder, never()).encode(any());
+    }
+
+    @Test
+    void actualizarConPasswordEnBlancoDebeMantenerPasswordHash() {
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuarioEjemplo()));
+        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuarioEjemplo());
+
+        UsuarioRequest request = new UsuarioRequest(
+                "Carlos Mendoza", "carlos@sgroas.com", "   ", "ROLE_ADMIN");
 
         UsuarioResponse response = usuarioService.actualizar(1L, request);
 
