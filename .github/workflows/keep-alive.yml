@@ -1,0 +1,24 @@
+name: Keep Render alive
+
+# Mantiene despierto el Web Service gratuito de Render haciendo un ping
+# periodico al health check. Evita que Render duerma el servicio y que el
+# siguiente auto-deploy falle por "no open ports detected" (timeout de arranque).
+on:
+  schedule:
+    # Cada 10 minutos (UTC). Ajustable si Render free exige mas frecuencia.
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping health endpoint
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 \
+            https://sgroas-backend.onrender.com/actuator/health)
+          echo "Health code: $code"
+          if [ "$code" != "200" ]; then
+            echo "Render no respondio 200 (codigo $code). Revisar el servicio."
+            exit 0
+          fi

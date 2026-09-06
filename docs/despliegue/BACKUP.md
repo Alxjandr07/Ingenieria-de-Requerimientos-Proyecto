@@ -49,7 +49,7 @@ Get-FileHash backups/sgroas-prod-YYYY-MM-DD.sql.gz -Algorithm SHA256
 
 | Fecha | Backups usados | Destino de prueba | Resultado |
 |---|---|---|---|
-| 2026-08-17 | (planificado) | BD temporal Render | conteos = fuente, health UP |
+| 2026-08-28 | `backups/sgroas-2026-08-28.sql.dump` | contenedor local `sgroas-postgres` (sgroas_db) | dump integrity OK (`pg_restore --list`, 228 TOC, custom/gzip 17.25 MB) |
 
 Pasos:
 1. Crear BD temporal en Render (o local `sgroas_restore_test`).

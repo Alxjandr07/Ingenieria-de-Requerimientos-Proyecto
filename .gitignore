@@ -43,6 +43,11 @@ frontend/dist/
 backend.err
 backend.log
 
+### Database dumps (no subir a git; documentar hash en docs/despliegue/BACKUP.md) ###
+backups/*.dump
+backups/*.sql.gz
+backups/*.sql
+
 ### LaTeX build artifacts (repo structure per Entrega Final guide) ###
 docs/informe-final/*.aux
 docs/informe-final/*.log
