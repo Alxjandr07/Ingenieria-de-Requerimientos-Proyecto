@@ -25,7 +25,7 @@ El umbral declarado es p95~<~200\,ms y error~<~1\,\%.
 \texttt{docs/mediciones/perf/k01-run1.json}, \texttt{k02-run2.json} y
 \texttt{k03-run3.json} (commit \texttt{62bf8fa}), más cinco corridas contra la URL
 pública en \texttt{k04-run1.json}--\texttt{k08-run1.json} y cinco muestras frías en
-\texttt{k04-cold.json}--\texttt{k08-cold.json} (commit \texttt{dea7940}).
+\texttt{k04-cold.json}--\texttt{k08-cold.json} (commit \texttt{9ded2a69}).
 
 \textbf{Descriptiva e IC 95\,\%:} la media de las medias por corrida es
 \textbf{23.01\,ms} (DT 12.44\,ms, EE 7.18\,ms), con IC\,95\,\%
@@ -77,7 +77,7 @@ HttpOnly y BCrypt (factor 10+).
 
 \textbf{ZAP baseline (K3):} el escaneo baseline de OWASP ZAP
 (\texttt{scripts/zap/run-zap.sh}) se ejecutó contra la URL pública
-\texttt{https://sgroas-backend.onrender.com} (commit \texttt{dea7940}). Resultado: 0
+\texttt{https://sgroas-backend.onrender.com} (commit \texttt{ca7f700}). Resultado: 0
 High, 2 Medium (configuración CSP, no vulnerabilidad), 4 Low (cabeceras CORS del
 reverse proxy) e 2 Informational; 63 PASS sobre 8 URLs
 (\texttt{docs/mediciones/sec/zap/RESUMEN.md}).

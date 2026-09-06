@@ -12,16 +12,16 @@ Todo número del informe es re-derivable desde estas fuentes (reglas de oro 6 y 
 |---|---|---|---|
 | Tabla "Configuracion de k6" | `k6/opts.js` | — | `62bf8fa` |
 | Tabla K1 local (corridas k01-k03) | `docs/mediciones/perf/k01-run1.json`, `k02-run2.json`, `k03-run3.json` | `scripts/perf-analysis.py` | `62bf8fa` (datos), `72b919c` (script) |
-| Tabla Render caliente (K4-K8) | `docs/mediciones/perf/k04-run1.json` ... `k08-run1.json` | `scripts/perf-analysis.py` | `dea7940` |
-| Muestras frias Render (K4-K8) | `docs/mediciones/perf/k04-cold.json` ... `k08-cold.json` | `scripts/perf/nonparametric.py` | `dea7940` |
+| Tabla Render caliente (K4-K8) | `docs/mediciones/perf/k04-run1.json` ... `k08-run1.json` | `scripts/perf-analysis.py` | `9ded2a69` |
+| Muestras frias Render (K4-K8) | `docs/mediciones/perf/k04-cold.json` ... `k08-cold.json` | `scripts/perf/nonparametric.py` | `9ded2a69` |
 | Tabla de estadistica agregada (media/DT/IC95) | ídem | `scripts/perf-analysis.py` | `761e5e1` |
 | Fig. "Perfil de percentiles" | ídem | `scripts/gen-figuras.py` → `fig-percentiles-corridas.png` | `cba0e96` |
 | Fig. "p95 por corrida" | ídem | `scripts/gen-figuras.py` → `fig-p95-por-corrida.png` | `cba0e96` |
 | Fig. "Media e IC95" | ídem | `scripts/gen-figuras.py` → `fig-media-ic95.png` | `cba0e96` |
-| Contraste frio vs caliente (Mann-Whitney) | k0X-cold.json + k0X-run1.json | `scripts/perf/nonparametric.py` | `dea7940` |
-| Informe de analisis k6 | `docs/mediciones/perf/ANALISIS-k6.md` | `scripts/perf-analysis.py` | `dea7940` |
+| Contraste frio vs caliente (Mann-Whitney) | k0X-cold.json + k0X-run1.json | `scripts/perf/nonparametric.py` | `9ded2a69` |
+| Informe de analisis k6 | `docs/mediciones/perf/ANALISIS-k6.md` | `scripts/perf-analysis.py` | `9ded2a69` |
 | IC bootstrap (validacion) | `docs/mediciones/perf/ANALISIS-BOOTSTRAP.md` | `scripts/perf-bootstrap.py` → `bootstrap.json` | `683cea3` |
-| RENDER-REPORT.md | `docs/mediciones/perf/k04-k08` | `scripts/perf/nonparametric.py` | `dea7940` |
+| RENDER-REPORT.md | `docs/mediciones/perf/k04-k08` | `scripts/perf/nonparametric.py` | `9ded2a69` |
 
 ## 2. Usabilidad (SUS) — Bloque C.3
 

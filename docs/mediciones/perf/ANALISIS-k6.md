@@ -7,7 +7,7 @@
 Se analizaron dos series de corridas de k6 (50 VUs, 30 s, p95<200 ms). Cada corrida invoca `GET /api/conductores` con autenticacion JWT (cookie HttpOnly + header Bearer). Sobre `http_req_duration (ms)` se calculan media, mediana, percentiles y tasa de error por corrida; entre corridas se calcula la media de las medias con IC 95% mediante t de Student con n = numero de corridas.
 
 - **Serie K1 (local):** 3 corridas contra backend local (commit `62bf8fa`).
-- **Serie Render (K4-K8):** 5 corridas calientes + 5 muestras frias contra `https://sgroas-backend.onrender.com` (commit `dea7940`).
+- **Serie Render (K4-K8):** 5 corridas calientes + 5 muestras frias contra `https://sgroas-backend.onrender.com` (commit `9ded2a69`).
 
 ## Serie K1 — Backend local (n = 3)
 
