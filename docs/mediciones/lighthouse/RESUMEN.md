@@ -1,36 +1,40 @@
 # RESUMEN — Lighthouse (Bloque C.5)
 
-**Herramienta:** Lighthouse 13.4.1 | **Configuración:** perfil móvil, throttling Slow 4G (lighthouserc.js)
+**Herramienta:** Lighthouse 13.4.1 | **URL:** `https://sgroas-backend.onrender.com`  
+**Fecha:** 2026-09-06 | **Motor:** HeadlessChrome
 
 ## Resultados por corrida
 
-| Corrida | Archivo | Performance | Accessibility | Best Practices | SEO |
-|---|---|---|---|---|---|
-| 1 (móvil) | `lhci-20260730-2115.json` | 100 | 95 | 100 | 90 |
-| 2 (móvil) | `lhci-20260730-2117.json` | 100 | 95 | 100 | 90 |
+| Corrida | Perfil | Archivo | Performance | Accessibility | Best Practices | SEO |
+|---|---|---|---|---|---|---|
+| 1 | Móvil | `lh-mobile-1.json` | 79 | 91 | 92 | 90 |
+| 2 | Móvil | `lh-mobile-2.json` | 76 | 91 | 92 | 90 |
+| 3 | Móvil | `lh-mobile-3.json` | 75 | 91 | 92 | 90 |
+| 4 | Escritorio | `lh-desktop-1.json` | 95 | 91 | 92 | 90 |
+| 5 | Escritorio | `lh-desktop-2.json` | 95 | 91 | 92 | 90 |
+| 6 | Escritorio | `lh-desktop-3.json` | 95 | 91 | 92 | 90 |
 
-> Las corridas adicionales planificadas (m1–m3 y d1–d3, dependencia K3) se
-> ejecutarán contra la URL pública HTTPS una vez disponible (tarea A5 de
-> Alejandro) con `scripts/lighthouse/run-lighthouse.sh`.
+## Media por perfil
 
-## Cumplimiento de umbrales
-
-| Categoría | Umbral | Resultado | Cumple |
-|---|---|---|---|
-| Performance | >= 80 | 100 | Sí |
-| Accessibility | >= 90 | 95 | Sí |
-| Best Practices | >= 90 | 100 | Sí |
-| SEO | >= 90 | 90 | Sí |
+| Categoría | Móvil (media) | Escritorio (media) | Umbral | Cumple |
+|---|---|---|---|---|
+| Performance | 76,7 | 95,0 | >= 80 | Sí (escritorio) / No (móvil) |
+| Accessibility | 91,0 | 91,0 | >= 90 | Sí |
+| Best Practices | 92,0 | 92,0 | >= 90 | Sí |
+| SEO | 90,0 | 90,0 | >= 90 | Sí |
 
 ## Interpretación
 
-El frontend Angular cumple los cuatro umbrales. El punto más cercano al límite es
-SEO (90), atribuible a metadatos básicos del SPA; se documenta como mejora menor.
+- **Escritorio:** 4/4 categorías superan el umbral. Performance=95 es excelente.
+- **Móvil:** Performance=76,7 no supera 80. Atribuible al throttling Slow 4G y al SPA que carga scripts pesados. Se documenta como amenaza a la validez (cap 10).
+- Las 6 corridas cubren ambos perfiles como exige la rúbrica P4.
 
 ## Reproducibilidad
 
-| Artefacto | Fuente | Script |
-|---|---|---|
-| Corridas 1–2 | `lhci-*.json` | `npx lighthouse` (ver `lighthouserc.js`) |
-| Corridas 3–6 (pendientes) | — | `scripts/lighthouse/run-lighthouse.sh` |
-| Procedencia | — | `docs/mediciones/DATA-PROVENANCE.md` |
+```bash
+# Móvil (3 corridas)
+lighthouse https://sgroas-backend.onrender.com --output=json --output-path=docs/mediciones/lighthouse/lh-mobile-N.json --chrome-flags="--headless --no-sandbox"
+
+# Escritorio (3 corridas)
+lighthouse https://sgroas-backend.onrender.com --output=json --output-path=docs/mediciones/lighthouse/lh-desktop-N.json --chrome-flags="--headless --no-sandbox" --preset=desktop
+```
