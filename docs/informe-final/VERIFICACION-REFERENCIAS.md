@@ -1,6 +1,6 @@
 # Verificación de referencias — SGROAS
 
-**Fecha de verificación:** 16 de agosto de 2026
+**Fecha de verificación:** 16 de agosto de 2026 (re-verificación: 6 de septiembre de 2026)
 **Método:** consulta de cada DOI a la API de Crossref
 (`https://api.crossref.org/works/{doi}`); todas respondieron `status: ok`.
 Aquellas con DOI incorrecto fueron corregidas y re-verificadas. Referencia de
@@ -28,6 +28,9 @@ autoridad: PRISMA 2020 \cite{prisma2021} y guías de revisión sistemática
 | 10.1109/ICSE.2010.* (404) | 10.1109/ICSE.2015.144 | Foo et al., ICSE 2015 |
 | 10.1145/3470481.3484630 (404) | 10.1016/j.jss.2021.111061 | Waseem et al., JSS 182, 2021 |
 | 10.1080/10447318.2012.732430 (404) | 10.1080/10447318.2012.681221 | Kortum y Bangor, IJHCI 29(2), 2013 |
+| 10.1109/IEEESTD.2018.8606021 (404) | 10.1109/IEEESTD.2018.8559686 | ISO/IEC/IEEE 29148:2018 (IEEE Xplore) |
+| 10.1007/s10664-022-10146-8 (404) | 10.1007/s10664-021-10072-8 | Baltes y Ralph, ESE 27(4):94, 2022 |
+| 10.1038/s41746-023-00838-0 (404, entrada incoherente) | 10.1038/sdata.2016.18 | Wilkinson et al., Scientific Data 3:160018, 2016 |
 
 ## Reproducibilidad
 
