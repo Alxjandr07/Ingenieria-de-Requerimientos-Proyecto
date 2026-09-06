@@ -114,7 +114,7 @@ public class AsignacionRutaService {
     }
 
     private AsignacionRuta obtenerAsignacionActiva(Long id) {
-        return asignacionRutaRepository.findById(id)
+        return asignacionRutaRepository.findWithDetalle(id)
                 .filter(AsignacionRuta::getActivo)
                 .orElseThrow(() -> new IllegalArgumentException("Asignacion no encontrada"));
     }
