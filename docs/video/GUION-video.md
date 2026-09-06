@@ -41,8 +41,8 @@ Abrir y narrar brevemente cada uno:
 | `docs/mediciones/sec/zap/RESUMEN.md` | baseline OWASP ZAP | alertas y severidades |
 | `docs/mediciones/jacoco/` | cobertura | 98.8 % instr / 85.4 % ramas |
 
-Cerrar con **disponibilidad de datos**: DOI software
-`10.5281/zenodo.21698129`, DOI dataset `10.5281/zenodo.21973297`.
+Cerrar con **disponibilidad de datos**: DOI software (v1.0.0)
+`10.5281/zenodo.22522109`, DOI dataset `10.5281/zenodo.21973297`.
 
 ## min 4:50 – Cierre (≈10 s)
 Repo, tag v1.0.0, CI verde, agradecimientos; animar a citar la publicación

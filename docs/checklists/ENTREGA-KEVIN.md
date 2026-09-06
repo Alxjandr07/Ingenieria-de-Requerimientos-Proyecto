@@ -66,7 +66,7 @@ de URL pública (dependencia A5). Umbrales y categorías en capítulo 8.
 | Artefacto | Ruta / valor |
 |---|---|
 | CITATION.cff v1.0.0 | `CITATION.cff` (ORCID reales de los 3) |
-| DOI software | 10.5281/zenodo.21698129 |
+| DOI software (v1.0.0) | 10.5281/zenodo.22522109 |
 | DOI dataset | 10.5281/zenodo.21973297 |
 | Paquete de datos | `dataset/` (`README.md`, `MANIFEST.csv`, `zenodo.json`) |
 | Script de empaquetado | `scripts/zenodo/package-dataset.py` |

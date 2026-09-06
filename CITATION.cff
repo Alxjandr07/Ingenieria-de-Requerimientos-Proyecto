@@ -23,7 +23,9 @@ affiliation: >-
   Ciencias de la Ingeniería — Carrera de Ingeniería de Software
 version: 1.0.0
 date-released: 2026-08-17
-doi: 10.5281/zenodo.21698129
+doi: 10.5281/zenodo.22522109
+# Commit del tag v1.0.0: 9ded2a69f1da35d09b6dfedb9d62e61e5c9ae48a
+# DOI software v0.9.0-rc (depósito previo): 10.5281/zenodo.21698129
 license: MIT
 repository-code: >-
   https://github.com/Alxjandr07/SGROAS-ProyectoAppWeb

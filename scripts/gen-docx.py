@@ -27,7 +27,7 @@ DOCENTE = "DR. GLEISTON CICERON GUERRERO ULLOA, PH.D."
 CURSO = "5TO SOFTWARE A"
 FECHA = "17 de agosto de 2026"
 GITHUB = "https://github.com/Alxjandr07/SGROAS-ProyectoAppWeb.git"
-DOI = "10.5281/zenodo.21698129"
+DOI = "10.5281/zenodo.22522109"
 GHCR = "ghcr.io/alxjandr07/sgroas"
 
 

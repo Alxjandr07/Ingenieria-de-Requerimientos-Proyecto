@@ -6,7 +6,7 @@
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-green)](https://spring.io/projects/spring-boot)
 [![Angular](https://img.shields.io/badge/Angular-17-red)](https://angular.io/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791)](https://www.postgresql.org/)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21698129.svg)](https://doi.org/10.5281/zenodo.21698129)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22522109.svg)](https://doi.org/10.5281/zenodo.22522109)
 
 > **Grupo D** — Universidad Técnica Estatal de Quevedo (UTEQ) — FCC — Carrera de Ingeniería de Software
 > Aplicaciones Web — Quinto Nivel — Periodo 2026-2027
@@ -120,10 +120,12 @@ Distribuido bajo licencia MIT. Ver [LICENSE](LICENSE).
   month = jul,
   year = 2026,
   publisher = {Zenodo},
-  doi = {10.5281/zenodo.21698129},
+  doi = {10.5281/zenodo.22522109},
   url = {https://github.com/Alxjandr07/SGROAS-ProyectoAppWeb}
 }
 ```
+
+> Versión publicada: tag `v1.0.0` (commit `9ded2a69f1da35d09b6dfedb9d62e61e5c9ae48a`).
 
 ## Dataset del estudio empírico
 
