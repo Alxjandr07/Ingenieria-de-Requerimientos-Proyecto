@@ -22,11 +22,11 @@ public class ConductorService {
     private final ConductorRepository conductorRepository;
 
     public Page&lt;ConductorResponse&gt; listar(String search, Pageable pageable) {
-<span class="pc bpc" id="L25" title="3 of 4 branches missed.">        if (search == null || search.isBlank()) {</span>
+<span class="fc bfc" id="L25" title="All 4 branches covered.">        if (search == null || search.isBlank()) {</span>
 <span class="fc" id="L26">            return conductorRepository.findByActivoTrue(pageable).map(this::mapearAResponse);</span>
         }
-<span class="nc" id="L28">        return conductorRepository.buscarActivos(search.trim().toLowerCase(), pageable)</span>
-<span class="nc" id="L29">                .map(this::mapearAResponse);</span>
+<span class="fc" id="L28">        return conductorRepository.buscarActivos(search.trim().toLowerCase(), pageable)</span>
+<span class="fc" id="L29">                .map(this::mapearAResponse);</span>
     }
 
     public ConductorResponse buscarPorId(Long id) {

@@ -32,10 +32,16 @@ public class IncidenteAbdController {
 <span class="nc" id="L32">        return ResponseEntity.status(HttpStatus.CREATED).body(incidenteAbdService.crear(request));</span>
     }
 
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;AbdDtos.IncidenteAbdResponse&gt; actualizar(@PathVariable Integer id,
+                                                                  @Valid @RequestBody AbdDtos.IncidenteAbdRequest request) {
+<span class="nc" id="L38">        return ResponseEntity.ok(incidenteAbdService.actualizar(id, request));</span>
+    }
+
     @DeleteMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;Void&gt; eliminar(@PathVariable Integer id) {
-<span class="nc" id="L37">        incidenteAbdService.eliminar(id);</span>
-<span class="nc" id="L38">        return ResponseEntity.noContent().build();</span>
+<span class="nc" id="L43">        incidenteAbdService.eliminar(id);</span>
+<span class="nc" id="L44">        return ResponseEntity.noContent().build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

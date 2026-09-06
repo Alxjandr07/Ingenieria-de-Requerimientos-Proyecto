@@ -114,7 +114,7 @@ public class AsignacionRutaService {
 <span class="fc" id="L114">    }</span>
 
     private AsignacionRuta obtenerAsignacionActiva(Long id) {
-<span class="fc" id="L117">        return asignacionRutaRepository.findById(id)</span>
+<span class="fc" id="L117">        return asignacionRutaRepository.findWithDetalle(id)</span>
 <span class="fc" id="L118">                .filter(AsignacionRuta::getActivo)</span>
 <span class="fc" id="L119">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Asignacion no encontrada&quot;));</span>
     }

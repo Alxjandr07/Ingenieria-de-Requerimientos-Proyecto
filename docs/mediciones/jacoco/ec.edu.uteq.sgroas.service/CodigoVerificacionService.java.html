@@ -38,60 +38,60 @@ public class CodigoVerificacionService {
     /** Genera un codigo nuevo (invalida los anteriores del mismo tipo) y lo devuelve en claro para enviarlo por correo. */
     @Transactional
     public String generar(String email, Tipo tipo) {
-<span class="nc" id="L41">        repository.deleteByEmailAndTipo(email, tipo.name());</span>
+<span class="fc" id="L41">        repository.deleteByEmailAndTipo(email, tipo.name());</span>
 
-<span class="nc" id="L43">        String codigo = String.format(&quot;%06d&quot;, aleatorio.nextInt(1_000_000));</span>
-<span class="nc" id="L44">        repository.save(CodigoVerificacion.builder()</span>
-<span class="nc" id="L45">                .email(email)</span>
-<span class="nc" id="L46">                .codigoHash(sha256(codigo))</span>
-<span class="nc" id="L47">                .tipo(tipo.name())</span>
-<span class="nc" id="L48">                .expiraEn(Instant.now().plus(VALIDEZ))</span>
-<span class="nc" id="L49">                .intentos(0)</span>
-<span class="nc" id="L50">                .usado(false)</span>
-<span class="nc" id="L51">                .creadoEn(Instant.now())</span>
-<span class="nc" id="L52">                .build());</span>
-<span class="nc" id="L53">        return codigo;</span>
+<span class="fc" id="L43">        String codigo = String.format(&quot;%06d&quot;, aleatorio.nextInt(1_000_000));</span>
+<span class="fc" id="L44">        repository.save(CodigoVerificacion.builder()</span>
+<span class="fc" id="L45">                .email(email)</span>
+<span class="fc" id="L46">                .codigoHash(sha256(codigo))</span>
+<span class="fc" id="L47">                .tipo(tipo.name())</span>
+<span class="fc" id="L48">                .expiraEn(Instant.now().plus(VALIDEZ))</span>
+<span class="fc" id="L49">                .intentos(0)</span>
+<span class="fc" id="L50">                .usado(false)</span>
+<span class="fc" id="L51">                .creadoEn(Instant.now())</span>
+<span class="fc" id="L52">                .build());</span>
+<span class="fc" id="L53">        return codigo;</span>
     }
 
     /** Indica si ya paso la espera minima para generar otro codigo. */
     public boolean puedeReenviar(String email, Tipo tipo) {
-<span class="nc" id="L58">        return repository.findFirstByEmailAndTipoOrderByCreadoEnDesc(email, tipo.name())</span>
-<span class="nc" id="L59">                .map(c -&gt; c.getCreadoEn().isBefore(Instant.now().minus(ESPERA_REENVIO)))</span>
-<span class="nc" id="L60">                .orElse(true);</span>
+<span class="fc" id="L58">        return repository.findFirstByEmailAndTipoOrderByCreadoEnDesc(email, tipo.name())</span>
+<span class="fc" id="L59">                .map(c -&gt; c.getCreadoEn().isBefore(Instant.now().minus(ESPERA_REENVIO)))</span>
+<span class="fc" id="L60">                .orElse(true);</span>
     }
 
     /** Valida el codigo recibido; si es correcto lo marca como usado. Lanza IllegalArgumentException si no. */
     @Transactional
     public void validar(String email, Tipo tipo, String codigo) {
-<span class="nc" id="L66">        CodigoVerificacion registro = repository</span>
-<span class="nc" id="L67">                .findFirstByEmailAndTipoOrderByCreadoEnDesc(email, tipo.name())</span>
-<span class="nc" id="L68">                .orElseThrow(() -&gt; new IllegalArgumentException(CODIGO_INVALIDO));</span>
+<span class="fc" id="L66">        CodigoVerificacion registro = repository</span>
+<span class="fc" id="L67">                .findFirstByEmailAndTipoOrderByCreadoEnDesc(email, tipo.name())</span>
+<span class="fc" id="L68">                .orElseThrow(() -&gt; new IllegalArgumentException(CODIGO_INVALIDO));</span>
 
-<span class="nc bnc" id="L70" title="All 4 branches missed.">        if (registro.isUsado() || registro.getExpiraEn().isBefore(Instant.now())) {</span>
-<span class="nc" id="L71">            throw new IllegalArgumentException(CODIGO_INVALIDO);</span>
+<span class="fc bfc" id="L70" title="All 4 branches covered.">        if (registro.isUsado() || registro.getExpiraEn().isBefore(Instant.now())) {</span>
+<span class="fc" id="L71">            throw new IllegalArgumentException(CODIGO_INVALIDO);</span>
         }
-<span class="nc bnc" id="L73" title="All 2 branches missed.">        if (registro.getIntentos() &gt;= MAX_INTENTOS) {</span>
-<span class="nc" id="L74">            throw new IllegalArgumentException(CODIGO_INVALIDO);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if (registro.getIntentos() &gt;= MAX_INTENTOS) {</span>
+<span class="fc" id="L74">            throw new IllegalArgumentException(CODIGO_INVALIDO);</span>
         }
-<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (!registro.getCodigoHash().equals(sha256(codigo))) {</span>
-<span class="nc" id="L77">            registro.setIntentos(registro.getIntentos() + 1);</span>
-<span class="nc" id="L78">            repository.save(registro);</span>
-<span class="nc" id="L79">            throw new IllegalArgumentException(CODIGO_INVALIDO);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        if (!registro.getCodigoHash().equals(sha256(codigo))) {</span>
+<span class="fc" id="L77">            registro.setIntentos(registro.getIntentos() + 1);</span>
+<span class="fc" id="L78">            repository.save(registro);</span>
+<span class="fc" id="L79">            throw new IllegalArgumentException(CODIGO_INVALIDO);</span>
         }
-<span class="nc" id="L81">        registro.setUsado(true);</span>
-<span class="nc" id="L82">        repository.save(registro);</span>
-<span class="nc" id="L83">    }</span>
+<span class="fc" id="L81">        registro.setUsado(true);</span>
+<span class="fc" id="L82">        repository.save(registro);</span>
+<span class="fc" id="L83">    }</span>
 
     private String sha256(String texto) {
         try {
-<span class="nc" id="L87">            MessageDigest digest = MessageDigest.getInstance(&quot;SHA-256&quot;);</span>
-<span class="nc" id="L88">            byte[] hash = digest.digest(texto.getBytes(StandardCharsets.UTF_8));</span>
-<span class="nc" id="L89">            StringBuilder hex = new StringBuilder(hash.length * 2);</span>
-<span class="nc bnc" id="L90" title="All 2 branches missed.">            for (byte b : hash) {</span>
-<span class="nc" id="L91">                hex.append(Character.forDigit((b &gt;&gt; 4) &amp; 0xF, 16));</span>
-<span class="nc" id="L92">                hex.append(Character.forDigit(b &amp; 0xF, 16));</span>
+<span class="fc" id="L87">            MessageDigest digest = MessageDigest.getInstance(&quot;SHA-256&quot;);</span>
+<span class="fc" id="L88">            byte[] hash = digest.digest(texto.getBytes(StandardCharsets.UTF_8));</span>
+<span class="fc" id="L89">            StringBuilder hex = new StringBuilder(hash.length * 2);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">            for (byte b : hash) {</span>
+<span class="fc" id="L91">                hex.append(Character.forDigit((b &gt;&gt; 4) &amp; 0xF, 16));</span>
+<span class="fc" id="L92">                hex.append(Character.forDigit(b &amp; 0xF, 16));</span>
             }
-<span class="nc" id="L94">            return hex.toString();</span>
+<span class="fc" id="L94">            return hex.toString();</span>
 <span class="nc" id="L95">        } catch (NoSuchAlgorithmException e) {</span>
 <span class="nc" id="L96">            throw new IllegalStateException(&quot;SHA-256 no disponible&quot;, e);</span>
         }

@@ -24,11 +24,11 @@ public class UsuarioService {
     private final EmailService emailService;
 
     public Page&lt;UsuarioResponse&gt; listar(String search, Pageable pageable) {
-<span class="pc bpc" id="L27" title="3 of 4 branches missed.">        if (search == null || search.isBlank()) {</span>
+<span class="fc bfc" id="L27" title="All 4 branches covered.">        if (search == null || search.isBlank()) {</span>
 <span class="fc" id="L28">            return usuarioRepository.findByActivoTrue(pageable).map(this::toResponse);</span>
         }
-<span class="nc" id="L30">        return usuarioRepository.buscarActivos(search.trim().toLowerCase(), pageable)</span>
-<span class="nc" id="L31">                .map(this::toResponse);</span>
+<span class="fc" id="L30">        return usuarioRepository.buscarActivos(search.trim().toLowerCase(), pageable)</span>
+<span class="fc" id="L31">                .map(this::toResponse);</span>
     }
 
     public UsuarioResponse buscarPorId(Long id) {
@@ -67,7 +67,7 @@ public class UsuarioService {
     /** El ADMIN puede reenviar el codigo de activacion de una cuenta sin verificar. */
     public void reenviarCodigoActivacion(Long id) {
 <span class="fc" id="L69">        Usuario usuario = usuarioRepository.findById(id)</span>
-<span class="pc" id="L70">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Usuario no encontrado con id: &quot; + id));</span>
+<span class="fc" id="L70">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Usuario no encontrado con id: &quot; + id));</span>
 
 <span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if (Boolean.TRUE.equals(usuario.getVerificado())) {</span>
 <span class="nc" id="L73">            throw new IllegalArgumentException(&quot;Ese usuario ya verifico su correo&quot;);</span>
@@ -95,7 +95,7 @@ public class UsuarioService {
 <span class="fc" id="L95">        usuario.setRol(Rol.valueOf(request.rol().toUpperCase()));</span>
 <span class="fc" id="L96">        usuario.setActualizadoEn(Instant.now());</span>
 
-<span class="pc bpc" id="L98" title="2 of 4 branches missed.">        if (request.password() != null &amp;&amp; !request.password().isBlank()) {</span>
+<span class="fc bfc" id="L98" title="All 4 branches covered.">        if (request.password() != null &amp;&amp; !request.password().isBlank()) {</span>
 <span class="fc" id="L99">            usuario.setPasswordHash(passwordEncoder.encode(request.password()));</span>
         }
 

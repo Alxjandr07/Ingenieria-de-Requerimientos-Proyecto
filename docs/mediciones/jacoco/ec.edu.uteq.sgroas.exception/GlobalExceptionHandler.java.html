@@ -77,19 +77,34 @@ import java.util.Map;
 <span class="nc" id="L77">        return detail;</span>
     }
 
+    /** Denegaciones de @PreAuthorize: 403, no 500 como hacia el catch-all. */
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    public ProblemDetail manejarAccesoDenegado(
+            org.springframework.security.access.AccessDeniedException ex,
+            HttpServletRequest request
+    ) {
+<span class="fc" id="L86">        ProblemDetail detail = ProblemDetail.forStatus(HttpStatus.FORBIDDEN);</span>
+<span class="fc" id="L87">        detail.setType(URI.create(&quot;https://sgroas.uteq.edu.ec/errors/forbidden&quot;));</span>
+<span class="fc" id="L88">        detail.setTitle(&quot;Acceso denegado&quot;);</span>
+<span class="fc" id="L89">        detail.setDetail(&quot;No tiene permisos para realizar esta operacion&quot;);</span>
+<span class="fc" id="L90">        detail.setInstance(URI.create(request.getRequestURI()));</span>
+
+<span class="fc" id="L92">        return detail;</span>
+    }
+
     /** Rutas inexistentes (ej. el antiguo /api/auth/register): 404, no 500. */
     @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
     public ProblemDetail manejarRutaInexistente(
             org.springframework.web.servlet.resource.NoResourceFoundException ex,
             HttpServletRequest request
     ) {
-<span class="fc" id="L86">        ProblemDetail detail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);</span>
-<span class="fc" id="L87">        detail.setType(URI.create(&quot;https://sgroas.uteq.edu.ec/errors/not-found&quot;));</span>
-<span class="fc" id="L88">        detail.setTitle(&quot;Recurso no encontrado&quot;);</span>
-<span class="fc" id="L89">        detail.setDetail(&quot;La ruta solicitada no existe&quot;);</span>
-<span class="fc" id="L90">        detail.setInstance(URI.create(request.getRequestURI()));</span>
+<span class="fc" id="L101">        ProblemDetail detail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);</span>
+<span class="fc" id="L102">        detail.setType(URI.create(&quot;https://sgroas.uteq.edu.ec/errors/not-found&quot;));</span>
+<span class="fc" id="L103">        detail.setTitle(&quot;Recurso no encontrado&quot;);</span>
+<span class="fc" id="L104">        detail.setDetail(&quot;La ruta solicitada no existe&quot;);</span>
+<span class="fc" id="L105">        detail.setInstance(URI.create(request.getRequestURI()));</span>
 
-<span class="fc" id="L92">        return detail;</span>
+<span class="fc" id="L107">        return detail;</span>
     }
 
     @ExceptionHandler(Exception.class)
@@ -97,15 +112,15 @@ import java.util.Map;
             Exception ex,
             HttpServletRequest request
     ) {
-<span class="fc" id="L100">        ex.printStackTrace();</span>
+<span class="fc" id="L115">        ex.printStackTrace();</span>
 
-<span class="fc" id="L102">        ProblemDetail detail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);</span>
-<span class="fc" id="L103">        detail.setType(URI.create(&quot;https://sgroas.uteq.edu.ec/errors/internal&quot;));</span>
-<span class="fc" id="L104">        detail.setTitle(&quot;Error interno del servidor&quot;);</span>
-<span class="fc" id="L105">        detail.setDetail(ex.getClass().getSimpleName() + &quot;: &quot; + ex.getMessage());</span>
-<span class="fc" id="L106">        detail.setInstance(URI.create(request.getRequestURI()));</span>
+<span class="fc" id="L117">        ProblemDetail detail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L118">        detail.setType(URI.create(&quot;https://sgroas.uteq.edu.ec/errors/internal&quot;));</span>
+<span class="fc" id="L119">        detail.setTitle(&quot;Error interno del servidor&quot;);</span>
+<span class="fc" id="L120">        detail.setDetail(ex.getClass().getSimpleName() + &quot;: &quot; + ex.getMessage());</span>
+<span class="fc" id="L121">        detail.setInstance(URI.create(request.getRequestURI()));</span>
 
-<span class="fc" id="L108">        return detail;</span>
+<span class="fc" id="L123">        return detail;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -38,71 +38,71 @@ import java.util.Properties;
     private String from;
 
     public boolean configurado() {
-<span class="nc bnc" id="L41" title="All 4 branches missed.">        return host != null &amp;&amp; !host.isBlank();</span>
+<span class="fc bfc" id="L41" title="All 4 branches covered.">        return host != null &amp;&amp; !host.isBlank();</span>
     }
 
     public void enviarCodigoVerificacion(String para, String nombre, String codigo) {
-<span class="nc" id="L45">        String html = plantillaCodigo(</span>
+<span class="fc" id="L45">        String html = plantillaCodigo(</span>
                 &quot;Confirma tu cuenta&quot;,
                 &quot;Hola &quot; + nombre + &quot;, usa este codigo para activar tu cuenta en SGROAS:&quot;,
                 codigo,
                 &quot;El codigo expira en 10 minutos. Si no creaste esta cuenta, ignora este mensaje.&quot;
         );
-<span class="nc" id="L51">        enviar(para, &quot;SGROAS · Codigo de verificacion de cuenta&quot;, html, codigo);</span>
-<span class="nc" id="L52">    }</span>
+<span class="fc" id="L51">        enviar(para, &quot;SGROAS · Codigo de verificacion de cuenta&quot;, html, codigo);</span>
+<span class="fc" id="L52">    }</span>
 
     public void enviarCodigoRestablecimiento(String para, String codigo) {
-<span class="nc" id="L55">        String html = plantillaCodigo(</span>
+<span class="fc" id="L55">        String html = plantillaCodigo(</span>
                 &quot;Restablece tu contrasena&quot;,
                 &quot;Recibimos una solicitud para restablecer tu contrasena de SGROAS. Usa este codigo:&quot;,
                 codigo,
                 &quot;El codigo expira en 10 minutos y solo puede usarse una vez. Si no fuiste tu, ignora este mensaje.&quot;
         );
-<span class="nc" id="L61">        enviar(para, &quot;SGROAS · Codigo para restablecer contrasena&quot;, html, codigo);</span>
-<span class="nc" id="L62">    }</span>
+<span class="fc" id="L61">        enviar(para, &quot;SGROAS · Codigo para restablecer contrasena&quot;, html, codigo);</span>
+<span class="fc" id="L62">    }</span>
 
     private void enviar(String para, String asunto, String html, String codigo) {
-<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (!configurado()) {</span>
-<span class="nc" id="L66">            log.warn(&quot;[MODO CONSOLA] SMTP sin configurar. Codigo para {} ({}): {}&quot;, para, asunto, codigo);</span>
-<span class="nc" id="L67">            return;</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (!configurado()) {</span>
+<span class="fc" id="L66">            log.warn(&quot;[MODO CONSOLA] SMTP sin configurar. Codigo para {} ({}): {}&quot;, para, asunto, codigo);</span>
+<span class="fc" id="L67">            return;</span>
         }
         try {
-<span class="nc" id="L70">            JavaMailSender sender = crearSender();</span>
-<span class="nc" id="L71">            MimeMessage mensaje = sender.createMimeMessage();</span>
-<span class="nc" id="L72">            MimeMessageHelper helper = new MimeMessageHelper(mensaje, false, StandardCharsets.UTF_8.name());</span>
+<span class="fc" id="L70">            JavaMailSender sender = crearSender();</span>
+<span class="fc" id="L71">            MimeMessage mensaje = sender.createMimeMessage();</span>
+<span class="fc" id="L72">            MimeMessageHelper helper = new MimeMessageHelper(mensaje, false, StandardCharsets.UTF_8.name());</span>
 <span class="nc" id="L73">            helper.setFrom(from);</span>
 <span class="nc" id="L74">            helper.setTo(para);</span>
 <span class="nc" id="L75">            helper.setSubject(asunto);</span>
 <span class="nc" id="L76">            helper.setText(html, true);</span>
 <span class="nc" id="L77">            sender.send(mensaje);</span>
 <span class="nc" id="L78">            log.info(&quot;Correo '{}' enviado a {}&quot;, asunto, para);</span>
-<span class="nc" id="L79">        } catch (Exception e) {</span>
-<span class="nc" id="L80">            log.error(&quot;No se pudo enviar el correo a {}: {}&quot;, para, e.getMessage());</span>
-<span class="nc" id="L81">            throw new IllegalStateException(</span>
+<span class="fc" id="L79">        } catch (Exception e) {</span>
+<span class="fc" id="L80">            log.error(&quot;No se pudo enviar el correo a {}: {}&quot;, para, e.getMessage());</span>
+<span class="fc" id="L81">            throw new IllegalStateException(</span>
                     &quot;No se pudo enviar el correo de confirmacion. Revisa la configuracion SMTP del servidor.&quot;);
 <span class="nc" id="L83">        }</span>
 <span class="nc" id="L84">    }</span>
 
     private JavaMailSender crearSender() {
-<span class="nc" id="L87">        JavaMailSenderImpl sender = new JavaMailSenderImpl();</span>
-<span class="nc" id="L88">        sender.setHost(host);</span>
-<span class="nc" id="L89">        sender.setPort(port);</span>
-<span class="nc bnc" id="L90" title="All 4 branches missed.">        if (username != null &amp;&amp; !username.isBlank()) {</span>
-<span class="nc" id="L91">            sender.setUsername(username);</span>
-<span class="nc" id="L92">            sender.setPassword(password);</span>
+<span class="fc" id="L87">        JavaMailSenderImpl sender = new JavaMailSenderImpl();</span>
+<span class="fc" id="L88">        sender.setHost(host);</span>
+<span class="fc" id="L89">        sender.setPort(port);</span>
+<span class="pc bpc" id="L90" title="1 of 4 branches missed.">        if (username != null &amp;&amp; !username.isBlank()) {</span>
+<span class="fc" id="L91">            sender.setUsername(username);</span>
+<span class="fc" id="L92">            sender.setPassword(password);</span>
         }
-<span class="nc" id="L94">        Properties props = sender.getJavaMailProperties();</span>
-<span class="nc" id="L95">        props.put(&quot;mail.transport.protocol&quot;, &quot;smtp&quot;);</span>
-<span class="nc bnc" id="L96" title="All 4 branches missed.">        props.put(&quot;mail.smtp.auth&quot;, Boolean.toString(username != null &amp;&amp; !username.isBlank()));</span>
-<span class="nc" id="L97">        props.put(&quot;mail.smtp.starttls.enable&quot;, &quot;true&quot;);</span>
-<span class="nc" id="L98">        props.put(&quot;mail.smtp.connectiontimeout&quot;, &quot;10000&quot;);</span>
-<span class="nc" id="L99">        props.put(&quot;mail.smtp.timeout&quot;, &quot;10000&quot;);</span>
-<span class="nc" id="L100">        props.put(&quot;mail.smtp.writetimeout&quot;, &quot;10000&quot;);</span>
-<span class="nc" id="L101">        return sender;</span>
+<span class="fc" id="L94">        Properties props = sender.getJavaMailProperties();</span>
+<span class="fc" id="L95">        props.put(&quot;mail.transport.protocol&quot;, &quot;smtp&quot;);</span>
+<span class="pc bpc" id="L96" title="1 of 4 branches missed.">        props.put(&quot;mail.smtp.auth&quot;, Boolean.toString(username != null &amp;&amp; !username.isBlank()));</span>
+<span class="fc" id="L97">        props.put(&quot;mail.smtp.starttls.enable&quot;, &quot;true&quot;);</span>
+<span class="fc" id="L98">        props.put(&quot;mail.smtp.connectiontimeout&quot;, &quot;10000&quot;);</span>
+<span class="fc" id="L99">        props.put(&quot;mail.smtp.timeout&quot;, &quot;10000&quot;);</span>
+<span class="fc" id="L100">        props.put(&quot;mail.smtp.writetimeout&quot;, &quot;10000&quot;);</span>
+<span class="fc" id="L101">        return sender;</span>
     }
 
     private String plantillaCodigo(String titulo, String intro, String codigo, String pie) {
-<span class="nc" id="L105">        return &quot;&quot;&quot;</span>
+<span class="fc" id="L105">        return &quot;&quot;&quot;</span>
                 &lt;!doctype html&gt;
                 &lt;html lang=&quot;es&quot;&gt;
                 &lt;body style=&quot;margin:0;padding:24px;background:#f4f5f7;font-family:Arial,Helvetica,sans-serif;&quot;&gt;
@@ -117,7 +117,7 @@ import java.util.Properties;
                   &lt;/div&gt;
                 &lt;/body&gt;
                 &lt;/html&gt;
-<span class="nc" id="L120">                &quot;&quot;&quot;.formatted(titulo, intro, codigo, pie);</span>
+<span class="fc" id="L120">                &quot;&quot;&quot;.formatted(titulo, intro, codigo, pie);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
