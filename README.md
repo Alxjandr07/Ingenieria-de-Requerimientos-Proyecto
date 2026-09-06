@@ -138,4 +138,19 @@ dataset de acceso abierto en Zenodo:
 - Empaquetado reproducible: `scripts/zenodo/package-dataset.py`
 - Descripción y checksums: [`dataset/`](dataset/)
 
+## Imagen Docker (GHCR)
+
+Imagen del sistema (backend JDK 21 + frontend Angular) publicada en GitHub
+Container Registry por el workflow `release-docker.yml` (reproducible en el CI):
+
+```bash
+docker pull ghcr.io/alxjandr07/sgroas:v1.0.0
+```
+
+- Etiqueta: `ghcr.io/alxjandr07/sgroas:v1.0.0`
+- Digest (manifest list, amd64):
+  `sha256:ea284abed7f6dcb16ef6859e8e5a57cdc1958ed30336e31f04a966a379b18f92`
+- Para levantar el sistema completo (backend + PostgreSQL + Redis) usar
+  `docker compose up --build -d`.
+
 
