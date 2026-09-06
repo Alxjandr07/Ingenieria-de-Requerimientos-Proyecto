@@ -15,7 +15,10 @@ jobs:
     steps:
       - name: Ping health endpoint
         run: |
+          # El free tier de Render duerme el servicio tras ~15 min de inactividad
+          # y el cold start tarda >30 s, por lo que reintentamos antes de reportar.
           code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 \
+            --retry 5 --retry-delay 20 --retry-all-errors \
             https://sgroas-backend.onrender.com/actuator/health)
           echo "Health code: $code"
           if [ "$code" != "200" ]; then
