@@ -106,7 +106,7 @@ class AsignacionRutaServiceTest {
 
     @Test
     void buscarPorIdDebeRetornarAsignacion() {
-        when(asignacionRutaRepository.findById(1L))
+        when(asignacionRutaRepository.findWithDetalle(1L))
                 .thenReturn(Optional.of(asignacionEjemplo()));
 
         AsignacionRutaResponse response = asignacionRutaService.buscarPorId(1L);
@@ -117,7 +117,7 @@ class AsignacionRutaServiceTest {
 
     @Test
     void buscarPorIdInexistenteDebeLanzarExcepcion() {
-        when(asignacionRutaRepository.findById(99L)).thenReturn(Optional.empty());
+        when(asignacionRutaRepository.findWithDetalle(99L)).thenReturn(Optional.empty());
 
         assertThrows(IllegalArgumentException.class,
                 () -> asignacionRutaService.buscarPorId(99L));
@@ -182,7 +182,7 @@ class AsignacionRutaServiceTest {
 
     @Test
     void actualizarDebeModificarYRetornar() {
-        when(asignacionRutaRepository.findById(1L))
+        when(asignacionRutaRepository.findWithDetalle(1L))
                 .thenReturn(Optional.of(asignacionEjemplo()));
         when(conductorRepository.findById(1L)).thenReturn(Optional.of(conductorEjemplo()));
         when(vehiculoRepository.findById(1L)).thenReturn(Optional.of(vehiculoEjemplo()));
@@ -198,7 +198,7 @@ class AsignacionRutaServiceTest {
 
     @Test
     void desactivarDebeCambiarEstado() {
-        when(asignacionRutaRepository.findById(1L))
+        when(asignacionRutaRepository.findWithDetalle(1L))
                 .thenReturn(Optional.of(asignacionEjemplo()));
 
         asignacionRutaService.desactivar(1L);

@@ -77,6 +77,21 @@ public class GlobalExceptionHandler {
         return detail;
     }
 
+    /** Denegaciones de @PreAuthorize: 403, no 500 como hacia el catch-all. */
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    public ProblemDetail manejarAccesoDenegado(
+            org.springframework.security.access.AccessDeniedException ex,
+            HttpServletRequest request
+    ) {
+        ProblemDetail detail = ProblemDetail.forStatus(HttpStatus.FORBIDDEN);
+        detail.setType(URI.create("https://sgroas.uteq.edu.ec/errors/forbidden"));
+        detail.setTitle("Acceso denegado");
+        detail.setDetail("No tiene permisos para realizar esta operacion");
+        detail.setInstance(URI.create(request.getRequestURI()));
+
+        return detail;
+    }
+
     /** Rutas inexistentes (ej. el antiguo /api/auth/register): 404, no 500. */
     @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
     public ProblemDetail manejarRutaInexistente(
