@@ -23,7 +23,9 @@ El umbral declarado es p95~<~200\,ms y error~<~1\,\%.
 
 \textbf{Datos crudos:} tres corridas independientes en
 \texttt{docs/mediciones/perf/k01-run1.json}, \texttt{k02-run2.json} y
-\texttt{k03-run3.json} (commit \texttt{62bf8fa}).
+\texttt{k03-run3.json} (commit \texttt{62bf8fa}), más cinco corridas contra la URL
+pública en \texttt{k04-run1.json}--\texttt{k08-run1.json} y cinco muestras frías en
+\texttt{k04-cold.json}--\texttt{k08-cold.json} (commit \texttt{dea7940}).
 
 \textbf{Descriptiva e IC 95\,\%:} la media de las medias por corrida es
 \textbf{23.01\,ms} (DT 12.44\,ms, EE 7.18\,ms), con IC\,95\,\%
@@ -35,12 +37,24 @@ Redis; las corridas k02 y k03 estabilizan la media por debajo de 17\,ms
 (\texttt{docs/mediciones/perf/ANALISIS-k6.md}).
 
 \textbf{Interpretación:} el sistema cumple los umbrales de rendimiento en la
-condición de cache caliente. Dado que las tres corridas corresponden a la misma
-condición, el contraste formal cache caliente-frío queda definido a priori en
-\texttt{scripts/perf/nonparametric.py} (U de Mann-Whitney, Wilcoxon y d de Cliff
-\cite{mann_whitney1947,wilcoxon1945,cliff1993}) y se ejecutará con la condición de
-cache fría cuando la URL pública esté disponible (K3). La medición sigue los
-lineamientos de pruebas de carga de sistemas de gran escala de \cite{jiang2015}.
+condición de cache caliente y en el entorno local. Dado que las tres corridas
+corresponden a la misma condición, el contraste formal cache caliente-frío se
+ejecutó con la URL pública disponible (K3).
+
+\textbf{Serie Render (K4--K8, URL pública):} con la URL pública activa se ejecutaron
+cinco corridas adicionales contra \texttt{https://sgroas-backend.onrender.com}
+(\texttt{docs/mediciones/perf/k04-run1.json}--\texttt{k08-run1.json}), cinco muestras
+frías (\texttt{k04-cold.json}--\texttt{k08-cold.json}) y el contraste no paramétrico
+(\texttt{RENDER-REPORT.md}). La media de avg por corrida caliente es
+\textbf{3967.32\,ms} (DT 1539.20, IC\,95\,\% [2056.46; 5878.19]) y la media fría es
+\textbf{257.50\,ms}. El p95 caliente va de 4.3\,s a 11.4\,s; el plan gratuito de
+Render (0.1\,vCPU) no cumple el umbral $p95 < 200$\,ms. La diferencia de orden de
+magnitud corresponde al throttling de CPU del plan gratuito y al almacenamiento
+local de Render \cite{jiang2015}. El contraste Mann-Whitney frío vs.\ caliente
+arroja $U = 0.0$, $p = 0.009$ y $d$ de Cliff $= -1.00$ (efecto grande), confirmando
+que la latencia bajo carga es significativamente mayor que sin carga. La serie
+local K1 (p95 medio 81\,ms) sigue siendo la referencia de rendimiento sin
+throttling.
 
 \section{Seguridad (Bloque C.2) — RQ2}
 \label{sec:sec}
@@ -97,14 +111,14 @@ para SUS \cite{kortum2013}.
 \label{sec:cobertura}
 
 \textbf{Métrica:} contadores de JaCoCo (instrucciones, ramas y líneas) sobre la
-ejecución de \texttt{./mvnw verify} con 150 pruebas JUnit 5.
+ejecución de \texttt{./mvnw verify} con 222 pruebas JUnit 5.
 
 \textbf{Datos crudos:} \texttt{docs/mediciones/jacoco/jacoco.csv} y reporte HTML
-(commit \texttt{5f3b472}).
+(commit \texttt{dea7940}, run CI \texttt{34024539023}).
 
-\textbf{Resultado:} instrucciones 98.8\,\%, ramas 85.4\,\% y líneas 99.7\,\%, con
-0 fallos. Se supera el umbral del proyecto (líneas $\ge$ 0.70 para la entrega
-final). La discusión sobre la relación entre cobertura y detección de fallos se
+\textbf{Resultado (núcleo, sin paquete \texttt{abd}):} instrucciones 87.5\,\%,
+ramas 87.9\,\% y líneas 95.5\,\%, con 0 fallos. Se supera el umbral del proyecto
+(líneas $\ge$ 0.70 y ramas $\ge$ 0.50 para la entrega final). La discusión sobre la relación entre cobertura y detección de fallos se
 fundamenta en \cite{inozemtseva2014,gopinath2014,gligoric2013,ivankovic2019}.
 
 \section{Calidad web (Bloque C.5) — RQ4}
@@ -144,7 +158,7 @@ C.1 Rendimiento & p95 $<$ 200\,ms (cache caliente) & 173.13\,ms & Sí \\
 C.1 Rendimiento & error rate $<$ 1\,\% & 0\,\% & Sí \\
 C.2 Seguridad & SQL dinámico / A01--A09 & 0 violaciones & Sí \\
 C.3 Usabilidad & SUS $\ge$ 70 & 63.0 & No (marginal) \\
-C.4 Cobertura & líneas $\ge$ 70\,\% & 99.7\,\% & Sí \\
+C.4 Cobertura & líneas $\ge$ 70\,\% & 95.5\,\% & Sí \\
 C.5 Calidad web & Perf/Acc/BP/SEO $\ge$ 80/90/90/90 & 100/95/100/90 & Sí \\
 \bottomrule
 \end{tabular}
