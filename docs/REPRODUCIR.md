@@ -49,20 +49,35 @@ bash scripts/zap/run-zap.sh <URL>                 # OWASP ZAP baseline
 
 ```sh
 python scripts/zenodo/package-dataset.py   # -> dist/sgroas-dataset-v1.0.0.zip
-                                           #    dataset/MANIFEST.csv
+                                           #    dataset/MANIFEST.csv (ruta,bytes,sha256)
+                                           #    dataset/MANIFEST.sha256 (formato sha256sum)
 ```
 
 Verificación de integridad contra Zenodo:
 
 ```sh
-sha256sum -c dataset/MANIFEST.csv    # Linux
-certutil -hashfile <archivo> SHA256   # Windows
+cd dataset
+sha256sum -c MANIFEST.sha256                       # Linux (formato sha256sum)
+python -c "import csv,hashlib,pathlib; [print('  '+r, '=> OK' if h==hashlib.sha256(pathlib.Path(r).read_bytes()).hexdigest() else '=> FALLO') for r,b,h in list(csv.reader(open('MANIFEST.csv')))[1:]]"
+cd ..
+certutil -hashfile <archivo> SHA256                 # Windows
 ```
 
 ## 6. Informe (K5)
 
-`docs/informe-final/main-evaluacion.tex` compila con `pdflatex` + `biber`
-(pdflatex x2). Las referencias fueron verificadas contra Crossref (ver
+`docs/informe-final/main.tex` compila con `pdflatex` + `biber` (tres pasadas
+de `pdflatex` + una de `biber`, 95 páginas). Desde un clon limpio:
+
+```sh
+cd docs/informe-final
+pdflatex -interaction=nonstopmode main.tex
+biber main
+pdflatex -interaction=nonstopmode main.tex
+pdflatex -interaction=nonstopmode main.tex
+```
+
+También se compila desde la raíz con `make pdf`. Las referencias fueron
+verificadas contra Crossref (ver
 `docs/informe-final/VERIFICACION-REFERENCIAS.md`).
 
 ## Regla

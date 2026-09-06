@@ -1,4 +1,4 @@
-.PHONY: up down test bench audit jacoco versions docs all clean
+.PHONY: up down test bench audit jacoco versions docs pdf all clean
 
 PYTHON ?= $(shell command -v python3 2>/dev/null || command -v python 2>/dev/null)
 
@@ -12,6 +12,7 @@ PYTHON ?= $(shell command -v python3 2>/dev/null || command -v python 2>/dev/nul
 #      make audit -> auditoria SQL estatico + trazabilidad
 #      make jacoco-> regenerar reporte de cobertura
 #      make versions -> generar docs/entorno/versions.txt
+#      make pdf   -> compilar el informe (docs/informe-final/main.tex, 95 pag.)
 #      make docs  -> generar artefactos de documentacion
 #      make all   -> pipeline completo (R1: reproduccion end-to-end)
 #      make clean -> limpieza total
@@ -53,10 +54,18 @@ versions:
 	$(PYTHON) scripts/gen-versions.py > docs/entorno/versions.txt
 	@echo "Versiones registradas en docs/entorno/versions.txt"
 
+pdf:
+	@echo "Compilando informe LaTeX (docs/informe-final/main.tex)..."
+	cd docs/informe-final && pdflatex -interaction=nonstopmode main.tex
+	cd docs/informe-final && biber main
+	cd docs/informe-final && pdflatex -interaction=nonstopmode main.tex
+	cd docs/informe-final && pdflatex -interaction=nonstopmode main.tex
+	@echo "PDF generado en docs/informe-final/main.pdf (95 paginas)."
+
 docs: versions
 	@echo "Artefactos de documentacion generados."
 
-all: up test bench audit jacoco versions
+all: up test bench audit jacoco versions pdf
 	@echo "=========================================="
 	@echo "PIPELINE COMPLETO (make all) FINALIZADO OK"
 	@echo "=========================================="

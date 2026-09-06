@@ -41,11 +41,29 @@ make bench
 # Auditoría de seguridad
 make audit
 
+# Compilar el informe (genera docs/informe-final/main.pdf, 95 páginas)
+make pdf
+
 # Limpiar
 make down
 ```
 
 Sistema disponible en `https://sgroas-backend.onrender.com` (Render Free, datos de muestra `V1..V9`; `>1M` reproducible en local con `psql -f db/data/generar_datos_masivos.sql`) — desarrollo local: `http://localhost:8080`.
+
+## Compilación del informe técnico
+
+El informe se compila desde el directorio `docs/informe-final/` (95 páginas),
+con `pdflatex` + `biber` (tres pasadas de `pdflatex` y una de `biber`):
+
+```bash
+cd docs/informe-final
+pdflatex -interaction=nonstopmode main.tex
+biber main
+pdflatex -interaction=nonstopmode main.tex
+pdflatex -interaction=nonstopmode main.tex
+```
+
+También se puede compilar desde la raíz del repositorio con `make pdf`.
 
 ### Credenciales por defecto
 
