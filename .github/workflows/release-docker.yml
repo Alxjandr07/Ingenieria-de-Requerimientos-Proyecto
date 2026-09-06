@@ -35,6 +35,8 @@ jobs:
       - name: Compute tag
         id: meta
         run: |
+          OWNER="${GITHUB_REPOSITORY_OWNER,,}"
+          echo "OWNER=$OWNER" >> "$GITHUB_OUTPUT"
           if [[ -n "${{ github.event.inputs.image_tag }}" ]]; then
             echo "TAG=${{ github.event.inputs.image_tag }}" >> "$GITHUB_OUTPUT"
           elif [[ "${{ github.ref_type }}" == "tag" ]]; then
@@ -56,4 +58,4 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64
-          tags: ${{ env.REGISTRY }}/${{ github.actor }}/sgroas:${{ steps.meta.outputs.TAG }}
+          tags: ${{ env.REGISTRY }}/${{ steps.meta.outputs.OWNER }}/sgroas:${{ steps.meta.outputs.TAG }}
