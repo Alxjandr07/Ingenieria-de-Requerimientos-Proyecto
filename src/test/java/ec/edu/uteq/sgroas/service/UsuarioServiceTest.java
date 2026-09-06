@@ -72,6 +72,19 @@ class UsuarioServiceTest {
     }
 
     @Test
+    void listarConBusquedaDebeUsarBuscarActivos() {
+        PageRequest pageable = PageRequest.of(0, 10);
+        when(usuarioRepository.buscarActivos("carlos", pageable))
+                .thenReturn(new PageImpl<>(List.of(usuarioEjemplo())));
+
+        Page<UsuarioResponse> pagina = usuarioService.listar("  Carlos  ", pageable);
+
+        assertEquals(1, pagina.getTotalElements());
+        verify(usuarioRepository).buscarActivos("carlos", pageable);
+        verify(usuarioRepository, never()).findByActivoTrue(pageable);
+    }
+
+    @Test
     void buscarPorIdDebeRetornarUsuario() {
         when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuarioEjemplo()));
 
@@ -143,6 +156,27 @@ class UsuarioServiceTest {
     }
 
     @Test
+    void reenviarActivacionDentroDeLaEsperaDebeLanzarExcepcion() {
+        Usuario sinVerificar = usuarioEjemplo();
+        sinVerificar.setVerificado(false);
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(sinVerificar));
+        when(codigoVerificacionService.puedeReenviar("carlos@sgroas.com",
+                CodigoVerificacionService.Tipo.VERIFICACION)).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> usuarioService.reenviarCodigoActivacion(1L));
+        verify(emailService, never()).enviarCodigoVerificacion(any(), any(), any());
+    }
+
+    @Test
+    void reenviarActivacionConUsuarioInexistenteDebeLanzarExcepcion() {
+        when(usuarioRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class,
+                () -> usuarioService.reenviarCodigoActivacion(99L));
+    }
+
+    @Test
     void actualizarDebeModificarYRetornar() {
         when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuarioEjemplo()));
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuarioEjemplo());
@@ -151,6 +185,20 @@ class UsuarioServiceTest {
 
         assertEquals(1L, response.id());
         verify(usuarioRepository).save(any(Usuario.class));
+    }
+
+    @Test
+    void actualizarSinPasswordDebeMantenerPasswordHash() {
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuarioEjemplo()));
+        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuarioEjemplo());
+
+        UsuarioRequest request = new UsuarioRequest(
+                "Carlos Mendoza", "carlos@sgroas.com", null, "ROLE_ADMIN");
+
+        UsuarioResponse response = usuarioService.actualizar(1L, request);
+
+        assertEquals("Carlos Mendoza", response.nombre());
+        verify(passwordEncoder, never()).encode(any());
     }
 
     @Test

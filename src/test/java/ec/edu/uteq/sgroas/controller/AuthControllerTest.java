@@ -1,6 +1,8 @@
 package ec.edu.uteq.sgroas.controller;
 
 import ec.edu.uteq.sgroas.dto.AuthResponse;
+import ec.edu.uteq.sgroas.entity.Rol;
+import ec.edu.uteq.sgroas.entity.Usuario;
 import ec.edu.uteq.sgroas.exception.GlobalExceptionHandler;
 import ec.edu.uteq.sgroas.repository.UsuarioRepository;
 import ec.edu.uteq.sgroas.security.JwtService;
@@ -15,6 +17,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.time.Instant;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -53,6 +58,102 @@ class AuthControllerTest {
                 3600000L, "Administrador SGROAS",
                 "admin@sgroas.com", "ROLE_ADMIN"
         );
+    }
+
+    private Usuario usuarioActivo() {
+        return Usuario.builder()
+                .id(1L)
+                .nombre("Administrador SGROAS")
+                .email("admin@sgroas.com")
+                .passwordHash("hash")
+                .rol(Rol.ROLE_ADMIN)
+                .activo(true)
+                .verificado(true)
+                .creadoEn(Instant.now())
+                .actualizadoEn(Instant.now())
+                .build();
+    }
+
+    @Test
+    void meDesdeCookieDebeRetornar200ConDatosDelUsuario() throws Exception {
+        when(tokenService.accessTokenEnBlacklist("access-token")).thenReturn(false);
+        when(jwtService.extraerEmail("access-token")).thenReturn("admin@sgroas.com");
+        when(jwtService.getExpirationMs()).thenReturn(3600000L);
+        when(usuarioRepository.findByEmail("admin@sgroas.com"))
+                .thenReturn(Optional.of(usuarioActivo()));
+
+        mockMvc().perform(get("/api/auth/me")
+                        .cookie(new jakarta.servlet.http.Cookie("access_token", "access-token")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("admin@sgroas.com"))
+                .andExpect(jsonPath("$.rol").value("ROLE_ADMIN"))
+                .andExpect(jsonPath("$.nombre").value("Administrador SGROAS"));
+    }
+
+    @Test
+    void meDesdeAuthorizationHeaderDebeRetornar200() throws Exception {
+        when(tokenService.accessTokenEnBlacklist("access-token")).thenReturn(false);
+        when(jwtService.extraerEmail("access-token")).thenReturn("admin@sgroas.com");
+        when(jwtService.getExpirationMs()).thenReturn(3600000L);
+        when(usuarioRepository.findByEmail("admin@sgroas.com"))
+                .thenReturn(Optional.of(usuarioActivo()));
+
+        mockMvc().perform(get("/api/auth/me")
+                        .header("Authorization", "Bearer access-token"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("admin@sgroas.com"));
+    }
+
+    @Test
+    void meSinTokenDebeRetornar401() throws Exception {
+        mockMvc().perform(get("/api/auth/me"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void meConTokenEnBlacklistDebeRetornar401() throws Exception {
+        when(tokenService.accessTokenEnBlacklist("access-token")).thenReturn(true);
+
+        mockMvc().perform(get("/api/auth/me")
+                        .cookie(new jakarta.servlet.http.Cookie("access_token", "access-token")))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void meConEmailInvalidoDebeRetornar401() throws Exception {
+        when(tokenService.accessTokenEnBlacklist("access-token")).thenReturn(false);
+        when(jwtService.extraerEmail("access-token")).thenReturn(null);
+
+        mockMvc().perform(get("/api/auth/me")
+                        .cookie(new jakarta.servlet.http.Cookie("access_token", "access-token")))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void meConUsuarioInactivoDebeRetornar401() throws Exception {
+        Usuario inactivo = usuarioActivo();
+        inactivo.setActivo(false);
+        when(tokenService.accessTokenEnBlacklist("access-token")).thenReturn(false);
+        when(jwtService.extraerEmail("access-token")).thenReturn("admin@sgroas.com");
+        when(usuarioRepository.findByEmail("admin@sgroas.com"))
+                .thenReturn(Optional.of(inactivo));
+
+        mockMvc().perform(get("/api/auth/me")
+                        .cookie(new jakarta.servlet.http.Cookie("access_token", "access-token")))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void resendCodeDebeRetornar200ConMensajeGenerico() throws Exception {
+        mockMvc().perform(post("/api/auth/resend-code")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "email": "carlos@sgroas.com"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.mensaje").exists());
     }
 
     @Test
