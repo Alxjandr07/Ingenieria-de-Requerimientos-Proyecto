@@ -28,7 +28,7 @@ fi
 
 ERRS=0
 # Salta la cabecera
-tail -n +2 "$MATRIZ" | while IFS= read -r line; do
+while IFS= read -r line; do
     line="$(echo "$line" | tr -d '\r')"
     [[ -z "$line" ]] && continue
 
@@ -58,7 +58,7 @@ tail -n +2 "$MATRIZ" | while IFS= read -r line; do
             ERRS=$((ERRS+1))
         fi
     fi
-done
+done < <(tail -n +2 "$MATRIZ")
 
 if [[ "$ERRS" -gt 0 ]]; then
     echo "ERROR: la matriz de trazabilidad tiene $ERRS requisito(s) sin trazabilidad minima." >&2

@@ -33,19 +33,19 @@ REQ-F-031,Funcional,Must,HU-007,CU-006,IncidenteController,GET /api/incidentes/{
 REQ-F-032,Funcional,Must,HU-007,CU-006,IncidenteController,POST /api/incidentes,IncidenteServiceTest,CRUD-ORM,,verificado
 REQ-F-033,Funcional,Must,HU-007,CU-006,IncidenteController,PUT /api/incidentes/{id},IncidenteServiceTest,CRUD-ORM,,verificado
 REQ-F-034,Funcional,Must,HU-007,CU-006,IncidenteController,DELETE /api/incidentes/{id},IncidenteServiceTest,CRUD-ORM,,verificado
-REQ-F-035,Funcional,Should,HU-008,,ReportesController,GET /api/reportes/rendimiento-rutas,ReportesServiceTest,SP,docs/mediciones/sec/sp-rendimiento.txt,verificado
-REQ-F-036,Funcional,Should,HU-008,,ReportesController,GET /api/reportes/estadisticas-generales,ReportesServiceTest,FN,,verificado
-REQ-F-037,Funcional,Should,HU-008,,ReportesController,GET /api/reportes/licencias-por-vencer,ReportesServiceTest,FN,,verificado
-REQ-F-038,Funcional,Should,HU-008,,ReportesController,GET /api/reportes/incidentes-por-gravedad,ReportesServiceTest,SP,,verificado
-REQ-F-039,Funcional,Should,HU-008,,ReportesController,GET /api/reportes/incidentes-por-rango,ReportesServiceTest,SP,,verificado
-REQ-F-040,Funcional,Should,HU-006,,ReportesController,GET /api/reportes/asignaciones-activas-conductor,ReportesServiceTest,SP,,verificado
+REQ-F-035,Funcional,Should,HU-008,,ReportesController,GET /api/reportes/rendimiento-rutas,ReporteControllerTest,SP,docs/mediciones/sec/sp-rendimiento.txt,verificado
+REQ-F-036,Funcional,Should,HU-008,,ReportesController,GET /api/reportes/estadisticas-generales,ReporteControllerTest,FN,,verificado
+REQ-F-037,Funcional,Should,HU-008,,ReportesController,GET /api/reportes/licencias-por-vencer,ReporteControllerTest,FN,,verificado
+REQ-F-038,Funcional,Should,HU-008,,ReportesController,GET /api/reportes/incidentes-por-gravedad,ReporteControllerTest,SP,,verificado
+REQ-F-039,Funcional,Should,HU-008,,ReportesController,GET /api/reportes/incidentes-por-rango,ReporteControllerTest,SP,,verificado
+REQ-F-040,Funcional,Should,HU-006,,ReportesController,GET /api/reportes/asignaciones-activas-conductor,ReporteControllerTest,SP,,verificado
 REQ-NF-001,No funcional,Must,,,SecurityConfig,,,CRUD-ORM,docs/mediciones/sec/A05-headers.txt,verificado
 REQ-NF-002,No funcional,Must,,,SecurityConfig,,,CRUD-ORM,docs/mediciones/sec/A02-criptografia.txt,verificado
 REQ-NF-003,No funcional,Must,,,ConductorController,GET /api/conductores,ConductorServiceTest,CRUD-ORM,docs/mediciones/perf/k01-run1.json,verificado
 REQ-NF-004,No funcional,Must,,,GlobalExceptionHandler,,,CRUD-ORM,docs/mediciones/sec/A03-inyeccion.txt,verificado
 REQ-NF-005,No funcional,Must,,,AuthController,POST /api/auth/login,,CRUD-ORM,docs/mediciones/sec/A07-rate-limit.txt,verificado
 REQ-NF-006,No funcional,Should,,,Backend,,,CRUD-ORM,docs/mediciones/jacoco/jacoco.xml,verificado
-REQ-NF-007,No funcional,Should,,,Backend,GET /api/docs,,CRUD-ORM,,verificado
-REQ-NF-008,No funcional,Must,,,GlobalExceptionHandler,,,CRUD-ORM,,verificado
-REQ-NF-009,No funcional,Must,,,SecurityConfig,,,CRUD-ORM,,verificado
-REQ-NF-010,No funcional,Must,,,SecurityConfig,,,CRUD-ORM,,verificado
+REQ-NF-007,No funcional,Should,,,Backend,GET /api/docs,SecurityConfigTest,CRUD-ORM,docs/despliegue/DEPLOYMENT.md,verificado
+REQ-NF-008,No funcional,Must,,,GlobalExceptionHandler,,GlobalExceptionHandlerTest,CRUD-ORM,docs/mediciones/sec/A03-inyeccion.txt,verificado
+REQ-NF-009,No funcional,Must,,,SecurityConfig,,SecurityConfigTest,CRUD-ORM,docs/mediciones/sec/A05-headers.txt,verificado
+REQ-NF-010,No funcional,Must,,,SecurityConfig,,SecurityConfigTest,CRUD-ORM,docs/mediciones/sec/A01-acceso.txt,verificado
