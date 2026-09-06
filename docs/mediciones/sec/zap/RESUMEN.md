@@ -28,8 +28,8 @@ aplica el reverse proxy (Render), no la aplicación.
 | Herramienta | OWASP ZAP baseline (`ghcr.io/zaproxy/zaproxy:latest`) |
 | Comando | `docker run --rm -v .../zap:/zap/report ghcr.io/zaproxy/zaproxy zap-baseline.py -t https://sgroas-backend.onrender.com -r ...html -w ...md -l INFO -T 5` |
 | URL objetivo | `https://sgroas-backend.onrender.com` |
-| Salida HTML | `docs/mediciones/sec/zap/zap-baseline-2026-09-06.html` |
-| Salida Markdown | `docs/mediciones/sec/zap/zap-baseline-2026-09-06.md` |
+| Salida HTML | `docs/mediciones/sec/zap/zap.html` (66 KB) |
+| Salida Markdown | `docs/mediciones/sec/zap/zap.md` (18 KB) |
 
 ## Hallazgos detallados
 
@@ -67,7 +67,7 @@ no la aplicación Java directamente.
 
 | Artefacto | Ruta |
 |---|---|
-| Reporte HTML | `docs/mediciones/sec/zap/zap-baseline-2026-09-06.html` (64 KB) |
-| Reporte Markdown | `docs/mediciones/sec/zap/zap-baseline-2026-09-06.md` (18 KB) |
+| Reporte HTML | `docs/mediciones/sec/zap/zap.html` (66 KB) |
+| Reporte Markdown | `docs/mediciones/sec/zap/zap.md` (18 KB) |
 | Script | `scripts/zap/run-zap.sh` |
 | Procedencia | `docs/mediciones/DATA-PROVENANCE.md` |

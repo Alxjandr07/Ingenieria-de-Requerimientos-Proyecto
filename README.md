@@ -92,7 +92,7 @@ reproducirlos y comprobarlos:
 
 ## Informe final (Entrega Final v1.0.0)
 
-Documento académico completo — **95 páginas** con anexos y capturas CI/Render: [`docs/informe-final.pdf`](docs/informe-final.pdf) · Fuente LaTeX: [`docs/informe-final/main.tex`](docs/informe-final/main.tex) + `refs.bib` · Wrapper para Listing 1 p.17: [`docs/informe-final.tex`](docs/informe-final.tex).
+Documento académico completo — **96 páginas** con anexos y capturas CI/Render: [`docs/informe-final.pdf`](docs/informe-final.pdf) · Fuente LaTeX: [`docs/informe-final/main.tex`](docs/informe-final/main.tex) + `refs.bib` · Wrapper para Listing 1 p.17: [`docs/informe-final.tex`](docs/informe-final.tex).
 
 ### Compilación del informe
 
