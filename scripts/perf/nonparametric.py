@@ -36,7 +36,7 @@ def mann_whitney_u(x: Sequence[float], y: Sequence[float]) -> Tuple[float, float
         i = j
 
     n1, n2 = len(x), len(y)
-    r1 = sum(r for r, g in zip(rangos, muestras) if g == 0)
+    r1 = sum(r for r, (_, g) in zip(rangos, muestras) if g == 0)
     u = r1 - n1 * (n1 + 1) / 2.0
     u2 = n1 * n2 - u
     u = min(u, u2)

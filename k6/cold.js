@@ -1,16 +1,20 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
-import { opciones } from './opts.js';
 import { Rate, Trend } from 'k6/metrics';
 
 export let errorRate = new Rate('errores');
-export let duracionListado = new Trend('duracion_listado');
+export let duracionFrio = new Trend('duracion_frio');
 
-export const options = opciones;
+export const options = {
+  vus: 1,
+  iterations: 1,
+  thresholds: {
+    http_req_failed: [{ threshold: 'rate<1', abortOnFail: false }],
+  },
+  summaryTrendStats: ['avg', 'med', 'min', 'max', 'p(50)', 'p(90)', 'p(95)', 'p(99)'],
+};
 
 const BASE_URL = 'https://sgroas-backend.onrender.com';
-
-let authToken = null;
 
 export function setup() {
   const loginPayload = JSON.stringify({
@@ -49,11 +53,10 @@ export default function (data) {
     },
   });
 
-  duracionListado.add(res.timings.duration);
+  duracionFrio.add(res.timings.duration);
 
   const exitoso = check(res, {
     'status es 200': (r) => r.status === 200,
-    'tiempo respuesta < 500ms': (r) => r.timings.duration < 500,
   });
 
   errorRate.add(!exitoso);
