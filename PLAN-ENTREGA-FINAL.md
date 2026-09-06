@@ -136,25 +136,29 @@ Estrategia (60-80 tests nuevos):
 6. Usuario demo: `admin@sgroas.com / admin123` (ya en seed) y publicar credenciales demo en README.
 7. Commit: `feat(deploy): despliega en <proveedor>, health UP, DEPLOYMENT/RUNBOOK/BACKUP + adr-006/007 (P5)`.
 
-### A6. Imagen GHCR + CI/CD despliegue (opcional si sobra tiempo, R2/R3)
+### A6. Imagen GHCR + CI/CD despliegue (opcional si sobra tiempo, R2/R3) ✔ HECHO (06/09/2026)
 ```powershell
 docker build -t ghcr.io/alxjandr07/sgroas:v1.0.0 .
 docker push ghcr.io/alxjandr07/sgroas:v1.0.0
 docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/alxjandr07/sgroas:v1.0.0
 ```
-Pegar digest sha256 en README + CITATION.cff + PDF (portada).
+- Imagen publicada: `ghcr.io/alxjandr07/sgroas:v1.0.0` vía workflow `.github/workflows/release-docker.yml` (CI: run 34055975557 success).
+- Digest (manifest list amd64): `sha256:ea284abed7f6dcb16ef6859e8e5a57cdc1958ed30336e31f04a966a379b18f92`.
+- Digest pegado en README (sección "Imagen Docker"). Falta verificar visibilidad pública de la imagen en https://github.com/users/Alxjandr07/packages (por defecto privada; requiere PAT con `write:packages` o UI web).
 
-### A7. `make all` desde clonación limpia (R1, 8%) — DOMINGO NOCHE / LUNES MAÑANA
-1. En `C:\Users\alxja\AppData\Local\Temp\opencode\sgroas-test`:
+### A7. `make all` desde clonación limpia (R1, 8%) ✔ HECHO (06/09/2026)
+1. Ejecutado en `C:\Users\alxja\AppData\Local\Temp\opencode\sgroas-a7` (clon de `main` @ 6097476) con `make all SHELL=/usr/bin/bash` bajo **JDK 21** (JAVA_HOME Adoptium; el sistema tenía JDK 26 que rompe SpotBugs 4.8.6 con "class file major version 70").
 ```powershell
 git clone https://github.com/Alxjandr07/SGROAS-ProyectoAppWeb.git sgroas-test
 cd sgroas-test; make all; echo $LASTEXITCODE   # debe ser 0
 ```
-2. Target `all` = `up` (docker compose) → `test` (mvnw) → `bench` (k6 3 corridas → docs/mediciones/perf/) → `audit` (scripts) → `jacoco` (reporte fecha ISO) → `docs` (versions.txt). Que `docs` también copie/descargue el PDF del informe (si Overleaf: `curl` del PDF o carpeta sincronizada).
-3. Notebooks ejecutados visibles en `scripts/*.ipynb` (los hace Kevin con datos de A5).
+2. **Resultado: exit 0 — "PIPELINE COMPLETO (make all) FINALIZADO OK"** con 222 tests, 0 fallos; k6 3 corridas locales (`-e BASE_URL=http://localhost:8080`); audit OK; JaCoCo report; `versions.txt` regenerado (2026-09-06T15:33:30); PDF `docs/informe-final/main.pdf` generado (MiKTeX 25.12).
+3. Cambios derivados: `k6/script.js` y `k6/cold.js` usan `__ENV.BASE_URL` (default Render para series K4..K8; `make bench` fija localhost) — Makefile `bench` actualizado.
+4. Notebooks ejecutados visibles en `scripts/*.ipynb` (los hace Kevin con datos de A5).
 
-### A8. CIERRE (DOMINGO NOCHE / LUNES MAÑANA, ver sección 7)
-Tag v1.0.0 + GitHub Release + Zenodo release v1.0.0 (DOI software ya existe: 10.5281/zenodo.21698129; publicar release sobre el tag) + portada con hash real + video `make all` (con Kevin).
+### A8. CIERRE (DOMINGO NOCHE / LUNES MAÑANA, ver sección 7) ✔ PARCIALMENTE HECHO (06/09/2026)
+Tag v1.0.0 + GitHub Release + Zenodo release v1.0.0 (DOI software actualizado: v1.0.0 = **10.5281/zenodo.22522109**; el depósito de v0.9.0-rc es 10.5281/zenodo.21698129) + portada con hash real (Commit: `9ded2a69`) + video `make all` (con Kevin).
+- Pendiente con compañeros: portada/informe PDF con el hash final, referencias DOI en el PDF, video.
 
 **Entregables de Alejandro:** OBSERVACIONES.md completo, SPs vía @Procedure + endpoints, scripts de auditoría, pytest/MockMvc con cobertura >=70%, CI 3 verdes, despliegue público + 3 docs de despliegue, ADR-006/007, Makefile `all`, tag v1.0.0, GHCR, Zenodo software, video.
 
