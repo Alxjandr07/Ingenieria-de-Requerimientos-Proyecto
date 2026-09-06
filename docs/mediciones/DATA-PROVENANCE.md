@@ -10,15 +10,18 @@ Todo número del informe es re-derivable desde estas fuentes (reglas de oro 6 y 
 
 | Artefacto (tabla/figura) en informe | Datos crudos | Script | Commit |
 |---|---|---|---|
-| Tabla "Configuración de k6" | `k6/opts.js` | — | `62bf8fa` |
-| Tabla de resultados por corrida | `docs/mediciones/perf/k01-run1.json`, `k02-run2.json`, `k03-run3.json` | `scripts/perf-analysis.py` | `62bf8fa` (datos), `72b919c` (script) |
-| Tabla de estadística agregada (media/DT/IC95) | ídem | `scripts/perf-analysis.py` | `761e5e1` |
+| Tabla "Configuracion de k6" | `k6/opts.js` | — | `62bf8fa` |
+| Tabla K1 local (corridas k01-k03) | `docs/mediciones/perf/k01-run1.json`, `k02-run2.json`, `k03-run3.json` | `scripts/perf-analysis.py` | `62bf8fa` (datos), `72b919c` (script) |
+| Tabla Render caliente (K4-K8) | `docs/mediciones/perf/k04-run1.json` ... `k08-run1.json` | `scripts/perf-analysis.py` | `dea7940` |
+| Muestras frias Render (K4-K8) | `docs/mediciones/perf/k04-cold.json` ... `k08-cold.json` | `scripts/perf/nonparametric.py` | `dea7940` |
+| Tabla de estadistica agregada (media/DT/IC95) | ídem | `scripts/perf-analysis.py` | `761e5e1` |
 | Fig. "Perfil de percentiles" | ídem | `scripts/gen-figuras.py` → `fig-percentiles-corridas.png` | `cba0e96` |
 | Fig. "p95 por corrida" | ídem | `scripts/gen-figuras.py` → `fig-p95-por-corrida.png` | `cba0e96` |
 | Fig. "Media e IC95" | ídem | `scripts/gen-figuras.py` → `fig-media-ic95.png` | `cba0e96` |
-| Contraste no paramétrico (a priori) | — (definido en script) | `scripts/perf/nonparametric.py` | `6e2c372` |
-| Informe de análisis k6 | `docs/mediciones/perf/ANALISIS-k6.md` | `scripts/perf-analysis.py` | `761e5e1` |
-| IC bootstrap (validación) | `docs/mediciones/perf/ANALISIS-BOOTSTRAP.md` | `scripts/perf-bootstrap.py` → `bootstrap.json` | `683cea3` |
+| Contraste frio vs caliente (Mann-Whitney) | k0X-cold.json + k0X-run1.json | `scripts/perf/nonparametric.py` | `dea7940` |
+| Informe de analisis k6 | `docs/mediciones/perf/ANALISIS-k6.md` | `scripts/perf-analysis.py` | `dea7940` |
+| IC bootstrap (validacion) | `docs/mediciones/perf/ANALISIS-BOOTSTRAP.md` | `scripts/perf-bootstrap.py` → `bootstrap.json` | `683cea3` |
+| RENDER-REPORT.md | `docs/mediciones/perf/k04-k08` | `scripts/perf/nonparametric.py` | `dea7940` |
 
 ## 2. Usabilidad (SUS) — Bloque C.3
 
@@ -37,8 +40,8 @@ Todo número del informe es re-derivable desde estas fuentes (reglas de oro 6 y 
 
 | Artefacto (tabla/figura) en informe | Datos crudos | Script | Commit |
 |---|---|---|---|
-| Tabla de cobertura por clase | `docs/mediciones/jacoco/jacoco.csv` | `./mvnw verify` (reporte JaCoCo) | `5f3b472` |
-| Reporte HTML de cobertura | `docs/mediciones/jacoco/index.html` | JaCoCo Maven plugin | `5f3b472` |
+| Tabla de cobertura por clase | `docs/mediciones/jacoco/jacoco.csv` | `./mvnw verify` (reporte JaCoCo) | `dea7940` |
+| Reporte HTML de cobertura | `docs/mediciones/jacoco/index.html` | JaCoCo Maven plugin | `dea7940` |
 
 ## 4. Calidad web (Lighthouse) — Bloque C.5
 
@@ -52,7 +55,7 @@ Todo número del informe es re-derivable desde estas fuentes (reglas de oro 6 y 
 | Artefacto (tabla/figura) en informe | Datos crudos | Script | Commit |
 |---|---|---|---|
 | Evidencias OWASP A01–A09 | `docs/mediciones/sec/*` | scripts de evidencia (`A01-*.sh`, etc.) | `34f3a6a`, `56002f3`, `9f67bfc` |
-| ZAP baseline (pendiente URL pública) | `docs/mediciones/sec/zap/` | `scripts/zap/run-zap.sh` | por definir |
+| ZAP baseline | `docs/mediciones/sec/zap/zap-baseline-2026-09-06.html`, `.md` | `scripts/zap/run-zap.sh` | `ca7f700` |
 
 ## 6. Dataset público (Zenodo) — Bloque G / K6
 
