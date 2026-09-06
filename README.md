@@ -92,7 +92,21 @@ reproducirlos y comprobarlos:
 
 ## Informe final (Entrega Final v1.0.0)
 
-Documento académico completo — **94 páginas** con anexos y capturas CI/Render: [`docs/informe-final.pdf`](docs/informe-final.pdf) · Fuente LaTeX: [`docs/informe-final/main.tex`](docs/informe-final/main.tex) + `refs.bib` (wrappers `docs/informe-final.tex` / `docs/refs.bib` por Listing 1 p.17) — compila con `pdflatex`+`biber` (MiKTeX 26.5, 01-sep-2026).
+Documento académico completo — **95 páginas** con anexos y capturas CI/Render: [`docs/informe-final.pdf`](docs/informe-final.pdf) · Fuente LaTeX: [`docs/informe-final/main.tex`](docs/informe-final/main.tex) + `refs.bib` · Wrapper para Listing 1 p.17: [`docs/informe-final.tex`](docs/informe-final.tex).
+
+### Compilación del informe
+
+```bash
+# Opción A: desde docs/ (wrapper, Listing 1 p.17)
+cd docs
+pdflatex informe-final && biber informe-final && pdflatex informe-final && pdflatex informe-final
+
+# Opción B: desde docs/informe-final/ (directo)
+cd docs/informe-final
+pdflatex main && biber main && pdflatex main && pdflatex main
+```
+
+Requiere MiKTeX o TeX Live con `babel-spanish`, `biblatex` + `biber`, `listings`, `csquotes`, `float`.
 
 ## Estructura del repositorio
 
