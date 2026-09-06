@@ -18,9 +18,9 @@ class SecurityConfigTest {
     private MockMvc mockMvc;
 
     @Test
-    void sinAutenticacionAccesoProtegidoResponde401() throws Exception {
+    void sinAutenticacionAccesoProtegidoResponde403() throws Exception {
         mockMvc.perform(get("/api/conductores"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 
     @Test
