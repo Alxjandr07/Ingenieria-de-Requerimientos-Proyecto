@@ -8,7 +8,7 @@ export let duracionListado = new Trend('duracion_listado');
 
 export const options = opciones;
 
-const BASE_URL = 'https://sgroas-backend.onrender.com';
+const BASE_URL = __ENV.BASE_URL || 'https://sgroas-backend.onrender.com';
 
 let authToken = null;
 

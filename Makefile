@@ -32,10 +32,10 @@ test:
 	@echo "Reporte JaCoCo generado en docs/mediciones/jacoco/"
 
 bench:
-	@echo "Ejecutando benchmarks k6 (3 corridas)..."
-	k6 run k6/script.js --summary-export docs/mediciones/perf/k01-run1.json
-	k6 run k6/script.js --summary-export docs/mediciones/perf/k02-run2.json
-	k6 run k6/script.js --summary-export docs/mediciones/perf/k03-run3.json
+	@echo "Ejecutando benchmarks k6 (3 corridas) contra el stack local (make up)..."
+	k6 run -e BASE_URL=http://localhost:8080 k6/script.js --summary-export docs/mediciones/perf/k01-run1.json
+	k6 run -e BASE_URL=http://localhost:8080 k6/script.js --summary-export docs/mediciones/perf/k02-run2.json
+	k6 run -e BASE_URL=http://localhost:8080 k6/script.js --summary-export docs/mediciones/perf/k03-run3.json
 	@echo "Benchmarks completos. Resultados en docs/mediciones/perf/"
 
 audit:
