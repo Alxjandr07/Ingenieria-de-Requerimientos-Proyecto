@@ -90,17 +90,24 @@ def main() -> int:
     rows = []
     for full, rel in materializados:
         rows.append((rel, os.path.getsize(full), sha256(full)))
-    with manifest.open("w", newline="", encoding="utf-8") as fh:
-        w = csv.writer(fh)
+    with manifest.open("w", newline="\n", encoding="utf-8") as fh:
+        w = csv.writer(fh, lineterminator="\n")
         w.writerow(["ruta", "bytes", "sha256"])
         w.writerows(rows)
     print(f"MANIFEST: {len(rows)} archivos -> {manifest}")
+
+    # 2b) MANIFEST.sha256 en formato estandar de sha256sum (<hash>  <ruta>)
+    sha_manifest = REPO / "dataset" / "MANIFEST.sha256"
+    with sha_manifest.open("w", newline="\n", encoding="utf-8") as fh:
+        for rel, size, digest in rows:
+            fh.write(f"{digest}  {rel}\n")
+    print(f"MANIFEST.sha256: {len(rows)} archivos -> {sha_manifest}")
 
     # 3) ZIP para subir a Zenodo (mismo contenido que dataset/ del repo)
     DIST.mkdir(exist_ok=True)
     zip_path = DIST / ZIP_NAME
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
-        for extra in ["README.md", "MANIFEST.csv", "zenodo.json"]:
+        for extra in ["README.md", "MANIFEST.csv", "MANIFEST.sha256", "zenodo.json"]:
             z.write(REPO / "dataset" / extra, f"dataset/{extra}")
         for full, rel in materializados:
             z.write(full, f"dataset/{rel}")

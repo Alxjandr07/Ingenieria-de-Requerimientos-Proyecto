@@ -26,7 +26,8 @@ un script reproducible; **no hay datos fabricados a mano** (ver
 ```
 dataset-sgroas/
 ├── README.md                 ← este archivo
-├── MANIFEST.csv              ← checksums SHA-256 de cada archivo
+├── MANIFEST.csv              ← checksums SHA-256 (ruta, bytes, hash)
+├── MANIFEST.sha256           ← mismo checksum en formato `sha256sum -c`
 ├── DATA-PROVENANCE.md        ← origen de cada medición
 ├── DATA-DICTIONARY.md        ← definición de todas las variables
 ├── perf/                     ← 3 corridas k6 + análisis + figuras
@@ -51,6 +52,7 @@ dataset-sgroas/
 La lista de checksums SHA-256 está en `MANIFEST.csv`. Verificación:
 
 ```sh
-certutil -hashfile <archivo> SHA256   # Windows
-sha256sum -c MANIFEST.csv            # Linux/macOS
+certutil -hashfile <archivo> SHA256            # Windows
+sha256sum -c MANIFEST.sha256                   # Linux/macOS (archivo en formato sha256sum)
+python -c "import csv,hashlib,pathlib; [print('  '+r, '=> OK' if h==hashlib.sha256(pathlib.Path(r).read_bytes()).hexdigest() else '=> FALLO') for r,b,h in list(csv.reader(open('MANIFEST.csv')))[1:]]"
 ```

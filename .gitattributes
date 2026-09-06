@@ -1,2 +1,4 @@
 /mvnw text eol=lf
 *.cmd text eol=crlf
+dataset/MANIFEST.csv text eol=lf
+dataset/MANIFEST.sha256 text eol=lf

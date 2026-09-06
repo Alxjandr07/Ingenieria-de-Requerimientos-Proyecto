@@ -58,8 +58,8 @@ Todo número del informe es re-derivable desde estas fuentes (reglas de oro 6 y 
 
 | Artefacto | Datos crudos | Script | Commit |
 |---|---|---|---|
-| ZIP del dataset (173 archivos) | `docs/mediciones/{perf,sus,lighthouse,zap,jacoco}` | `scripts/zenodo/package-dataset.py` | `d30e980` |
-| Checksums SHA-256 | — | idem → `dataset/MANIFEST.csv` | `d30e980` |
+| ZIP del dataset (249 archivos) | `docs/mediciones/{perf,sus,lighthouse,zap,jacoco}` | `scripts/zenodo/package-dataset.py` | `d30e980` |
+| Checksums SHA-256 | — | idem → `dataset/MANIFEST.csv` + `dataset/MANIFEST.sha256` | `d30e980` |
 | DOI dataset | — | depósito Zenodo 10.5281/zenodo.21973297 | `b18444b` |
 
 ## 7. Convención de nombres
