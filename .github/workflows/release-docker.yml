@@ -6,6 +6,12 @@ name: Docker GHCR
 
 on:
   workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Tag de la imagen a publicar (opcional; por defecto vX.Y.Z del tag o sha de la rama)'
+        required: false
+        type: string
+        default: ''
   push:
     tags:
       - 'v*'
@@ -29,7 +35,9 @@ jobs:
       - name: Compute tag
         id: meta
         run: |
-          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+          if [[ -n "${{ github.event.inputs.image_tag }}" ]]; then
+            echo "TAG=${{ github.event.inputs.image_tag }}" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.ref_type }}" == "tag" ]]; then
             echo "TAG=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
           else
             echo "TAG=${GITHUB_SHA::12}" >> "$GITHUB_OUTPUT"
