@@ -61,12 +61,17 @@ public interface ConductorRepository
 
     Page<Conductor> findByActivoTrue(Pageable pageable);
 
-    List<Conductor> findByLicenciaVencimientoBefore(LocalDate fecha);
-
-    @Query("SELECT c FROM Conductor c WHERE " +
-           "LOWER(c.nombre) LIKE LOWER(CONCAT('%', :busqueda, '%'))")
-    Page<Conductor> buscar(@Param("busqueda") String busqueda,
-                           Pageable pageable);
+    @Query("""
+            SELECT c FROM Conductor c
+            WHERE c.activo = true
+              AND (:search IS NULL
+                   OR LOWER(c.nombres) LIKE LOWER(CONCAT('%', :search, '%'))
+                   OR LOWER(c.apellidos) LIKE LOWER(CONCAT('%', :search, '%'))
+                   OR c.cedula LIKE CONCAT('%', :search, '%')
+                   OR LOWER(c.numeroLicencia) LIKE LOWER(CONCAT('%', :search, '%')))
+            """)
+    Page<Conductor> buscarActivos(@Param("search") String search,
+                                  Pageable pageable);
 }
 \end{lstlisting}
 
