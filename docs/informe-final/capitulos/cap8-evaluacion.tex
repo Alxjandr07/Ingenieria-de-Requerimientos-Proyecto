@@ -75,9 +75,12 @@ concatenado; se audita con \texttt{scripts/audit-sql-dynamic.sh} (commit
 usa JWT según RFC\,7519 \cite{rfc7519} sobre OAuth\,2.0 \cite{rfc6749}, con cookie
 HttpOnly y BCrypt (factor 10+).
 
-\textbf{ZAP (pendiente de URL):} el escaneo baseline de OWASP ZAP
-(\texttt{scripts/zap/run-zap.sh}) se ejecutará contra la URL pública y su resultado
-se reportará en \texttt{docs/mediciones/sec/zap/RESUMEN.md} (dependencia K3).
+\textbf{ZAP baseline (K3):} el escaneo baseline de OWASP ZAP
+(\texttt{scripts/zap/run-zap.sh}) se ejecutó contra la URL pública
+\texttt{https://sgroas-backend.onrender.com} (commit \texttt{dea7940}).Resultado: 0
+High, 2 Medium (configuración CSP, no vulnerabilidad), 4 Low (cabeceras CORS del
+reverse proxy) e 2 Informational; 63 PASS sobre 8 URLs
+(\texttt{docs/mediciones/sec/zap/RESUMEN.md}).
 
 \textbf{Interpretación:} los controles estáticos y dinámicos ejecutados no detectan
 SQL dinámico ni credenciales en texto plano; la evidencia A01 (accessible via
