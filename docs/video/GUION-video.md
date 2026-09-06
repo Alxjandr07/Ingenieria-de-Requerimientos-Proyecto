@@ -39,7 +39,7 @@ Abrir y narrar brevemente cada uno:
 | `docs/mediciones/sus/ANALISIS-SUS.md` | SUS media/DT/IC95 | media 63.0, IC95 [53.07; 72.93] |
 | `docs/mediciones/lighthouse/RESUMEN.md` | categorías | 100/95/100/90 |
 | `docs/mediciones/sec/zap/RESUMEN.md` | baseline OWASP ZAP | alertas y severidades |
-| `docs/mediciones/jacoco/` | cobertura | 98.8 % instr / 85.4 % ramas |
+| `docs/mediciones/jacoco/` | cobertura | 87.5 % instr / 87.9 % ramas / 95.5 % líneas |
 
 Cerrar con **disponibilidad de datos**: DOI software (v1.0.0)
 `10.5281/zenodo.22522109`, DOI dataset `10.5281/zenodo.21973297`.
