@@ -102,7 +102,7 @@ public interface IncidenteRepository
         extends JpaRepository<Incidente, Long> {
 
     @Procedure(name = "Incidente.incidentesPorGravedad")
-    List<IncidenteGravedadDTO> incidentesPorGravedad(
+    List<Object[]> incidentesPorGravedad(
             @Param("p_tipo") String tipo);
 }
 \end{lstlisting}
