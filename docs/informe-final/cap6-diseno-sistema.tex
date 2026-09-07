@@ -12,6 +12,13 @@ SGROAS adopta una arquitectura monolítica de tres capas \cite{martin2017}, docu
 
 El sistema interactúa con tres actores principales (Administrador, Coordinador, Personal de Seguridad) y se conecta a dos sistemas externos: PostgreSQL 16 (base de datos transaccional) y Redis 7 (caché distribuida y blacklist de JWT).
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{c4-nivel1-contexto.png}
+  \caption{Diagrama C4 nivel 1 --- Contexto del sistema SGROAS.}
+  \label{fig:c4-nivel1}
+\end{figure}
+
 \subsection{Contenedores (C4 nivel 2)}
 
 El sistema se compone de cuatro contenedores:
@@ -21,6 +28,13 @@ El sistema se compone de cuatro contenedores:
   \item \textbf{PostgreSQL 16:} Base de datos relacional con migraciones Flyway.
   \item \textbf{Redis 7:} Caché distribuida para listados paginados y blacklist de JTI.
 \end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{c4-nivel2-contenedores.png}
+  \caption{Diagrama C4 nivel 2 --- Contenedores del sistema SGROAS.}
+  \label{fig:c4-nivel2}
+\end{figure}
 
 \subsection{Componentes (C4 nivel 3)}
 
@@ -33,6 +47,13 @@ El backend se organiza en paquetes:
   \item \texttt{ec.edu.uteq.sgroas.dto}: DTOs como Java Records.
   \item \texttt{ec.edu.uteq.sgroas.config}: configuración de seguridad, caché y CORS.
 \end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{c4-nivel3-componentes.png}
+  \caption{Diagrama C4 nivel 3 --- Componentes del backend SGROAS.}
+  \label{fig:c4-nivel3}
+\end{figure}
 
 \section{Decisiones de Arquitectura (ADR)}
 \label{sec:adr}
