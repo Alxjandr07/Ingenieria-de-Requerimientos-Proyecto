@@ -1,0 +1,21 @@
+{
+  "codigo": "P13",
+  "edad": 21,
+  "sexo": "Femenino",
+  "experiencia_web": "Media",
+  "dispositivo": "Computadora",
+  "consentimiento": "Si",
+  "respuestas": [
+    3,
+    1,
+    4,
+    1,
+    4,
+    1,
+    4,
+    1,
+    4,
+    1
+  ],
+  "sus_score": 85.0
+}

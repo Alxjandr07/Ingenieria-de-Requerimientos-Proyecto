@@ -1,0 +1,21 @@
+{
+  "codigo": "P12",
+  "edad": 19,
+  "sexo": "Masculino",
+  "experiencia_web": "Baja",
+  "dispositivo": "Computadora",
+  "consentimiento": "Si",
+  "respuestas": [
+    3,
+    2,
+    4,
+    2,
+    4,
+    2,
+    3,
+    1,
+    4,
+    2
+  ],
+  "sus_score": 72.5
+}
