@@ -1,34 +1,148 @@
 {
   "info": {
-     "name": "SGROAS API — Entrega Final",
-     "description": "Coleccion de la API REST de SGROAS para la Entrega Final (v1.0.0) — 28 peticiones: exito, validacion 422, autorizacion 401/403 y no encontrado 404. Variables: baseUrl, adminEmail, adminPassword, token (Bearer JWT).",
-     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-   },
+    "name": "SGROAS API — Entrega Final",
+    "description": "Coleccion de la API REST de SGROAS para la Entrega Final (v1.0.0) — 49 peticiones: exito, validacion 422/400, autorizacion 401/403 y no encontrado 404. Variables: baseUrl, adminEmail, adminPassword, token (Bearer JWT).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
   "variable": [
-     { "key": "baseUrl", "value": "http://localhost:8080/api" },
-     { "key": "adminEmail", "value": "admin@sgroas.com" },
-     { "key": "adminPassword", "value": "admin123" },
-     { "key": "token", "value": "" }
-   ],
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api"
+    },
+    {
+      "key": "adminEmail",
+      "value": "admin@sgroas.com"
+    },
+    {
+      "key": "adminPassword",
+      "value": "admin123"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
   "item": [
     {
       "name": "Auth",
       "item": [
         {
           "name": "Registrar usuario",
-          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"nombre\":\"Nuevo Usuario\",\"email\":\"nuevo@test.com\",\"password\":\"test123\",\"rol\":\"ROLE_COORDINADOR\"}" }, "url": "{{baseUrl}}/auth/register" }
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombre\":\"Nuevo Usuario\",\"email\":\"nuevo@test.com\",\"password\":\"test123\",\"rol\":\"ROLE_COORDINADOR\"}"
+            },
+            "url": "{{baseUrl}}/auth/register"
+          }
         },
         {
           "name": "Login exitoso",
-          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"email\":\"{{adminEmail}}\",\"password\":\"{{adminPassword}}\"}" }, "url": "{{baseUrl}}/auth/login" }
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"{{adminEmail}}\",\"password\":\"{{adminPassword}}\"}"
+            },
+            "url": "{{baseUrl}}/auth/login"
+          }
         },
         {
           "name": "Login credenciales invalidas",
-          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"email\":\"{{adminEmail}}\",\"password\":\"wrongpass\"}" }, "url": "{{baseUrl}}/auth/login" }
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"{{adminEmail}}\",\"password\":\"wrongpass\"}"
+            },
+            "url": "{{baseUrl}}/auth/login"
+          }
         },
         {
           "name": "Login email invalido",
-          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"email\":\"email-invalido\",\"password\":\"test123\"}" }, "url": "{{baseUrl}}/auth/login" }
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"email-invalido\",\"password\":\"test123\"}"
+            },
+            "url": "{{baseUrl}}/auth/login"
+          }
+        },
+        {
+          "name": "Logout (cierre de sesion 204)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/logout",
+            "description": "Caso exito: con Bearer valido revoca el token en Redis -> 204.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Forgot password (email valido 200)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/forgot-password",
+            "description": "Caso exito: email registrado -> 200 y envia codigo.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"{{adminEmail}}\"}"
+            }
+          }
+        },
+        {
+          "name": "Refresh token invalido 401",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/refresh",
+            "description": "Caso autorizacion: refresh falso -> 401.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"refreshToken\":\"invalido\"}"
+            }
+          }
         }
       ]
     },
@@ -37,31 +151,82 @@
       "item": [
         {
           "name": "Listar conductores",
-          "request": { "method": "GET", "url": "{{baseUrl}}/conductores?page=0&size=10" }
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/conductores?page=0&size=10"
+          }
         },
         {
           "name": "Crear conductor",
-          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"nombres\":\"Juan Carlos\",\"apellidos\":\"Perez Garcia\",\"cedula\":\"1234567890\",\"numeroLicencia\":\"LIC-001\",\"tipoLicencia\":\"B1\",\"fechaVencimientoLicencia\":\"2027-12-31\",\"telefono\":\"0999999999\",\"email\":\"juan.perez@cooperativa.ec\",\"estado\":\"ACTIVO\"}" }, "url": "{{baseUrl}}/conductores" }
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombres\":\"Juan Carlos\",\"apellidos\":\"Perez Garcia\",\"cedula\":\"1234567890\",\"numeroLicencia\":\"LIC-001\",\"tipoLicencia\":\"B1\",\"fechaVencimientoLicencia\":\"2027-12-31\",\"telefono\":\"0999999999\",\"email\":\"juan.perez@cooperativa.ec\",\"estado\":\"ACTIVO\"}"
+            },
+            "url": "{{baseUrl}}/conductores"
+          }
         },
         {
           "name": "Buscar conductor por ID",
-          "request": { "method": "GET", "url": "{{baseUrl}}/conductores/1" }
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/conductores/1"
+          }
         },
         {
           "name": "Conductor no encontrado (404)",
-          "request": { "method": "GET", "url": "{{baseUrl}}/conductores/9999" }
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/conductores/9999"
+          }
         },
         {
           "name": "Actualizar conductor",
-          "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"nombres\":\"Juan Carlos\",\"apellidos\":\"Perez Actualizado\",\"cedula\":\"1234567890\",\"numeroLicencia\":\"LIC-001\",\"tipoLicencia\":\"B1\",\"fechaVencimientoLicencia\":\"2028-01-01\",\"telefono\":\"0999999999\",\"email\":\"juan.perez@cooperativa.ec\",\"estado\":\"ACTIVO\"}" }, "url": "{{baseUrl}}/conductores/1" }
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombres\":\"Juan Carlos\",\"apellidos\":\"Perez Actualizado\",\"cedula\":\"1234567890\",\"numeroLicencia\":\"LIC-001\",\"tipoLicencia\":\"B1\",\"fechaVencimientoLicencia\":\"2028-01-01\",\"telefono\":\"0999999999\",\"email\":\"juan.perez@cooperativa.ec\",\"estado\":\"ACTIVO\"}"
+            },
+            "url": "{{baseUrl}}/conductores/1"
+          }
         },
         {
           "name": "Eliminar (desactivar) conductor",
-          "request": { "method": "DELETE", "url": "{{baseUrl}}/conductores/1" }
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/conductores/1"
+          }
         },
         {
           "name": "Crear conductor 422 validacion",
-          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"nombres\":\"\",\"apellidos\":\"\",\"cedula\":\"123\",\"numeroLicencia\":\"\",\"tipoLicencia\":\"\",\"fechaVencimientoLicencia\":null,\"estado\":\"\"}" }, "url": "{{baseUrl}}/conductores" }
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombres\":\"\",\"apellidos\":\"\",\"cedula\":\"123\",\"numeroLicencia\":\"\",\"tipoLicencia\":\"\",\"fechaVencimientoLicencia\":null,\"estado\":\"\"}"
+            },
+            "url": "{{baseUrl}}/conductores"
+          }
         }
       ]
     },
@@ -70,88 +235,516 @@
       "item": [
         {
           "name": "Listar usuarios",
-          "request": { "method": "GET", "url": "{{baseUrl}}/usuarios?page=0&size=10" }
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/usuarios?page=0&size=10"
+          }
         },
         {
           "name": "Crear usuario",
-          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"nombre\":\"Operador Prueba\",\"email\":\"operador@test.com\",\"password\":\"test123\",\"rol\":\"ROLE_COORDINADOR\"}" }, "url": "{{baseUrl}}/usuarios" }
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombre\":\"Operador Prueba\",\"email\":\"operador@test.com\",\"password\":\"test123\",\"rol\":\"ROLE_COORDINADOR\"}"
+            },
+            "url": "{{baseUrl}}/usuarios"
+          }
         },
         {
           "name": "Buscar usuario por ID",
-          "request": { "method": "GET", "url": "{{baseUrl}}/usuarios/1" }
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/usuarios/1"
+          }
         },
         {
           "name": "Usuario no encontrado (404)",
-          "request": { "method": "GET", "url": "{{baseUrl}}/usuarios/9999" }
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/usuarios/9999"
+          }
         },
         {
           "name": "Actualizar usuario",
-          "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"nombre\":\"Admin Modificado\",\"email\":\"admin@sgroas.com\",\"password\":\"\",\"rol\":\"ROLE_ADMIN\"}" }, "url": "{{baseUrl}}/usuarios/1" }
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombre\":\"Admin Modificado\",\"email\":\"admin@sgroas.com\",\"password\":\"\",\"rol\":\"ROLE_ADMIN\"}"
+            },
+            "url": "{{baseUrl}}/usuarios/1"
+          }
         },
         {
           "name": "Eliminar (desactivar) usuario",
-          "request": { "method": "DELETE", "url": "{{baseUrl}}/usuarios/1" }
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/usuarios/1"
+          }
         },
         {
-           "name": "Crear usuario 422 email duplicado",
-           "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"nombre\":\"Admin Duplicado\",\"email\":\"admin@sgroas.com\",\"password\":\"test123\",\"rol\":\"ROLE_ADMIN\"}" }, "url": "{{baseUrl}}/usuarios" }
-         }
-       ]
-     },
-     {
-       "name": "Auth — sesion",
-       "item": [
-         {
-           "name": "Me (perfil autenticado 200)",
-           "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/auth/me" }
-         },
-         {
-           "name": "Refresh token 200",
-           "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"refreshToken\":\"{{token}}\"}" }, "url": "{{baseUrl}}/auth/refresh" }
-         },
-         {
-           "name": "Listar conductores sin token 401",
-           "request": { "method": "GET", "url": "{{baseUrl}}/conductores?page=0&size=10" }
-         }
-       ]
-     },
-     {
-       "name": "Vehiculos",
-       "item": [
-         {
-           "name": "Listar vehiculos 200",
-           "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/vehiculos?page=0&size=10" }
-         },
-         {
-           "name": "Crear vehiculo 201",
-           "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "body": { "mode": "raw", "raw": "{\"placa\":\"ABC-1234\",\"marca\":\"Chevrolet\",\"modelo\":\"2024\",\"anio\":2024,\"capacidad\":40,\"estado\":\"ACTIVO\"}" }, "url": "{{baseUrl}}/vehiculos" }
-         },
-         {
-           "name": "Vehiculo no encontrado 404",
-           "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/vehiculos/9999" }
-         },
-         {
-           "name": "Crear vehiculo 422 validacion",
-           "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "body": { "mode": "raw", "raw": "{\"placa\":\"\",\"marca\":\"\",\"modelo\":\"\",\"anio\":null,\"capacidad\":null,\"estado\":\"\"}" }, "url": "{{baseUrl}}/vehiculos" }
-         }
-       ]
-     },
-     {
-       "name": "Rutas",
-       "item": [
-         {
-           "name": "Listar rutas 200",
-           "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/rutas?page=0&size=10" }
-         },
-         {
-           "name": "Crear ruta 201",
-           "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "body": { "mode": "raw", "raw": "{\"origen\":\"Quevedo\",\"destino\":\"Guayaquil\",\"distanciaKm\":180,\"duracionMin\":150,\"estado\":\"ACTIVA\"}" }, "url": "{{baseUrl}}/rutas" }
-         },
-         {
-           "name": "Ruta no encontrada 404",
-           "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/rutas/9999" }
-         }
-       ]
-     }
-   ]
+          "name": "Crear usuario 422 email duplicado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nombre\":\"Admin Duplicado\",\"email\":\"admin@sgroas.com\",\"password\":\"test123\",\"rol\":\"ROLE_ADMIN\"}"
+            },
+            "url": "{{baseUrl}}/usuarios"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth — sesion",
+      "item": [
+        {
+          "name": "Me (perfil autenticado 200)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/me"
+          }
+        },
+        {
+          "name": "Refresh token 200",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"refreshToken\":\"{{token}}\"}"
+            },
+            "url": "{{baseUrl}}/auth/refresh"
+          }
+        },
+        {
+          "name": "Listar conductores sin token 401",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/conductores?page=0&size=10"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vehiculos",
+      "item": [
+        {
+          "name": "Listar vehiculos 200",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/vehiculos?page=0&size=10"
+          }
+        },
+        {
+          "name": "Crear vehiculo 201",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"placa\":\"ABC-1234\",\"marca\":\"Chevrolet\",\"modelo\":\"2024\",\"anio\":2024,\"capacidad\":40,\"estado\":\"ACTIVO\"}"
+            },
+            "url": "{{baseUrl}}/vehiculos"
+          }
+        },
+        {
+          "name": "Vehiculo no encontrado 404",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/vehiculos/9999"
+          }
+        },
+        {
+          "name": "Crear vehiculo 422 validacion",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"placa\":\"\",\"marca\":\"\",\"modelo\":\"\",\"anio\":null,\"capacidad\":null,\"estado\":\"\"}"
+            },
+            "url": "{{baseUrl}}/vehiculos"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rutas",
+      "item": [
+        {
+          "name": "Listar rutas 200",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/rutas?page=0&size=10"
+          }
+        },
+        {
+          "name": "Crear ruta 201",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"origen\":\"Quevedo\",\"destino\":\"Guayaquil\",\"distanciaKm\":180,\"duracionMin\":150,\"estado\":\"ACTIVA\"}"
+            },
+            "url": "{{baseUrl}}/rutas"
+          }
+        },
+        {
+          "name": "Ruta no encontrada 404",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/rutas/9999"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reportes",
+      "item": [
+        {
+          "name": "Estadisticas generales 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reportes/estadisticas-generales",
+            "description": "Caso exito SP/FN: FN estadisticas -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Incidentes por gravedad 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reportes/incidentes-por-gravedad",
+            "description": "Caso exito SP: incidentes por gravedad -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Incidentes por rango 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reportes/incidentes-por-rango?inicio=2026-01-01&fin=2026-12-31",
+            "description": "Caso exito SP: rango de fechas -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Licencias por vencer 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reportes/licencias-por-vencer",
+            "description": "Caso exito FN: licencias proximas a vencer -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Vehiculos en mantenimiento 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reportes/vehiculos-en-mantenimiento",
+            "description": "Caso exito: vehiculos en mantenimiento -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Rendimiento de rutas 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reportes/rendimiento-rutas",
+            "description": "Caso exito SP: rendimiento por ruta -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Asignaciones activas por conductor 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reportes/asignaciones-activas/1",
+            "description": "Caso exito SP: asignaciones activas del conductor 1 -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "ABD",
+      "item": [
+        {
+          "name": "ABD programaciones 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/abd/programaciones",
+            "description": "Caso exito: listado ABD 1M registros -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ABD unidades 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/abd/unidades",
+            "description": "Caso exito: unidades ABD -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ABD rutas 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/abd/rutas",
+            "description": "Caso exito: rutas ABD -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ABD conductores 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/abd/conductores",
+            "description": "Caso exito: conductores ABD -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ABD incidentes 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/abd/incidentes",
+            "description": "Caso exito: incidentes ABD -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ABD alertas 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/abd/alertas",
+            "description": "Caso exito: alertas ABD -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ABD catalogos 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/abd/catalogos",
+            "description": "Caso exito: catalogos ABD -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ABD resumen de reportes 200",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/abd/reportes/resumen",
+            "description": "Caso exito: resumen ABD -> 200.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Validacion y Error",
+      "item": [
+        {
+          "name": "Me sin token 401",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/auth/me",
+            "description": "Caso autorizacion: sin JWT -> 401 Unauthorized."
+          }
+        },
+        {
+          "name": "ABD sin permisos 403",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/abd/programaciones",
+            "description": "Caso autorizacion: token de rol COORDINADOR sin permiso ABD -> 403 Forbidden.",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Verify email codigo invalido 400",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/verify-email",
+            "description": "Caso validacion: codigo incorrecto -> 400.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"nuevo@test.com\",\"codigo\":\"000000\"}"
+            }
+          }
+        }
+      ]
+    }
+  ]
 }

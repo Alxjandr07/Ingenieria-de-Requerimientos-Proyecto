@@ -25,7 +25,7 @@ Mostrar que partimos de un directorio vacío (carpeta limpia al inicio).
 ```sh
 make all
 ```
-Mostrar el inicio en vivo (npm install, sam build, docker compose up) y
+Mostrar el inicio en vivo (`docker compose up`, `./mvnw verify`, k6, ZAP, JaCoCo, informe PDF) y
 **echo del código de salida 0** (`echo $?`). Si hace falta, acelerar con
 edición, pero sin cortar el `exit code 0`.
 
@@ -36,10 +36,13 @@ Abrir y narrar brevemente cada uno:
 |---|---|---|
 | `docs/mediciones/perf/ANALISIS-k6.md` | p95 < 200 ms, 0 % error | media de medias 23.01 ms, IC95 [−7.88; 53.91] |
 | `docs/mediciones/perf/figuras/` | figuras Okabe-Ito | 4 PNG regenerables |
-| `docs/mediciones/sus/ANALISIS-SUS.md` | SUS media/DT/IC95 | media 63.0, IC95 [53.07; 72.93] |
-| `docs/mediciones/lighthouse/RESUMEN.md` | categorías | 100/95/100/90 |
+| `docs/mediciones/sus/ANALISIS-SUS.md` | SUS media/DT/IC95 | media 68.5 (n=15), IC95 [60.76; 76.24] |
+| `docs/mediciones/lighthouse/RESUMEN.md` | categorías | desktop 95/91/92/90 (mobile 75–79, throttling free tier) |
 | `docs/mediciones/sec/zap/RESUMEN.md` | baseline OWASP ZAP | alertas y severidades |
 | `docs/mediciones/jacoco/` | cobertura | 87.5 % instr / 87.9 % ramas / 95.5 % líneas |
+| `scripts/perf-analysis.ipynb`, `scripts/sus-analysis.ipynb` | cuadernos con salidas archivadas | se ven sin re-ejecutar |
+| `docs/postman/coleccion.json` | colección API | 49 peticiones (éxito, 422/400, 401/403, 404) |
+| `docs/informe-final.pdf` | informe generado por `make pdf` | 101 páginas |
 
 Cerrar con **disponibilidad de datos**: DOI software (v1.0.0)
 `10.5281/zenodo.22522109`, DOI dataset `10.5281/zenodo.21973297`.
