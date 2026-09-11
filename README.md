@@ -114,6 +114,11 @@ pdflatex main && biber main && pdflatex main && pdflatex main
 
 Requiere MiKTeX o TeX Live con `babel-spanish`, `biblatex` + `biber`, `listings`, `csquotes`, `float`.
 
+## Demo
+
+Video (5–7 min) — `make all` desde clonación limpia + reportes: [ver en Google Drive](https://drive.google.com/file/d/1t70f9jVQv8W74b55glOZx7yIyEND41wA/view?usp=sharing).
+DOI software: 10.5281/zenodo.22522109 · DOI dataset: 10.5281/zenodo.21973297.
+
 ## Estructura del repositorio
 
 ```
