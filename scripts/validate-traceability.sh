@@ -36,7 +36,8 @@ while IFS= read -r line; do
 
     if [[ -z "$id" || -z "$tipo" || -z "$prioridad" ]]; then
         echo "ERROR: fila sin id/tipo/prioridad: $line" >&2
-        exit 1
+        ERRS=$((ERRS+1))
+        continue
     fi
 
     if [[ "$tipo" != "Funcional" && "$tipo" != "No funcional" ]]; then
@@ -48,9 +49,6 @@ while IFS= read -r line; do
         if [[ -z "$historia" && -z "$caso" && -z "$prueba" ]]; then
             echo "ERROR: $id (Funcional) sin correspondencia en historia, caso de uso o prueba." >&2
             ERRS=$((ERRS+1))
-        fi
-        if [[ -z "$historia" ]]; then
-            echo "AVISO: $id sin historia de usuario asociada (deberia existir HU)." >&2
         fi
     else
         if [[ -z "$prueba" && -z "$evidencia" ]]; then
