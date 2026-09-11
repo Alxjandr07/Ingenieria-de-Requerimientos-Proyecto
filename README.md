@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Java](https://img.shields.io/badge/Java-21-blue)](https://adoptium.net/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-green)](https://spring.io/projects/spring-boot)
-[![Angular](https://img.shields.io/badge/Angular-17-red)](https://angular.io/)
+[![Angular](https://img.shields.io/badge/Angular-20-red)](https://angular.io/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791)](https://www.postgresql.org/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22522109.svg)](https://doi.org/10.5281/zenodo.22522109)
 
@@ -44,7 +44,7 @@ make audit
 # Artefactos docs (versions + figuras k6)
 make docs
 
-# Compilar el informe (genera docs/informe-final/main.pdf, 95 páginas)
+# Compilar el informe (genera docs/informe-final/main.pdf, 101 páginas)
 make pdf
 
 # Pipeline completo end-to-end (up, test, bench K1-K3, audit, jacoco, docs, pdf)
@@ -58,7 +58,7 @@ Sistema disponible en `https://sgroas-backend.onrender.com` (Render Free, datos 
 
 ## Compilación del informe técnico
 
-El informe se compila desde el directorio `docs/informe-final/` (95 páginas),
+El informe se compila desde el directorio `docs/informe-final/` (101 páginas),
 con `pdflatex` + `biber` (4 invocaciones: tres pasadas de `pdflatex` y una de `biber`):
 
 ```bash
@@ -96,9 +96,9 @@ reproducirlos y comprobarlos:
 | **Auditoría de BD** | `V12` triggers + `docs/basedatos/AUDITORIA-ABD.md` | Insertar/actualizar y ver la fila nueva en `auditoria` |
 | **Elementos programables** | `V5`, `V12`, `V13` + `docs/basedatos/ELEMENTOS-PROGRAMABLES.md` | Funciones, cursores explícitos y procedimientos con validación (comandos incluidos) |
 
-## Informe final (Entrega Final v1.0.0)
+## Informe final (Entrega Final v1.0.1)
 
-Documento académico completo — **96 páginas** con anexos y capturas CI/Render: [`docs/informe-final.pdf`](docs/informe-final.pdf) · Fuente LaTeX: [`docs/informe-final/main.tex`](docs/informe-final/main.tex) + `refs.bib` · Wrapper para Listing 1 p.17: [`docs/informe-final.tex`](docs/informe-final.tex).
+Documento académico completo — **101 páginas** con anexos y capturas CI/Render: [`docs/informe-final.pdf`](docs/informe-final.pdf) · Fuente LaTeX: [`docs/informe-final/main.tex`](docs/informe-final/main.tex) + `refs.bib` · Wrapper para Listing 1 p.17: [`docs/informe-final.tex`](docs/informe-final.tex).
 
 ### Compilación del informe
 
@@ -123,8 +123,8 @@ DOI software: 10.5281/zenodo.22522109 · DOI dataset: 10.5281/zenodo.21973297.
 
 ```
 .
-├── backend/          # Spring Boot 3.5 / Java 21
-├── frontend/         # Angular 17+
+├── src/              # Spring Boot 3.5 / Java 21 (backend)
+├── frontend/         # Angular 20+
 ├── db/               # Schema, seed, stored procedures
 ├── docs/             # Documentación completa
 ├── k6/               # Benchmarks de rendimiento
@@ -150,7 +150,7 @@ Distribuido bajo licencia MIT. Ver [LICENSE](LICENSE).
 }
 ```
 
-> Versión publicada: tag `v1.0.0` (commit `9ded2a69f1da35d09b6dfedb9d62e61e5c9ae48a`).
+> Versión publicada: tag `v1.0.1`.
 
 ## Dataset del estudio empírico
 
@@ -169,10 +169,10 @@ Imagen del sistema (backend JDK 21 + frontend Angular) publicada en GitHub
 Container Registry por el workflow `release-docker.yml` (reproducible en el CI):
 
 ```bash
-docker pull ghcr.io/alxjandr07/sgroas:v1.0.0
+docker pull ghcr.io/alxjandr07/sgroas:v1.0.1
 ```
 
-- Etiqueta: `ghcr.io/alxjandr07/sgroas:v1.0.0`
+- Etiqueta: `ghcr.io/alxjandr07/sgroas:v1.0.1`
 - Digest (manifest list, amd64):
   `sha256:ea284abed7f6dcb16ef6859e8e5a57cdc1958ed30336e31f04a966a379b18f92`
 - Para levantar el sistema completo (backend + PostgreSQL + Redis) usar
