@@ -5,6 +5,7 @@ import ec.edu.uteq.sgroas.dto.EmailRequest;
 import ec.edu.uteq.sgroas.dto.LoginRequest;
 import ec.edu.uteq.sgroas.dto.RefreshTokenRequest;
 import ec.edu.uteq.sgroas.dto.RestablecerContrasenaRequest;
+import ec.edu.uteq.sgroas.dto.SesionResponse;
 import ec.edu.uteq.sgroas.dto.VerificarEmailRequest;
 import ec.edu.uteq.sgroas.entity.Usuario;
 import ec.edu.uteq.sgroas.repository.UsuarioRepository;
@@ -40,8 +41,11 @@ public class AuthController {
     @Value("${app.cookie.secure:false}")
     private boolean cookieSecure;
 
+    @Value("${app.jwt.refresh-expiration-ms:604800000}")
+    private long refreshExpirationMs;
+
     @GetMapping("/me")
-    public ResponseEntity<AuthResponse> me(
+    public ResponseEntity<SesionResponse> me(
             @CookieValue(name = "access_token", required = false) String accessTokenCookie,
             @RequestHeader(value = "Authorization", required = false) String authorizationHeader
     ) {
@@ -63,14 +67,11 @@ public class AuthController {
         if (usuario == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.ok(new AuthResponse(
-                "",
-                "",
-                "Bearer",
-                jwtService.getExpirationMs(),
+        return ResponseEntity.ok(new SesionResponse(
                 usuario.getNombre(),
                 usuario.getEmail(),
-                usuario.getRol().name()
+                usuario.getRol().name(),
+                jwtService.getExpirationMs()
         ));
     }
 
@@ -78,6 +79,9 @@ public class AuthController {
      * No existe registro publico: los usuarios los crea el ADMIN desde el
      * modulo Usuarios (POST /api/usuarios) y ahi mismo se les envia por
      * correo el codigo de activacion que se confirma en /verify-email.
+     *
+     * Los tokens viajan SOLO en cookies HttpOnly (access_token +
+     * refresh_token). El cuerpo devuelve el perfil de sesion sin JWT.
      */
 
     @PostMapping("/login")
@@ -97,7 +101,8 @@ public class AuthController {
             loginRateLimiter.resetear(ip);
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, crearCookieAccessToken(response.accessToken()))
-                    .body(response);
+                    .header(HttpHeaders.SET_COOKIE, crearCookieRefreshToken(response.refreshToken()))
+                    .body(aSesion(response));
         } catch (Exception e) {
             loginRateLimiter.registrarIntentoFallido(ip);
             throw e;
@@ -105,24 +110,34 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<AuthResponse> refresh(
-            @Valid @RequestBody RefreshTokenRequest request
+    public ResponseEntity<SesionResponse> refresh(
+            @CookieValue(name = "refresh_token", required = false) String refreshCookie,
+            @RequestBody(required = false) RefreshTokenRequest body
     ) {
-        AuthResponse response = authService.refresh(request);
+        String refreshToken = refreshCookie;
+        if ((refreshToken == null || refreshToken.isBlank()) && body != null) {
+            refreshToken = body.refreshToken();
+        }
+        if (refreshToken == null || refreshToken.isBlank()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        AuthResponse response = authService.refresh(new RefreshTokenRequest(refreshToken));
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, crearCookieAccessToken(response.accessToken()))
-                .body(response);
+                .header(HttpHeaders.SET_COOKIE, crearCookieRefreshToken(response.refreshToken()))
+                .body(aSesion(response));
     }
 
     /** Confirma el codigo enviado al correo y activa la cuenta (inicia sesion). */
     @PostMapping("/verify-email")
-    public ResponseEntity<AuthResponse> verificarEmail(
+    public ResponseEntity<SesionResponse> verificarEmail(
             @Valid @RequestBody VerificarEmailRequest request
     ) {
         AuthResponse response = authService.verificarEmail(request.email(), request.codigo());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, crearCookieAccessToken(response.accessToken()))
-                .body(response);
+                .header(HttpHeaders.SET_COOKIE, crearCookieRefreshToken(response.refreshToken()))
+                .body(aSesion(response));
     }
 
     /** Reenvia el codigo de verificacion (respuesta generica para no revelar cuentas). */
@@ -163,16 +178,29 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(
             @CookieValue(name = "access_token", required = false) String accessTokenCookie,
-            @Valid @RequestBody RefreshTokenRequest request
+            @CookieValue(name = "refresh_token", required = false) String refreshCookie,
+            @RequestBody(required = false) RefreshTokenRequest body
     ) {
-        String accessToken = accessTokenCookie;
-        if (accessToken == null) {
-            accessToken = "";
+        String accessToken = accessTokenCookie == null ? "" : accessTokenCookie;
+        String refreshToken = refreshCookie;
+        if ((refreshToken == null || refreshToken.isBlank()) && body != null) {
+            refreshToken = body.refreshToken();
         }
-        authService.logout(accessToken, request);
+        authService.logout(accessToken,
+                new RefreshTokenRequest(refreshToken == null ? "" : refreshToken));
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, eliminarCookieAccessToken())
+                .header(HttpHeaders.SET_COOKIE, eliminarCookieRefreshToken())
                 .build();
+    }
+
+    private SesionResponse aSesion(AuthResponse response) {
+        return new SesionResponse(
+                response.nombre(),
+                response.email(),
+                response.rol(),
+                response.expiresIn()
+        );
     }
 
     private String crearCookieAccessToken(String token) {
@@ -186,12 +214,34 @@ public class AuthController {
                 .toString();
     }
 
+    private String crearCookieRefreshToken(String token) {
+        return ResponseCookie.from("refresh_token", token)
+                .httpOnly(true)
+                .secure(cookieSecure)
+                .sameSite("Strict")
+                .path("/api/auth")
+                .maxAge(Duration.ofMillis(refreshExpirationMs))
+                .build()
+                .toString();
+    }
+
     private String eliminarCookieAccessToken() {
         return ResponseCookie.from("access_token", "")
                 .httpOnly(true)
                 .secure(cookieSecure)
                 .sameSite("Strict")
                 .path("/")
+                .maxAge(0)
+                .build()
+                .toString();
+    }
+
+    private String eliminarCookieRefreshToken() {
+        return ResponseCookie.from("refresh_token", "")
+                .httpOnly(true)
+                .secure(cookieSecure)
+                .sameSite("Strict")
+                .path("/api/auth")
                 .maxAge(0)
                 .build()
                 .toString();

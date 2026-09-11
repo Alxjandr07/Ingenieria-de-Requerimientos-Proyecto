@@ -5,9 +5,28 @@ Todas las cambios notables de SGROAS se documentan aquí.
 Formato basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 y el proyecto usa [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Unreleased] → v1.0.1 (2026-09-11, entrega final)
 
-### Añadido (ruta de entrega final — v1.0.0, 2026-08-17)
+### Seguridad
+- Auth cookie-only: `login`/`refresh`/`verify-email`/`me` devuelven
+  `SesionResponse` sin JWT en el cuerpo; access y refresh viajan solo en
+  cookies HttpOnly (`access_token` Path `/`, `refresh_token` Path
+  `/api/auth`, Secure en prod + SameSite=Strict). Frontend sin tokens en
+  `localStorage`; interceptor solo `withCredentials`.
+
+### Corregido
+- `GET /api/asignaciones`: `@Transactional(readOnly=true)` + total real
+  del `Page` (antes `contenido.size()`). Verificado 200 en Render.
+- SpotBugs real publicado en `docs/mediciones/sec/static-analysis/`
+  (71 clases, 0 bugs) en vez del placeholder.
+- `make all`/`docs`/`bench-render` aclarados y documentados en README.
+
+### Pruebas
+- Nueva suite ABD (45 tests): `Unidad/Programacion/Incidente/RutaAbdService`
+  + `Alerta/ConductorAbdController`. Ramas: `abd.controller` 91.7%,
+  `abd.service` 91.2% (antes 0%).
+
+## [1.0.0] — 2026-08-17 — Entrega final v1.0.0
 
 - Análisis estadístico reproducible de k6 (`scripts/perf-analysis.py`,
   `scripts/gen-figuras.py`) con media/DT/EE/IC95 y figuras Okabe-Ito.

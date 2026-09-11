@@ -170,7 +170,9 @@ class AuthControllerTest {
                                 """))
                 .andExpect(status().isOk())
                 .andExpect(header().exists("Set-Cookie"))
-                .andExpect(jsonPath("$.accessToken").value("access-token"));
+                .andExpect(jsonPath("$.email").value("admin@sgroas.com"))
+                .andExpect(jsonPath("$.accessToken").doesNotExist())
+                .andExpect(jsonPath("$.refreshToken").doesNotExist());
     }
 
     @Test
@@ -202,7 +204,7 @@ class AuthControllerTest {
     }
 
     @Test
-    void loginCorrectoDebeRetornar200YCookie() throws Exception {
+    void loginCorrectoDebeRetornar200YCookieSinTokenEnBody() throws Exception {
         when(loginRateLimiter.estaBloqueado("127.0.0.1")).thenReturn(false);
         when(authService.login(any())).thenReturn(authResponse());
 
@@ -216,7 +218,9 @@ class AuthControllerTest {
                                 """))
                 .andExpect(status().isOk())
                 .andExpect(header().exists("Set-Cookie"))
-                .andExpect(jsonPath("$.tokenType").value("Bearer"));
+                .andExpect(jsonPath("$.email").value("admin@sgroas.com"))
+                .andExpect(jsonPath("$.accessToken").doesNotExist())
+                .andExpect(jsonPath("$.refreshToken").doesNotExist());
     }
 
     @Test
@@ -253,7 +257,19 @@ class AuthControllerTest {
     }
 
     @Test
-    void refreshDebeRetornar200YCookie() throws Exception {
+    void refreshConCookieDebeRetornar200SinTokenEnBody() throws Exception {
+        when(authService.refresh(any())).thenReturn(authResponse());
+
+        mockMvc().perform(post("/api/auth/refresh")
+                        .cookie(new jakarta.servlet.http.Cookie("refresh_token", "refresh-token")))
+                .andExpect(status().isOk())
+                .andExpect(header().exists("Set-Cookie"))
+                .andExpect(jsonPath("$.email").value("admin@sgroas.com"))
+                .andExpect(jsonPath("$.accessToken").doesNotExist());
+    }
+
+    @Test
+    void refreshConBodyDebeRetornar200PorCompatibilidad() throws Exception {
         when(authService.refresh(any())).thenReturn(authResponse());
 
         mockMvc().perform(post("/api/auth/refresh")
@@ -264,6 +280,21 @@ class AuthControllerTest {
                                 }
                                 """))
                 .andExpect(status().isOk())
+                .andExpect(header().exists("Set-Cookie"));
+    }
+
+    @Test
+    void refreshSinTokenDebeRetornar401() throws Exception {
+        mockMvc().perform(post("/api/auth/refresh"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void logoutConCookiesDebeRetornar204() throws Exception {
+        mockMvc().perform(post("/api/auth/logout")
+                        .cookie(new jakarta.servlet.http.Cookie("access_token", "access-token"))
+                        .cookie(new jakarta.servlet.http.Cookie("refresh_token", "refresh-token")))
+                .andExpect(status().isNoContent())
                 .andExpect(header().exists("Set-Cookie"));
     }
 

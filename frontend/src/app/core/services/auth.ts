@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { catchError, EMPTY } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { LoginRequest, LoginResponse, MensajeResponse } from '../models/auth.model';
+import { LoginRequest, MensajeResponse, Sesion } from '../models/auth.model';
 
 const SESION_KEY = 'sgroas_sesion';
 
@@ -13,24 +13,24 @@ const SESION_KEY = 'sgroas_sesion';
 export class Auth {
   private readonly apiUrl = `${environment.apiUrl}/auth`;
 
-  currentUser = signal<LoginResponse | null>(this.cargarLocal());
+  currentUser = signal<Sesion | null>(this.cargarLocal());
 
   constructor(private http: HttpClient) {
     this.validarSesionConServidor();
   }
 
-  login(credentials: LoginRequest): Observable<LoginResponse> {
+  login(credentials: LoginRequest): Observable<Sesion> {
     return this.http
-      .post<LoginResponse>(`${this.apiUrl}/login`, credentials, {
+      .post<Sesion>(`${this.apiUrl}/login`, credentials, {
         withCredentials: true
       })
       .pipe(tap((response) => this.guardarSesion(response)));
   }
 
   /** Confirma el codigo de 6 digitos y deja la sesion iniciada. */
-  verificarEmail(email: string, codigo: string): Observable<LoginResponse> {
+  verificarEmail(email: string, codigo: string): Observable<Sesion> {
     return this.http
-      .post<LoginResponse>(
+      .post<Sesion>(
         `${this.apiUrl}/verify-email`,
         { email, codigo },
         { withCredentials: true }
@@ -59,12 +59,12 @@ export class Auth {
   }
 
   logout(): Observable<void> {
-    const refreshToken = this.currentUser()?.refreshToken ?? '';
     // La sesion local se limpia de inmediato: el cierre nunca queda bloqueado
     // si la peticion al servidor falla o responde con error.
+    // Los tokens viajan en cookies HttpOnly: no se envian en el cuerpo.
     this.limpiarSesion();
     return this.http
-      .post<void>(`${this.apiUrl}/logout`, { refreshToken }, { withCredentials: true })
+      .post<void>(`${this.apiUrl}/logout`, {}, { withCredentials: true })
       .pipe(catchError(() => EMPTY));
   }
 
@@ -82,9 +82,10 @@ export class Auth {
     return rol !== null && roles.includes(rol);
   }
 
-  private guardarSesion(response: LoginResponse): void {
+  private guardarSesion(response: Sesion): void {
     this.currentUser.set(response);
     try {
+      // Solo el perfil (sin JWT): los tokens viven en cookies HttpOnly.
       localStorage.setItem(SESION_KEY, JSON.stringify(response));
     } catch { /* almacenamiento no disponible */ }
   }
@@ -96,10 +97,10 @@ export class Auth {
     } catch { /* almacenamiento no disponible */ }
   }
 
-  private cargarLocal(): LoginResponse | null {
+  private cargarLocal(): Sesion | null {
     try {
       const bruto = localStorage.getItem(SESION_KEY);
-      return bruto ? (JSON.parse(bruto) as LoginResponse) : null;
+      return bruto ? (JSON.parse(bruto) as Sesion) : null;
     } catch {
       return null;
     }
@@ -111,7 +112,7 @@ export class Auth {
   private validarSesionConServidor(): void {
     if (this.currentUser() === null) return;
     this.http
-      .get<LoginResponse>(`${this.apiUrl}/me`, { withCredentials: true })
+      .get<Sesion>(`${this.apiUrl}/me`, { withCredentials: true })
       .subscribe({
         next: (response) => this.guardarSesion(response),
         error: () => this.limpiarSesion()

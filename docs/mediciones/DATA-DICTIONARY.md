@@ -201,17 +201,21 @@
 | `password` | String | SI | Contrasena del nuevo usuario |
 | `rol` | String | NO | Rol (default: ROLE_COORDINADOR) |
 
-### 3.3. `AuthResponse`
+### 3.3. `SesionResponse` (cuerpo de login/refresh/verify-email/me)
+
+Los JWT ya no viajan en el cuerpo: van solo en cookies HttpOnly
+`access_token` (Path `/`) y `refresh_token` (Path `/api/auth`),
+ambas con `Secure` (prod) + `SameSite=Strict`.
 
 | Campo | Tipo | Descripcion |
 |---|---|---|
-| `accessToken` | String | JWT de acceso |
-| `refreshToken` | String | UUID para renovar el access token |
-| `tokenType` | String | Siempre "Bearer" |
-| `expiresIn` | long | Tiempo de vida en ms |
 | `nombre` | String | Nombre del usuario autenticado |
 | `email` | String | Email del usuario autenticado |
 | `rol` | String | Rol del usuario (ROLE_ADMIN, etc.) |
+| `expiresIn` | long | Tiempo de vida del access token en ms |
+
+> `AuthResponse` (con `accessToken`/`refreshToken`/`tokenType`) sigue
+> existiendo como objeto interno del servicio, pero no se expone por HTTP.
 
 ### 3.4. `RefreshTokenRequest`
 

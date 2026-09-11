@@ -7,12 +7,9 @@ export interface MensajeResponse {
   mensaje: string;
 }
 
-export interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-  tokenType: string;
-  expiresIn: number;
+export interface Sesion {
   nombre: string;
   email: string;
   rol: string;
+  expiresIn: number;
 }
