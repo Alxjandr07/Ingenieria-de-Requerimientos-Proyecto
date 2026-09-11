@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UnidadAbdService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">ec.edu.uteq.sgroas.abd.service</a> &gt; <span class="el_source">UnidadAbdService.java</span></div><h1>UnidadAbdService.java</h1><pre class="source lang-java linenums">package ec.edu.uteq.sgroas.abd.service;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UnidadAbdService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">ec.edu.uteq.sgroas.abd.service</a> &gt; <span class="el_source">UnidadAbdService.java</span></div><h1>UnidadAbdService.java</h1><pre class="source lang-java linenums">package ec.edu.uteq.sgroas.abd.service;
 
 import ec.edu.uteq.sgroas.abd.dto.AbdDtos;
 import ec.edu.uteq.sgroas.abd.entity.Unidad;
@@ -19,84 +19,84 @@ public class UnidadAbdService {
 
     @Transactional(readOnly = true)
     public Page&lt;AbdDtos.UnidadResponse&gt; listar(String estado, String search, Pageable pageable) {
-<span class="nc bnc" id="L22" title="All 4 branches missed.">        String estadoFiltro = (estado == null || estado.isBlank()) ? null : estado.trim().toLowerCase();</span>
-<span class="nc bnc" id="L23" title="All 4 branches missed.">        String searchFiltro = (search == null || search.isBlank()) ? null : search.trim().toLowerCase();</span>
+<span class="fc bfc" id="L22" title="All 4 branches covered.">        String estadoFiltro = (estado == null || estado.isBlank()) ? null : estado.trim().toLowerCase();</span>
+<span class="fc bfc" id="L23" title="All 4 branches covered.">        String searchFiltro = (search == null || search.isBlank()) ? null : search.trim().toLowerCase();</span>
         Page&lt;Unidad&gt; page;
-<span class="nc bnc" id="L25" title="All 4 branches missed.">        if (estadoFiltro == null &amp;&amp; searchFiltro == null) {</span>
-<span class="nc" id="L26">            page = unidadRepository.findAll(pageable);</span>
+<span class="pc bpc" id="L25" title="1 of 4 branches missed.">        if (estadoFiltro == null &amp;&amp; searchFiltro == null) {</span>
+<span class="fc" id="L26">            page = unidadRepository.findAll(pageable);</span>
         } else {
-<span class="nc" id="L28">            page = unidadRepository.buscarConFiltros(estadoFiltro, searchFiltro,</span>
-<span class="nc" id="L29">                    PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));</span>
+<span class="fc" id="L28">            page = unidadRepository.buscarConFiltros(estadoFiltro, searchFiltro,</span>
+<span class="fc" id="L29">                    PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));</span>
         }
-<span class="nc" id="L31">        return page.map(this::aResponse);</span>
+<span class="fc" id="L31">        return page.map(this::aResponse);</span>
     }
 
     @Transactional(readOnly = true)
     public AbdDtos.UnidadResponse buscarPorId(Integer idUnidad) {
-<span class="nc" id="L36">        return unidadRepository.findById(idUnidad).map(this::aResponse)</span>
-<span class="nc" id="L37">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + idUnidad));</span>
+<span class="fc" id="L36">        return unidadRepository.findById(idUnidad).map(this::aResponse)</span>
+<span class="fc" id="L37">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + idUnidad));</span>
     }
 
     public AbdDtos.UnidadResponse crear(AbdDtos.UnidadRequest request) {
-<span class="nc" id="L41">        validarUnicidad(request.placa(), request.numeroDisco(), null);</span>
-<span class="nc" id="L42">        Unidad unidad = Unidad.builder()</span>
-<span class="nc" id="L43">                .placa(request.placa())</span>
-<span class="nc" id="L44">                .numeroDisco(request.numeroDisco())</span>
-<span class="nc" id="L45">                .modelo(request.modelo())</span>
-<span class="nc" id="L46">                .capacidad(request.capacidad())</span>
-<span class="nc" id="L47">                .anioFabricacion(request.anioFabricacion())</span>
-<span class="nc bnc" id="L48" title="All 2 branches missed.">                .estado(request.estado() == null ? &quot;Activo&quot; : request.estado())</span>
-<span class="nc" id="L49">                .build();</span>
-<span class="nc" id="L50">        return aResponse(unidadRepository.save(unidad));</span>
+<span class="fc" id="L41">        validarUnicidad(request.placa(), request.numeroDisco(), null);</span>
+<span class="fc" id="L42">        Unidad unidad = Unidad.builder()</span>
+<span class="fc" id="L43">                .placa(request.placa())</span>
+<span class="fc" id="L44">                .numeroDisco(request.numeroDisco())</span>
+<span class="fc" id="L45">                .modelo(request.modelo())</span>
+<span class="fc" id="L46">                .capacidad(request.capacidad())</span>
+<span class="fc" id="L47">                .anioFabricacion(request.anioFabricacion())</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">                .estado(request.estado() == null ? &quot;Activo&quot; : request.estado())</span>
+<span class="fc" id="L49">                .build();</span>
+<span class="fc" id="L50">        return aResponse(unidadRepository.save(unidad));</span>
     }
 
     public AbdDtos.UnidadResponse actualizar(Integer idUnidad, AbdDtos.UnidadRequest request) {
-<span class="nc" id="L54">        Unidad unidad = unidadRepository.findById(idUnidad)</span>
-<span class="nc" id="L55">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + idUnidad));</span>
-<span class="nc" id="L56">        validarUnicidad(request.placa(), request.numeroDisco(), idUnidad);</span>
-<span class="nc" id="L57">        unidad.setPlaca(request.placa());</span>
-<span class="nc" id="L58">        unidad.setNumeroDisco(request.numeroDisco());</span>
-<span class="nc" id="L59">        unidad.setModelo(request.modelo());</span>
-<span class="nc" id="L60">        unidad.setCapacidad(request.capacidad());</span>
-<span class="nc" id="L61">        unidad.setAnioFabricacion(request.anioFabricacion());</span>
-<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (request.estado() != null) {</span>
-<span class="nc" id="L63">            unidad.setEstado(request.estado());</span>
+<span class="fc" id="L54">        Unidad unidad = unidadRepository.findById(idUnidad)</span>
+<span class="fc" id="L55">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + idUnidad));</span>
+<span class="fc" id="L56">        validarUnicidad(request.placa(), request.numeroDisco(), idUnidad);</span>
+<span class="fc" id="L57">        unidad.setPlaca(request.placa());</span>
+<span class="fc" id="L58">        unidad.setNumeroDisco(request.numeroDisco());</span>
+<span class="fc" id="L59">        unidad.setModelo(request.modelo());</span>
+<span class="fc" id="L60">        unidad.setCapacidad(request.capacidad());</span>
+<span class="fc" id="L61">        unidad.setAnioFabricacion(request.anioFabricacion());</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (request.estado() != null) {</span>
+<span class="fc" id="L63">            unidad.setEstado(request.estado());</span>
         }
-<span class="nc" id="L65">        return aResponse(unidadRepository.save(unidad));</span>
+<span class="fc" id="L65">        return aResponse(unidadRepository.save(unidad));</span>
     }
 
     public void eliminar(Integer idUnidad) {
-<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (!unidadRepository.existsById(idUnidad)) {</span>
-<span class="nc" id="L70">            throw new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + idUnidad);</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (!unidadRepository.existsById(idUnidad)) {</span>
+<span class="fc" id="L70">            throw new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + idUnidad);</span>
         }
-<span class="nc" id="L72">        unidadRepository.deleteById(idUnidad);</span>
-<span class="nc" id="L73">    }</span>
+<span class="fc" id="L72">        unidadRepository.deleteById(idUnidad);</span>
+<span class="fc" id="L73">    }</span>
 
     private void validarUnicidad(String placa, String numeroDisco, Integer idExcluir) {
-<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (idExcluir == null) {</span>
-<span class="nc bnc" id="L77" title="All 2 branches missed.">            if (unidadRepository.existsByPlacaIgnoreCase(placa)) {</span>
-<span class="nc" id="L78">                throw new IllegalArgumentException(&quot;Ya existe una unidad con la placa &quot; + placa);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        if (idExcluir == null) {</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">            if (unidadRepository.existsByPlacaIgnoreCase(placa)) {</span>
+<span class="fc" id="L78">                throw new IllegalArgumentException(&quot;Ya existe una unidad con la placa &quot; + placa);</span>
             }
-<span class="nc bnc" id="L80" title="All 2 branches missed.">            if (unidadRepository.existsByNumeroDiscoIgnoreCase(numeroDisco)) {</span>
-<span class="nc" id="L81">                throw new IllegalArgumentException(&quot;Ya existe una unidad con el disco &quot; + numeroDisco);</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if (unidadRepository.existsByNumeroDiscoIgnoreCase(numeroDisco)) {</span>
+<span class="fc" id="L81">                throw new IllegalArgumentException(&quot;Ya existe una unidad con el disco &quot; + numeroDisco);</span>
             }
-<span class="nc" id="L83">            return;</span>
+<span class="fc" id="L83">            return;</span>
         }
-<span class="nc" id="L85">        Unidad actual = unidadRepository.findById(idExcluir)</span>
-<span class="nc" id="L86">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + idExcluir));</span>
-<span class="nc bnc" id="L87" title="All 2 branches missed.">        boolean cambioPlaca = !actual.getPlaca().equalsIgnoreCase(placa);</span>
-<span class="nc bnc" id="L88" title="All 2 branches missed.">        boolean cambioDisco = !actual.getNumeroDisco().equalsIgnoreCase(numeroDisco);</span>
-<span class="nc bnc" id="L89" title="All 4 branches missed.">        if (cambioPlaca &amp;&amp; unidadRepository.existsByPlacaIgnoreCase(placa)) {</span>
-<span class="nc" id="L90">            throw new IllegalArgumentException(&quot;Ya existe una unidad con la placa &quot; + placa);</span>
+<span class="fc" id="L85">        Unidad actual = unidadRepository.findById(idExcluir)</span>
+<span class="pc" id="L86">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + idExcluir));</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        boolean cambioPlaca = !actual.getPlaca().equalsIgnoreCase(placa);</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        boolean cambioDisco = !actual.getNumeroDisco().equalsIgnoreCase(numeroDisco);</span>
+<span class="fc bfc" id="L89" title="All 4 branches covered.">        if (cambioPlaca &amp;&amp; unidadRepository.existsByPlacaIgnoreCase(placa)) {</span>
+<span class="fc" id="L90">            throw new IllegalArgumentException(&quot;Ya existe una unidad con la placa &quot; + placa);</span>
         }
-<span class="nc bnc" id="L92" title="All 4 branches missed.">        if (cambioDisco &amp;&amp; unidadRepository.existsByNumeroDiscoIgnoreCase(numeroDisco)) {</span>
-<span class="nc" id="L93">            throw new IllegalArgumentException(&quot;Ya existe una unidad con el disco &quot; + numeroDisco);</span>
+<span class="fc bfc" id="L92" title="All 4 branches covered.">        if (cambioDisco &amp;&amp; unidadRepository.existsByNumeroDiscoIgnoreCase(numeroDisco)) {</span>
+<span class="fc" id="L93">            throw new IllegalArgumentException(&quot;Ya existe una unidad con el disco &quot; + numeroDisco);</span>
         }
-<span class="nc" id="L95">    }</span>
+<span class="fc" id="L95">    }</span>
 
     private AbdDtos.UnidadResponse aResponse(Unidad u) {
-<span class="nc" id="L98">        return new AbdDtos.UnidadResponse(u.getIdUnidad(), u.getPlaca(), u.getNumeroDisco(),</span>
-<span class="nc" id="L99">                u.getModelo(), u.getCapacidad(), u.getAnioFabricacion(), u.getEstado());</span>
+<span class="fc" id="L98">        return new AbdDtos.UnidadResponse(u.getIdUnidad(), u.getPlaca(), u.getNumeroDisco(),</span>
+<span class="fc" id="L99">                u.getModelo(), u.getCapacidad(), u.getAnioFabricacion(), u.getEstado());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

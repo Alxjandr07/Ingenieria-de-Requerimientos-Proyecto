@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProgramacionAbdService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">ec.edu.uteq.sgroas.abd.service</a> &gt; <span class="el_source">ProgramacionAbdService.java</span></div><h1>ProgramacionAbdService.java</h1><pre class="source lang-java linenums">package ec.edu.uteq.sgroas.abd.service;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProgramacionAbdService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">ec.edu.uteq.sgroas.abd.service</a> &gt; <span class="el_source">ProgramacionAbdService.java</span></div><h1>ProgramacionAbdService.java</h1><pre class="source lang-java linenums">package ec.edu.uteq.sgroas.abd.service;
 
 import ec.edu.uteq.sgroas.abd.dto.AbdDtos;
 import ec.edu.uteq.sgroas.abd.entity.ConductorAbd;
@@ -31,85 +31,85 @@ public class ProgramacionAbdService {
     @Transactional(readOnly = true)
     public Page&lt;AbdDtos.ProgramacionResponse&gt; listar(String estado, Integer idConductor, Integer idRuta,
                                                      LocalDate fechaDesde, LocalDate fechaHasta, Pageable pageable) {
-<span class="nc bnc" id="L34" title="All 4 branches missed.">        String estadoFiltro = (estado == null || estado.isBlank()) ? null : estado.trim().toLowerCase();</span>
-<span class="nc bnc" id="L35" title="All 4 branches missed.">        Integer conductorFiltro = (idConductor != null &amp;&amp; idConductor &gt; 0) ? idConductor : null;</span>
-<span class="nc bnc" id="L36" title="All 4 branches missed.">        Integer rutaFiltro = (idRuta != null &amp;&amp; idRuta &gt; 0) ? idRuta : null;</span>
-<span class="nc bnc" id="L37" title="All 10 branches missed.">        if (estadoFiltro == null &amp;&amp; conductorFiltro == null &amp;&amp; rutaFiltro == null</span>
+<span class="fc bfc" id="L34" title="All 4 branches covered.">        String estadoFiltro = (estado == null || estado.isBlank()) ? null : estado.trim().toLowerCase();</span>
+<span class="fc bfc" id="L35" title="All 4 branches covered.">        Integer conductorFiltro = (idConductor != null &amp;&amp; idConductor &gt; 0) ? idConductor : null;</span>
+<span class="fc bfc" id="L36" title="All 4 branches covered.">        Integer rutaFiltro = (idRuta != null &amp;&amp; idRuta &gt; 0) ? idRuta : null;</span>
+<span class="pc bpc" id="L37" title="4 of 10 branches missed.">        if (estadoFiltro == null &amp;&amp; conductorFiltro == null &amp;&amp; rutaFiltro == null</span>
                 &amp;&amp; fechaDesde == null &amp;&amp; fechaHasta == null) {
-<span class="nc" id="L39">            return programacionRepository.findAll(pageable).map(this::aResponse);</span>
+<span class="fc" id="L39">            return programacionRepository.findAll(pageable).map(this::aResponse);</span>
         }
-<span class="nc" id="L41">        return programacionRepository.buscarConFiltros(estadoFiltro, conductorFiltro, rutaFiltro,</span>
-<span class="nc" id="L42">                fechaDesde, fechaHasta, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()))</span>
-<span class="nc" id="L43">                .map(this::aResponse);</span>
+<span class="fc" id="L41">        return programacionRepository.buscarConFiltros(estadoFiltro, conductorFiltro, rutaFiltro,</span>
+<span class="fc" id="L42">                fechaDesde, fechaHasta, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()))</span>
+<span class="fc" id="L43">                .map(this::aResponse);</span>
     }
 
     public AbdDtos.ProgramacionResponse crear(AbdDtos.ProgramacionRequest request) {
-<span class="nc" id="L47">        validarHoras(request.horaSalida(), request.horaEstimadaLlegada());</span>
-<span class="nc" id="L48">        RutaAbd ruta = rutaAbdRepository.findById(request.idRuta())</span>
-<span class="nc" id="L49">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Ruta no encontrada: &quot; + request.idRuta()));</span>
-<span class="nc" id="L50">        Unidad unidad = unidadRepository.findById(request.idUnidad())</span>
-<span class="nc" id="L51">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + request.idUnidad()));</span>
-<span class="nc" id="L52">        ConductorAbd conductor = conductorAbdRepository.findById(request.idConductor())</span>
-<span class="nc" id="L53">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Conductor no encontrado: &quot; + request.idConductor()));</span>
-<span class="nc bnc" id="L54" title="All 2 branches missed.">        if (!&quot;Activo&quot;.equalsIgnoreCase(unidad.getEstado())) {</span>
-<span class="nc" id="L55">            throw new IllegalStateException(&quot;La unidad &quot; + unidad.getPlaca() + &quot; no esta activa&quot;);</span>
+<span class="fc" id="L47">        validarHoras(request.horaSalida(), request.horaEstimadaLlegada());</span>
+<span class="fc" id="L48">        RutaAbd ruta = rutaAbdRepository.findById(request.idRuta())</span>
+<span class="fc" id="L49">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Ruta no encontrada: &quot; + request.idRuta()));</span>
+<span class="fc" id="L50">        Unidad unidad = unidadRepository.findById(request.idUnidad())</span>
+<span class="fc" id="L51">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + request.idUnidad()));</span>
+<span class="fc" id="L52">        ConductorAbd conductor = conductorAbdRepository.findById(request.idConductor())</span>
+<span class="fc" id="L53">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Conductor no encontrado: &quot; + request.idConductor()));</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (!&quot;Activo&quot;.equalsIgnoreCase(unidad.getEstado())) {</span>
+<span class="fc" id="L55">            throw new IllegalStateException(&quot;La unidad &quot; + unidad.getPlaca() + &quot; no esta activa&quot;);</span>
         }
-<span class="nc" id="L57">        Programacion programacion = Programacion.builder()</span>
-<span class="nc" id="L58">                .fecha(request.fecha())</span>
-<span class="nc" id="L59">                .horaSalida(request.horaSalida())</span>
-<span class="nc" id="L60">                .horaEstimadaLlegada(request.horaEstimadaLlegada())</span>
-<span class="nc bnc" id="L61" title="All 2 branches missed.">                .estado(request.estado() == null ? &quot;Programado&quot; : request.estado())</span>
-<span class="nc" id="L62">                .ruta(ruta)</span>
-<span class="nc" id="L63">                .unidad(unidad)</span>
-<span class="nc" id="L64">                .conductor(conductor)</span>
-<span class="nc" id="L65">                .build();</span>
-<span class="nc" id="L66">        return aResponse(programacionRepository.save(programacion));</span>
+<span class="fc" id="L57">        Programacion programacion = Programacion.builder()</span>
+<span class="fc" id="L58">                .fecha(request.fecha())</span>
+<span class="fc" id="L59">                .horaSalida(request.horaSalida())</span>
+<span class="fc" id="L60">                .horaEstimadaLlegada(request.horaEstimadaLlegada())</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">                .estado(request.estado() == null ? &quot;Programado&quot; : request.estado())</span>
+<span class="fc" id="L62">                .ruta(ruta)</span>
+<span class="fc" id="L63">                .unidad(unidad)</span>
+<span class="fc" id="L64">                .conductor(conductor)</span>
+<span class="fc" id="L65">                .build();</span>
+<span class="fc" id="L66">        return aResponse(programacionRepository.save(programacion));</span>
     }
 
     public AbdDtos.ProgramacionResponse actualizar(Integer idProgramacion, AbdDtos.ProgramacionRequest request) {
-<span class="nc" id="L70">        Programacion programacion = programacionRepository.findById(idProgramacion)</span>
-<span class="nc" id="L71">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Programacion no encontrada: &quot; + idProgramacion));</span>
-<span class="nc" id="L72">        validarHoras(request.horaSalida(), request.horaEstimadaLlegada());</span>
-<span class="nc" id="L73">        RutaAbd ruta = rutaAbdRepository.findById(request.idRuta())</span>
-<span class="nc" id="L74">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Ruta no encontrada: &quot; + request.idRuta()));</span>
-<span class="nc" id="L75">        Unidad unidad = unidadRepository.findById(request.idUnidad())</span>
-<span class="nc" id="L76">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + request.idUnidad()));</span>
-<span class="nc" id="L77">        ConductorAbd conductor = conductorAbdRepository.findById(request.idConductor())</span>
-<span class="nc" id="L78">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Conductor no encontrado: &quot; + request.idConductor()));</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (!&quot;Activo&quot;.equalsIgnoreCase(unidad.getEstado())) {</span>
-<span class="nc" id="L80">            throw new IllegalStateException(&quot;La unidad &quot; + unidad.getPlaca() + &quot; no esta activa&quot;);</span>
+<span class="fc" id="L70">        Programacion programacion = programacionRepository.findById(idProgramacion)</span>
+<span class="fc" id="L71">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Programacion no encontrada: &quot; + idProgramacion));</span>
+<span class="fc" id="L72">        validarHoras(request.horaSalida(), request.horaEstimadaLlegada());</span>
+<span class="fc" id="L73">        RutaAbd ruta = rutaAbdRepository.findById(request.idRuta())</span>
+<span class="pc" id="L74">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Ruta no encontrada: &quot; + request.idRuta()));</span>
+<span class="fc" id="L75">        Unidad unidad = unidadRepository.findById(request.idUnidad())</span>
+<span class="pc" id="L76">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + request.idUnidad()));</span>
+<span class="fc" id="L77">        ConductorAbd conductor = conductorAbdRepository.findById(request.idConductor())</span>
+<span class="pc" id="L78">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Conductor no encontrado: &quot; + request.idConductor()));</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (!&quot;Activo&quot;.equalsIgnoreCase(unidad.getEstado())) {</span>
+<span class="fc" id="L80">            throw new IllegalStateException(&quot;La unidad &quot; + unidad.getPlaca() + &quot; no esta activa&quot;);</span>
         }
-<span class="nc" id="L82">        programacion.setFecha(request.fecha());</span>
-<span class="nc" id="L83">        programacion.setHoraSalida(request.horaSalida());</span>
-<span class="nc" id="L84">        programacion.setHoraEstimadaLlegada(request.horaEstimadaLlegada());</span>
-<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (request.estado() != null) {</span>
-<span class="nc" id="L86">            programacion.setEstado(request.estado());</span>
+<span class="fc" id="L82">        programacion.setFecha(request.fecha());</span>
+<span class="fc" id="L83">        programacion.setHoraSalida(request.horaSalida());</span>
+<span class="fc" id="L84">        programacion.setHoraEstimadaLlegada(request.horaEstimadaLlegada());</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (request.estado() != null) {</span>
+<span class="fc" id="L86">            programacion.setEstado(request.estado());</span>
         }
-<span class="nc" id="L88">        programacion.setRuta(ruta);</span>
-<span class="nc" id="L89">        programacion.setUnidad(unidad);</span>
-<span class="nc" id="L90">        programacion.setConductor(conductor);</span>
-<span class="nc" id="L91">        return aResponse(programacionRepository.save(programacion));</span>
+<span class="fc" id="L88">        programacion.setRuta(ruta);</span>
+<span class="fc" id="L89">        programacion.setUnidad(unidad);</span>
+<span class="fc" id="L90">        programacion.setConductor(conductor);</span>
+<span class="fc" id="L91">        return aResponse(programacionRepository.save(programacion));</span>
     }
 
     public void eliminar(Integer idProgramacion) {
-<span class="nc bnc" id="L95" title="All 2 branches missed.">        if (!programacionRepository.existsById(idProgramacion)) {</span>
-<span class="nc" id="L96">            throw new IllegalArgumentException(&quot;Programacion no encontrada: &quot; + idProgramacion);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (!programacionRepository.existsById(idProgramacion)) {</span>
+<span class="fc" id="L96">            throw new IllegalArgumentException(&quot;Programacion no encontrada: &quot; + idProgramacion);</span>
         }
-<span class="nc" id="L98">        programacionRepository.deleteById(idProgramacion);</span>
-<span class="nc" id="L99">    }</span>
+<span class="fc" id="L98">        programacionRepository.deleteById(idProgramacion);</span>
+<span class="fc" id="L99">    }</span>
 
     private void validarHoras(java.time.LocalTime salida, java.time.LocalTime llegada) {
-<span class="nc bnc" id="L102" title="All 2 branches missed.">        if (!llegada.isAfter(salida)) {</span>
-<span class="nc" id="L103">            throw new IllegalArgumentException(&quot;La hora de llegada debe ser posterior a la hora de salida&quot;);</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        if (!llegada.isAfter(salida)) {</span>
+<span class="fc" id="L103">            throw new IllegalArgumentException(&quot;La hora de llegada debe ser posterior a la hora de salida&quot;);</span>
         }
-<span class="nc" id="L105">    }</span>
+<span class="fc" id="L105">    }</span>
 
     private AbdDtos.ProgramacionResponse aResponse(Programacion p) {
-<span class="nc" id="L108">        return new AbdDtos.ProgramacionResponse(</span>
-<span class="nc" id="L109">                p.getIdProgramacion(), p.getFecha(), p.getHoraSalida(), p.getHoraEstimadaLlegada(), p.getEstado(),</span>
-<span class="nc" id="L110">                p.getRuta().getIdRuta(), p.getRuta().getTerminalOrigen().getNombre() + &quot; -&gt; &quot; + p.getRuta().getTerminalDestino().getNombre(),</span>
-<span class="nc" id="L111">                p.getUnidad().getIdUnidad(), p.getUnidad().getPlaca(),</span>
-<span class="nc" id="L112">                p.getConductor().getIdConductor(), p.getConductor().getNombres()</span>
+<span class="fc" id="L108">        return new AbdDtos.ProgramacionResponse(</span>
+<span class="fc" id="L109">                p.getIdProgramacion(), p.getFecha(), p.getHoraSalida(), p.getHoraEstimadaLlegada(), p.getEstado(),</span>
+<span class="fc" id="L110">                p.getRuta().getIdRuta(), p.getRuta().getTerminalOrigen().getNombre() + &quot; -&gt; &quot; + p.getRuta().getTerminalDestino().getNombre(),</span>
+<span class="fc" id="L111">                p.getUnidad().getIdUnidad(), p.getUnidad().getPlaca(),</span>
+<span class="fc" id="L112">                p.getConductor().getIdConductor(), p.getConductor().getNombres()</span>
         );
     }
 }

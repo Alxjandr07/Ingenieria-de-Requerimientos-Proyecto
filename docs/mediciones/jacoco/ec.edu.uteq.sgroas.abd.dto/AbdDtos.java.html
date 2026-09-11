@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbdDtos.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">ec.edu.uteq.sgroas.abd.dto</a> &gt; <span class="el_source">AbdDtos.java</span></div><h1>AbdDtos.java</h1><pre class="source lang-java linenums">package ec.edu.uteq.sgroas.abd.dto;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbdDtos.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">ec.edu.uteq.sgroas.abd.dto</a> &gt; <span class="el_source">AbdDtos.java</span></div><h1>AbdDtos.java</h1><pre class="source lang-java linenums">package ec.edu.uteq.sgroas.abd.dto;
 
 import jakarta.validation.constraints.*;
 
@@ -37,7 +37,7 @@ public final class AbdDtos {
 
     // ---------- Rutas (ABD) ----------
 
-<span class="nc" id="L40">    public record RutaAbdRequest(</span>
+<span class="fc" id="L40">    public record RutaAbdRequest(</span>
             @NotNull(message = &quot;El terminal de origen es obligatorio&quot;) Integer idTerminalOrigen,
             @NotNull(message = &quot;El terminal de destino es obligatorio&quot;) Integer idTerminalDestino,
             @NotNull @DecimalMin(value = &quot;0.01&quot;, message = &quot;El precio debe ser mayor a 0&quot;)
@@ -45,14 +45,14 @@ public final class AbdDtos {
     ) {
     }
 
-<span class="nc" id="L48">    public record RutaAbdResponse(Integer idRuta, Integer idTerminalOrigen, String terminalOrigen,</span>
+<span class="fc" id="L48">    public record RutaAbdResponse(Integer idRuta, Integer idTerminalOrigen, String terminalOrigen,</span>
                                   Integer idTerminalDestino, String terminalDestino,
                                   BigDecimal precioPasaje, long totalProgramaciones) {
     }
 
     // ---------- Unidades ----------
 
-<span class="nc" id="L55">    public record UnidadRequest(</span>
+<span class="fc" id="L55">    public record UnidadRequest(</span>
             @NotBlank @Size(max = 15) String placa,
             @NotBlank @Size(max = 10) String numeroDisco,
             @NotBlank @Size(max = 50) String modelo,
@@ -62,13 +62,13 @@ public final class AbdDtos {
     ) {
     }
 
-<span class="nc" id="L65">    public record UnidadResponse(Integer idUnidad, String placa, String numeroDisco, String modelo,</span>
+<span class="fc" id="L65">    public record UnidadResponse(Integer idUnidad, String placa, String numeroDisco, String modelo,</span>
                                  Integer capacidad, Integer anioFabricacion, String estado) {
     }
 
     // ---------- Programaciones ----------
 
-<span class="nc" id="L71">    public record ProgramacionRequest(</span>
+<span class="fc" id="L71">    public record ProgramacionRequest(</span>
             @NotNull LocalDate fecha,
             @NotNull LocalTime horaSalida,
             @NotNull LocalTime horaEstimadaLlegada,
@@ -79,7 +79,7 @@ public final class AbdDtos {
     ) {
     }
 
-<span class="nc" id="L82">    public record ProgramacionResponse(Integer idProgramacion, LocalDate fecha, LocalTime horaSalida,</span>
+<span class="fc" id="L82">    public record ProgramacionResponse(Integer idProgramacion, LocalDate fecha, LocalTime horaSalida,</span>
                                        LocalTime horaEstimadaLlegada, String estado,
                                        Integer idRuta, String rutaDescripcion,
                                        Integer idUnidad, String unidadPlaca,
@@ -88,7 +88,7 @@ public final class AbdDtos {
 
     // ---------- Incidentes (ABD) ----------
 
-<span class="nc" id="L91">    public record IncidenteAbdRequest(</span>
+<span class="fc" id="L91">    public record IncidenteAbdRequest(</span>
             @NotBlank @Size(max = 50) String tipo,
             @NotBlank String descripcion,
             @NotBlank @Pattern(regexp = &quot;BAJO|MEDIO|ALTO&quot;, message = &quot;Nivel sugerido debe ser BAJO, MEDIO o ALTO&quot;) String nivelSugerido,
@@ -98,12 +98,12 @@ public final class AbdDtos {
     ) {
     }
 
-<span class="nc" id="L101">    public record IncidenteAbdResponse(Integer idIncidente, String tipo, String descripcion,</span>
+<span class="fc" id="L101">    public record IncidenteAbdResponse(Integer idIncidente, String tipo, String descripcion,</span>
                                        String nivelSugerido, String fechaIncidente, String evidencia,
                                        String estado, Integer idUnidad, String unidadPlaca) {
     }
 
-<span class="nc" id="L106">    public record AlertaResponse(Integer idAlerta, String nivelRiesgo, String descripcion,</span>
+<span class="fc" id="L106">    public record AlertaResponse(Integer idAlerta, String nivelRiesgo, String descripcion,</span>
                                  String fecha, Integer idIncidente, String incidenteTipo) {
     }
 

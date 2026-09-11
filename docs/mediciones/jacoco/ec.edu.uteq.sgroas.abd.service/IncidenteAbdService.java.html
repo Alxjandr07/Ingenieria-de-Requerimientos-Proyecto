@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IncidenteAbdService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">ec.edu.uteq.sgroas.abd.service</a> &gt; <span class="el_source">IncidenteAbdService.java</span></div><h1>IncidenteAbdService.java</h1><pre class="source lang-java linenums">package ec.edu.uteq.sgroas.abd.service;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IncidenteAbdService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">ec.edu.uteq.sgroas.abd.service</a> &gt; <span class="el_source">IncidenteAbdService.java</span></div><h1>IncidenteAbdService.java</h1><pre class="source lang-java linenums">package ec.edu.uteq.sgroas.abd.service;
 
 import ec.edu.uteq.sgroas.abd.dto.AbdDtos;
 import ec.edu.uteq.sgroas.abd.entity.Alerta;
@@ -25,85 +25,85 @@ public class IncidenteAbdService {
 
     @Transactional(readOnly = true)
     public Page&lt;AbdDtos.IncidenteAbdResponse&gt; listar(String estado, String nivel, String search, Pageable pageable) {
-<span class="nc bnc" id="L28" title="All 4 branches missed.">        String estadoFiltro = (estado == null || estado.isBlank()) ? null : estado.trim().toLowerCase();</span>
-<span class="nc bnc" id="L29" title="All 4 branches missed.">        String nivelFiltro = (nivel == null || nivel.isBlank()) ? null : nivel.trim().toLowerCase();</span>
-<span class="nc bnc" id="L30" title="All 4 branches missed.">        String searchFiltro = (search == null || search.isBlank()) ? null : search.trim().toLowerCase();</span>
-<span class="nc bnc" id="L31" title="All 6 branches missed.">        if (estadoFiltro == null &amp;&amp; nivelFiltro == null &amp;&amp; searchFiltro == null) {</span>
-<span class="nc" id="L32">            return incidenteRepository.findAll(pageable).map(this::aResponse);</span>
+<span class="pc bpc" id="L28" title="1 of 4 branches missed.">        String estadoFiltro = (estado == null || estado.isBlank()) ? null : estado.trim().toLowerCase();</span>
+<span class="fc bfc" id="L29" title="All 4 branches covered.">        String nivelFiltro = (nivel == null || nivel.isBlank()) ? null : nivel.trim().toLowerCase();</span>
+<span class="pc bpc" id="L30" title="1 of 4 branches missed.">        String searchFiltro = (search == null || search.isBlank()) ? null : search.trim().toLowerCase();</span>
+<span class="pc bpc" id="L31" title="1 of 6 branches missed.">        if (estadoFiltro == null &amp;&amp; nivelFiltro == null &amp;&amp; searchFiltro == null) {</span>
+<span class="fc" id="L32">            return incidenteRepository.findAll(pageable).map(this::aResponse);</span>
         }
-<span class="nc bnc" id="L34" title="All 2 branches missed.">        if (searchFiltro != null) {</span>
-<span class="nc" id="L35">            return incidenteRepository</span>
-<span class="nc" id="L36">                    .buscarConFiltros(estadoFiltro, nivelFiltro, searchFiltro,</span>
-<span class="nc" id="L37">                            PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()))</span>
-<span class="nc" id="L38">                    .map(this::aResponse);</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (searchFiltro != null) {</span>
+<span class="fc" id="L35">            return incidenteRepository</span>
+<span class="fc" id="L36">                    .buscarConFiltros(estadoFiltro, nivelFiltro, searchFiltro,</span>
+<span class="fc" id="L37">                            PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()))</span>
+<span class="fc" id="L38">                    .map(this::aResponse);</span>
         }
         Page&lt;IncidenteAbd&gt; page;
-<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (estadoFiltro != null) {</span>
-<span class="nc" id="L42">            page = incidenteRepository.findByEstadoIgnoreCase(estadoFiltro, pageable);</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (estadoFiltro != null) {</span>
+<span class="fc" id="L42">            page = incidenteRepository.findByEstadoIgnoreCase(estadoFiltro, pageable);</span>
         } else {
-<span class="nc" id="L44">            page = incidenteRepository.findByNivelSugeridoIgnoreCase(nivelFiltro, pageable);</span>
+<span class="fc" id="L44">            page = incidenteRepository.findByNivelSugeridoIgnoreCase(nivelFiltro, pageable);</span>
         }
-<span class="nc" id="L46">        return page.map(this::aResponse);</span>
+<span class="fc" id="L46">        return page.map(this::aResponse);</span>
     }
 
     public AbdDtos.IncidenteAbdResponse crear(AbdDtos.IncidenteAbdRequest request) {
-<span class="nc" id="L50">        Unidad unidad = unidadRepository.findById(request.idUnidad())</span>
-<span class="nc" id="L51">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + request.idUnidad()));</span>
-<span class="nc" id="L52">        IncidenteAbd incidente = IncidenteAbd.builder()</span>
-<span class="nc" id="L53">                .tipo(request.tipo())</span>
-<span class="nc" id="L54">                .descripcion(request.descripcion())</span>
-<span class="nc" id="L55">                .nivelSugerido(request.nivelSugerido())</span>
-<span class="nc" id="L56">                .evidencia(request.evidencia())</span>
-<span class="nc bnc" id="L57" title="All 2 branches missed.">                .estado(request.estado() == null ? &quot;Reportado&quot; : request.estado())</span>
-<span class="nc" id="L58">                .unidad(unidad)</span>
-<span class="nc" id="L59">                .build();</span>
-<span class="nc" id="L60">        incidente = incidenteRepository.save(incidente);</span>
+<span class="fc" id="L50">        Unidad unidad = unidadRepository.findById(request.idUnidad())</span>
+<span class="fc" id="L51">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + request.idUnidad()));</span>
+<span class="fc" id="L52">        IncidenteAbd incidente = IncidenteAbd.builder()</span>
+<span class="fc" id="L53">                .tipo(request.tipo())</span>
+<span class="fc" id="L54">                .descripcion(request.descripcion())</span>
+<span class="fc" id="L55">                .nivelSugerido(request.nivelSugerido())</span>
+<span class="fc" id="L56">                .evidencia(request.evidencia())</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">                .estado(request.estado() == null ? &quot;Reportado&quot; : request.estado())</span>
+<span class="fc" id="L58">                .unidad(unidad)</span>
+<span class="fc" id="L59">                .build();</span>
+<span class="fc" id="L60">        incidente = incidenteRepository.save(incidente);</span>
 
-<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (&quot;ALTO&quot;.equalsIgnoreCase(incidente.getNivelSugerido())) {</span>
-<span class="nc" id="L63">            generarAlerta(incidente);</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (&quot;ALTO&quot;.equalsIgnoreCase(incidente.getNivelSugerido())) {</span>
+<span class="fc" id="L63">            generarAlerta(incidente);</span>
         }
-<span class="nc" id="L65">        return aResponse(incidente);</span>
+<span class="fc" id="L65">        return aResponse(incidente);</span>
     }
 
     public AbdDtos.IncidenteAbdResponse actualizar(Integer idIncidente, AbdDtos.IncidenteAbdRequest request) {
-<span class="nc" id="L69">        IncidenteAbd incidente = incidenteRepository.findById(idIncidente)</span>
-<span class="nc" id="L70">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Incidente no encontrado: &quot; + idIncidente));</span>
-<span class="nc" id="L71">        Unidad unidad = unidadRepository.findById(request.idUnidad())</span>
-<span class="nc" id="L72">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + request.idUnidad()));</span>
-<span class="nc" id="L73">        incidente.setTipo(request.tipo());</span>
-<span class="nc" id="L74">        incidente.setDescripcion(request.descripcion());</span>
-<span class="nc" id="L75">        incidente.setNivelSugerido(request.nivelSugerido());</span>
-<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (request.evidencia() != null) {</span>
-<span class="nc" id="L77">            incidente.setEvidencia(request.evidencia());</span>
+<span class="fc" id="L69">        IncidenteAbd incidente = incidenteRepository.findById(idIncidente)</span>
+<span class="fc" id="L70">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Incidente no encontrado: &quot; + idIncidente));</span>
+<span class="fc" id="L71">        Unidad unidad = unidadRepository.findById(request.idUnidad())</span>
+<span class="fc" id="L72">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Unidad no encontrada: &quot; + request.idUnidad()));</span>
+<span class="fc" id="L73">        incidente.setTipo(request.tipo());</span>
+<span class="fc" id="L74">        incidente.setDescripcion(request.descripcion());</span>
+<span class="fc" id="L75">        incidente.setNivelSugerido(request.nivelSugerido());</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        if (request.evidencia() != null) {</span>
+<span class="fc" id="L77">            incidente.setEvidencia(request.evidencia());</span>
         }
-<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (request.estado() != null) {</span>
-<span class="nc" id="L80">            incidente.setEstado(request.estado());</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (request.estado() != null) {</span>
+<span class="fc" id="L80">            incidente.setEstado(request.estado());</span>
         }
-<span class="nc" id="L82">        incidente.setUnidad(unidad);</span>
-<span class="nc" id="L83">        return aResponse(incidenteRepository.save(incidente));</span>
+<span class="fc" id="L82">        incidente.setUnidad(unidad);</span>
+<span class="fc" id="L83">        return aResponse(incidenteRepository.save(incidente));</span>
     }
 
     public void eliminar(Integer idIncidente) {
-<span class="nc bnc" id="L87" title="All 2 branches missed.">        if (!incidenteRepository.existsById(idIncidente)) {</span>
-<span class="nc" id="L88">            throw new IllegalArgumentException(&quot;Incidente no encontrado: &quot; + idIncidente);</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (!incidenteRepository.existsById(idIncidente)) {</span>
+<span class="fc" id="L88">            throw new IllegalArgumentException(&quot;Incidente no encontrado: &quot; + idIncidente);</span>
         }
-<span class="nc" id="L90">        incidenteRepository.deleteById(idIncidente);</span>
-<span class="nc" id="L91">    }</span>
+<span class="fc" id="L90">        incidenteRepository.deleteById(idIncidente);</span>
+<span class="fc" id="L91">    }</span>
 
     private void generarAlerta(IncidenteAbd incidente) {
-<span class="nc" id="L94">        Alerta alerta = Alerta.builder()</span>
-<span class="nc" id="L95">                .nivelRiesgo(&quot;ALTO&quot;)</span>
-<span class="nc" id="L96">                .descripcion(incidente.getDescripcion())</span>
-<span class="nc" id="L97">                .incidente(incidente)</span>
-<span class="nc" id="L98">                .build();</span>
-<span class="nc" id="L99">        alertaRepository.save(alerta);</span>
-<span class="nc" id="L100">    }</span>
+<span class="fc" id="L94">        Alerta alerta = Alerta.builder()</span>
+<span class="fc" id="L95">                .nivelRiesgo(&quot;ALTO&quot;)</span>
+<span class="fc" id="L96">                .descripcion(incidente.getDescripcion())</span>
+<span class="fc" id="L97">                .incidente(incidente)</span>
+<span class="fc" id="L98">                .build();</span>
+<span class="fc" id="L99">        alertaRepository.save(alerta);</span>
+<span class="fc" id="L100">    }</span>
 
     private AbdDtos.IncidenteAbdResponse aResponse(IncidenteAbd i) {
-<span class="nc" id="L103">        return new AbdDtos.IncidenteAbdResponse(</span>
-<span class="nc" id="L104">                i.getIdIncidente(), i.getTipo(), i.getDescripcion(),</span>
-<span class="nc" id="L105">                i.getNivelSugerido(), i.getFechaIncidente().toString(), i.getEvidencia(),</span>
-<span class="nc" id="L106">                i.getEstado(), i.getUnidad().getIdUnidad(), i.getUnidad().getPlaca()</span>
+<span class="fc" id="L103">        return new AbdDtos.IncidenteAbdResponse(</span>
+<span class="fc" id="L104">                i.getIdIncidente(), i.getTipo(), i.getDescripcion(),</span>
+<span class="fc" id="L105">                i.getNivelSugerido(), i.getFechaIncidente().toString(), i.getEvidencia(),</span>
+<span class="fc" id="L106">                i.getEstado(), i.getUnidad().getIdUnidad(), i.getUnidad().getPlaca()</span>
         );
     }
 }
