@@ -41,10 +41,16 @@ make bench
 # Auditoría de seguridad
 make audit
 
+# Artefactos docs (versions + figuras k6)
+make docs
+
 # Compilar el informe (genera docs/informe-final/main.pdf, 95 páginas)
 make pdf
 
-# Limpiar
+# Pipeline completo end-to-end (up, test, bench K1-K3, audit, jacoco, docs, pdf)
+make all
+
+# Detener (no se ejecuta dentro de make all, correr manual)
 make down
 ```
 
@@ -53,7 +59,7 @@ Sistema disponible en `https://sgroas-backend.onrender.com` (Render Free, datos 
 ## Compilación del informe técnico
 
 El informe se compila desde el directorio `docs/informe-final/` (95 páginas),
-con `pdflatex` + `biber` (tres pasadas de `pdflatex` y una de `biber`):
+con `pdflatex` + `biber` (4 invocaciones: tres pasadas de `pdflatex` y una de `biber`):
 
 ```bash
 cd docs/informe-final

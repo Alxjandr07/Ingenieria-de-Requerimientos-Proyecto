@@ -1,4 +1,4 @@
-.PHONY: up down test bench audit jacoco versions docs pdf all clean
+.PHONY: up down test bench bench-render audit jacoco versions docs pdf all clean
 
 PYTHON ?= $(shell command -v python3 2>/dev/null || command -v python 2>/dev/null)
 
@@ -8,7 +8,8 @@ PYTHON ?= $(shell command -v python3 2>/dev/null || command -v python 2>/dev/nul
 # Uso: make up    -> levantar el sistema completo
 #      make down  -> detener contenedores
 #      make test  -> ejecutar pruebas
-#      make bench -> ejecutar benchmarks k6
+#      make bench -> benchmarks k6 locales K1-K3 (serie local, n=3)
+#      make bench-render -> benchmarks k6 Render K4-K8 (serie publica, n=5, requiere JWT)
 #      make audit -> auditoria SQL estatico + trazabilidad
 #      make jacoco-> regenerar reporte de cobertura
 #      make versions -> generar docs/entorno/versions.txt
@@ -32,11 +33,18 @@ test:
 	@echo "Reporte JaCoCo generado en docs/mediciones/jacoco/"
 
 bench:
-	@echo "Ejecutando benchmarks k6 (3 corridas) contra el stack local (make up)..."
+	@echo "Ejecutando benchmarks k6 locales K1-K3 (3 corridas) contra el stack local (make up)..."
 	k6 run -e BASE_URL=http://localhost:8080 k6/script.js --summary-export docs/mediciones/perf/k01-run1.json
 	k6 run -e BASE_URL=http://localhost:8080 k6/script.js --summary-export docs/mediciones/perf/k02-run2.json
 	k6 run -e BASE_URL=http://localhost:8080 k6/script.js --summary-export docs/mediciones/perf/k03-run3.json
 	@echo "Benchmarks completos. Resultados en docs/mediciones/perf/"
+	@echo "Serie Render K4-K8 (5 corridas calientes + 5 frias) ya archivada; ver 'make bench-render'."
+
+bench-render:
+	@echo "Serie Render K4-K8 contra https://sgroas-backend.onrender.com (requiere JWT, 30s entre corridas)..."
+	@echo "Ejemplo (no se ejecuta en 'make all' para no saturar Render Free):"
+	@echo "k6 run -e BASE_URL=https://sgroas-backend.onrender.com k6/script.js --summary-export docs/mediciones/perf/k04-run1.json"
+	@echo "Ver docs/mediciones/perf/ANALISIS-k6.md (n=5) y RENDER-REPORT.md."
 
 audit:
 	@echo "Auditoria: SQL dinamico prohibido..."
@@ -63,9 +71,10 @@ pdf:
 	@echo "PDF generado en docs/informe-final/main.pdf (95 paginas)."
 
 docs: versions
+	$(PYTHON) scripts/gen-figuras.py
 	@echo "Artefactos de documentacion generados."
 
-all: up test bench audit jacoco versions pdf
+all: up test bench audit jacoco docs pdf
 	@echo "=========================================="
 	@echo "PIPELINE COMPLETO (make all) FINALIZADO OK"
 	@echo "=========================================="
