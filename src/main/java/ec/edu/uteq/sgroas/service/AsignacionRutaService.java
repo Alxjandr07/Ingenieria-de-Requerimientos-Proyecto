@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -27,18 +28,22 @@ public class AsignacionRutaService {
     private final VehiculoRepository vehiculoRepository;
     private final RutaRepository rutaRepository;
 
+    @Transactional(readOnly = true)
     public Page<AsignacionRutaResponse> listar(Pageable pageable) {
-        List<AsignacionRutaResponse> contenido = listarCacheable(pageable);
-        return new PageImpl<>(contenido, pageable, contenido.size());
+        Page<AsignacionRuta> page = asignacionRutaRepository.findByActivoTrue(pageable);
+        List<AsignacionRutaResponse> contenido = page.map(this::mapearAResponse).getContent();
+        return new PageImpl<>(contenido, pageable, page.getTotalElements());
     }
 
     @Cacheable(value = "asignaciones", key = "#pageable.pageNumber + '-' + #pageable.pageSize")
+    @Transactional(readOnly = true)
     public List<AsignacionRutaResponse> listarCacheable(Pageable pageable) {
         return asignacionRutaRepository.findByActivoTrue(pageable)
                 .map(this::mapearAResponse)
                 .getContent();
     }
 
+    @Transactional(readOnly = true)
     public AsignacionRutaResponse buscarPorId(Long id) {
         AsignacionRuta asignacion = obtenerAsignacionActiva(id);
         return mapearAResponse(asignacion);
