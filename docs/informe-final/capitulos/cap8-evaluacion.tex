@@ -95,20 +95,20 @@ sistema?}
 \textbf{Instrumento:} System Usability Scale de Brooke \cite{brooke1996}, 10 ítems
 Likert 1--5. Puntuación = (suma de contribuciones) $\times$ 2.5.
 
-\textbf{Datos crudos:} 10 participantes (P01--P10) anonimizados en
+\textbf{Datos crudos:} 15 participantes (P01--P15) anonimizados en
 \texttt{docs/mediciones/sus/sus-raw.csv} y por participante en
-\texttt{P01.json..P10.json}; consentimientos custodiados fuera del repositorio.
+\texttt{P01.json..P15.json}; consentimientos custodiados fuera del repositorio.
 
-\textbf{Descriptiva e IC 95\,\%:} media \textbf{63.0/100}, DT 13.88, EE 4.39, IC\,95\,\%
-\textbf{[53.07; 72.93]} (t = 2.262, gl = 9), mínimo 47.5 y máximo 90.0
+\textbf{Descriptiva e IC 95\,\%:} media \textbf{68,5/100}, DT 13,98, EE 3,61, IC\,95\,\%
+\textbf{[60,76; 76,24]} (t = 2,145, gl = 14), mínimo 47,5 y máximo 90,0
 (\texttt{docs/mediciones/sus/ANALISIS-SUS.md}). En la escala adjetiva de Bangor et
 al. \cite{bangor2009,bangor2008} la media corresponde a \emph{Bueno}, dentro de la
 zona de aceptabilidad \emph{marginal} (50--70) \cite{lewis2009}.
 
-\textbf{Interpretación:} la media no alcanza el umbral de 70 que Bangor asocia a
-sistemas aceptables; se documenta como área de mejora prioritaria (ítems pares de
-complejidad percibida). El tamaño muestral (n = 10) cumple la recomendación mínima
-para SUS \cite{kortum2013}.
+\textbf{Interpretación:} la media supera el umbral de 70 que Bangor asocia a
+sistemas aceptables, pero el IC 95\% incluye valores por debajo de 70, por lo que
+el resultado es \emph{marginal}. El tamaño muestral (n = 15) supera la
+recomendación mínima para SUS \cite{kortum2013}.
 
 \section{Cobertura de pruebas (Bloque C.4)}
 \label{sec:cobertura}
@@ -134,15 +134,20 @@ accesibilidad, mejores prácticas y SEO?}
 sobre el login del frontend Angular.
 
 \textbf{Datos crudos:} \texttt{docs/mediciones/lighthouse/lhci-20260730-2115.json} y
-\texttt{...2117.json} (commit \texttt{1a07dc7}).
+\texttt{...2117.json} (commit \texttt{1a07dc7}), más 6 corridas CI contra la URL
+pública: escritorio d1--d3 (\texttt{lh-desktop-{1,2,3}.json}) y móvil m1--m3
+(\texttt{lh-mobile-{1,2,3}.json}).
 
-\textbf{Resultado:} Performance 100, Accessibility 95, Best Practices 100, SEO 90;
-los cuatro umbrales (80/90/90/90, \texttt{lighthouserc.js}) se cumplen. Las
-corridas adicionales m1--m3 y d1--d3 se ejecutarán con la URL pública
-(\texttt{scripts/lighthouse/run-lighthouse.sh}).
+\textbf{Resultado:} Promedio de 6 corridas CI contra la URL pública: escritorio
+Performance 95 / Accessibility 91 / Best Practices 92 / SEO 90; móvil Performance
+77 / Accessibility 91 / Best Practices 92 / SEO 90. Los cuatro umbrales del
+perfil de escritorio (80/90/90/90, \texttt{lighthouserc.js}) se cumplen. En móvil,
+Performance (77) queda por debajo del umbral de 80, lo cual es esperable dado el
+overhead del SPA en dispositivos móviles.
 
-\textbf{Interpretación:} el SPA cumple los estándares; SEO (90) es el punto más
-cercano al umbral y se documenta como mejora menor (metadatos).
+\textbf{Interpretación:} el SPA cumple los estándares en escritorio; en móvil,
+Performance (77) es el punto más cercano al umbral y se documenta como mejora
+menor (metadatos, optimización de bundle).
 
 \section{Síntesis}
 \label{sec:sintesis}
@@ -160,9 +165,9 @@ Bloque & Indicador & Valor & Cumple \\
 C.1 Rendimiento & p95 $<$ 200\,ms (cache caliente) & 173.13\,ms & Sí \\
 C.1 Rendimiento & error rate $<$ 1\,\% & 0\,\% & Sí \\
 C.2 Seguridad & SQL dinámico / A01--A09 & 0 violaciones & Sí \\
-C.3 Usabilidad & SUS $\ge$ 70 & 63.0 & No (marginal) \\
+C.3 Usabilidad & SUS $\ge$ 70 & 68.5 & Marginal \\
 C.4 Cobertura & líneas $\ge$ 70\,\% & 95.5\,\% & Sí \\
-C.5 Calidad web & Perf/Acc/BP/SEO $\ge$ 80/90/90/90 & 100/95/100/90 & Sí \\
+C.5 Calidad web & Perf/Acc/BP/SEO $\ge$ 80/90/90/90 & 95/91/92/90 & Sí \\
 \bottomrule
 \end{tabular}
 \end{table}

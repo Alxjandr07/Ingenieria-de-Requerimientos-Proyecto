@@ -1,0 +1,9 @@
+% =====================================================================
+% Wrapper del informe final — Compilación desde docs/
+% Uso: cd docs && pdflatex informe-final && biber informe-final
+%       && pdflatex informe-final && pdflatex informe-final
+% =====================================================================
+\makeatletter
+\def\input@path{{informe-final/}}
+\makeatother
+\input{main}

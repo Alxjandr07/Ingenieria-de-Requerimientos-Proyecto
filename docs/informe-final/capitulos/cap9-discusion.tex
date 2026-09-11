@@ -22,17 +22,18 @@ limitación de tasa. Los riesgos identificados en la literatura de microservicio
 \cite{soldani2018,waseem2021,taibi2018} se abordan con \texttt{@Procedure} y
 \texttt{@Query} constantes.
 
-\textbf{RQ3 (usabilidad).} La media SUS de 63.0 (IC\,95\,\% [53.07; 72.93])
+\textbf{RQ3 (usabilidad).} La media SUS de 68,5 (IC\,95\,\% [60,76; 76,24], n=15)
 clasifica al sistema como \emph{Bueno} en la escala adjetiva, dentro de la zona
 marginal \cite{bangor2009,bangor2008}. Comparado con productos de software
-generalistas medidos en \cite{kortum2013}, el valor es menor que el promedio de
-aplicaciones web ($\approx$67--74), lo que coincide con que el sistema no alcanza el
-umbral de 70 y exige iterar sobre la complejidad percibida.
+generalistas medidos en \cite{kortum2013}, el valor se acerca al rango típico de
+aplicaciones web ($\approx$67--74); el IC 95\% incluye valores por debajo de 70, por
+lo que se recomienda iterar sobre la complejidad percibida de los ítems pares.
 
 \textbf{RQ4 (reproducibilidad y calidad web).} El proyecto es reproducible: todos
 los artefactos (datos crudos, scripts, figuras) están versionados y el protocolo
-FAIR se verifica en \texttt{docs/checklists/fair.md}. Lighthouse reporta 100/95/100/90,
-alcanzando los cuatro umbrales, en línea con SPA modernos bien configurados.
+FAIR se verifica en \texttt{docs/checklists/fair.md}. Lighthouse reporta escritorio
+95/91/92/90, alcanzando los cuatro umbrales; en móvil 77/91/92/90, con Performance
+por debajo del umbral de 80, en línea con SPA modernos bien configurados.
 
 \section{Comparación con trabajos relacionados}
 
@@ -44,7 +45,7 @@ alcanzando los cuatro umbrales, en línea con SPA modernos bien configurados.
   y SpotBugs) complementa la evidencia dinámica OWASP de \cite{owasp2021},
   emulando prácticas de revisión automatizada propuestas en la literatura de
   calidad de microservicios \cite{taibi2018}.
-- \emph{Usabilidad:} el uso de SUS con 10 participantes y la escala adjetiva sigue
+- \emph{Usabilidad:} el uso de SUS con 15 participantes y la escala adjetiva sigue
   el protocolo estándar \cite{brooke1996,bangor2009}; la discusión sobre tamaño
   muestral mínimo y factor estructural de la escala se respalda en \cite{lewis2009}.
 - \emph{Cobertura:} se reconocen las limitaciones de la cobertura como predictor

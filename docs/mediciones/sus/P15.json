@@ -1,0 +1,21 @@
+{
+  "codigo": "P15",
+  "edad": 20,
+  "sexo": "Femenino",
+  "experiencia_web": "Media",
+  "dispositivo": "Computadora",
+  "consentimiento": "Si",
+  "respuestas": [
+    3,
+    2,
+    3,
+    1,
+    4,
+    2,
+    4,
+    1,
+    4,
+    1
+  ],
+  "sus_score": 77.5
+}

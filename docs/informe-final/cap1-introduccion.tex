@@ -74,9 +74,9 @@ Las contribuciones esperadas del proyecto SGROAS son:
 \begin{enumerate}
   \item \textbf{Documento SRS v1.0.0:} Especificación completa de requisitos conforme a ISO/IEC/IEEE 29148:2018, con verificación INCOSE C1--C15, 50 requisitos (44 funcionales + 6 no funcionales) y trazabilidad completa.
 
-  \item \textbf{Sistema funcional:} Aplicación web desplegable con Docker Compose, que integra autenticación JWT, CRUD completo para 6 entidades, 7 procedimientos almacenados y 2 funciones SQL.
+  \item \textbf{Sistema funcional:} Aplicación web desplegable con Docker Compose, que integra autenticación JWT, CRUD completo para 6 entidades y ocho procedimientos almacenados/funciones SQL.
 
-  \item \textbf{Evidencia de calidad:} 150 pruebas JUnit 5 con JaCoCo núcleo 85,5\% líneas / 54,3\% ramas (67,5\% líneas full), escaneo OWASP ZAP baseline y pruebas de carga k6 (3 corridas, media 23,01\,ms, p95 máx 173,13\,ms).
+  \item \textbf{Evidencia de calidad:} 222 pruebas JUnit 5 con JaCoCo núcleo 87,5\% instrucciones / 87,9\% ramas (95,5\% líneas, paquete \texttt{abd} excluido), análisis estático SpotBugs 4.8.6 (0 hallazgos), escaneo OWASP ZAP baseline (0 High / 2 Med) y pruebas de carga k6 (3 corridas, media 23,01\,ms, p95 máx 173,13\,ms).
 
   \item \textbf{Validación de requisitos:} Checklist INCOSE verificando las 15 características de calidad para cada requisito del SRS, con evidencia de elicitación documentada.
 
@@ -93,11 +93,23 @@ El presente informe se organiza en los siguientes capítulos:
 
   \item[Capítulo 2 — Marco Teórico:] Fundamentos teóricos y tecnológicos que sustentan el desarrollo del sistema: ISO/IEC/IEEE 29148:2018, INCOSE Guide, modelo C4, JWT, OWASP Top 10, Spring Boot, Angular, PostgreSQL y Redis.
 
-  \item[Capítulo 3 — Diseño y Arquitectura:] Arquitectura de tres capas, diagramas C4 (niveles 1--3), decisiones de diseño (ADR), diseño de base de datos y diseño de la API REST.
+  \item[Capítulo 3 — Trabajos Relacionados:] Revisión sistemática de literatura sobre sistemas de gestión de transporte y arquitecturas web, siguiendo PRISMA 2020.
 
   \item[Capítulo 4 — Ingeniería de Requisitos:] Proceso de elicitación, stakeholders, historias de usuario, casos de uso, matriz MoSCoW, matriz de trazabilidad y conformidad INCOSE.
 
-  \item[Capítulo 5 — Verificación y Validación:] Pruebas unitarias e de integración (JaCoCo), pruebas de carga (k6), escaneo de seguridad (OWASP ZAP), prueba de usabilidad (SUS) y observaciones de auditoría.
+  \item[Capítulo 5 — Materiales y Métodos:] Protocolo experimental, participantes SUS, métricas de evaluación (k6, JaCoCo, Lighthouse, ZAP, SUS) y amenazas a la validez.
 
-  \item[Capítulo 6 — Conclusiones:] Resumen de resultados, respuesta a las preguntas de investigación, limitaciones y trabajo futuro.
+  \item[Capítulo 6 — Diseño del Sistema y Arquitectura:] Arquitectura de tres capas, diagramas C4 (niveles 1--3), decisiones de diseño (ADR), diseño de base de datos y diseño de la API REST.
+
+  \item[Capítulo 7 — Implementación:] Detalle de la implementación del backend (Spring Boot, PostgreSQL, Redis) y frontend (Angular), con listados de código representativos.
+
+  \item[Capítulo 8 — Evaluación:] Resultados experimentales de rendimiento (k6), cobertura (JaCoCo), calidad web (Lighthouse), seguridad (ZAP) y usabilidad (SUS).
+
+  \item[Capítulo 9 — Discusión:] Interpretación de resultados, comparación con trabajos relacionados y hallazgos inesperados.
+
+  \item[Capítulo 10 — Amenazas a la Validez:] Análisis de las amenazas internas y externas a la validez del estudio experimental.
+
+  \item[Capítulo 11 — Trabajo Futuro:] Líneas de mejora y extensión del sistema.
+
+  \item[Capítulo 12 — Conclusiones:] Resumen de resultados, respuesta a las preguntas de investigación y limitaciones.
 \end{description}

@@ -61,12 +61,17 @@ public interface ConductorRepository
 
     Page<Conductor> findByActivoTrue(Pageable pageable);
 
-    List<Conductor> findByLicenciaVencimientoBefore(LocalDate fecha);
-
-    @Query("SELECT c FROM Conductor c WHERE " +
-           "LOWER(c.nombre) LIKE LOWER(CONCAT('%', :busqueda, '%'))")
-    Page<Conductor> buscar(@Param("busqueda") String busqueda,
-                           Pageable pageable);
+    @Query("""
+            SELECT c FROM Conductor c
+            WHERE c.activo = true
+              AND (:search IS NULL
+                   OR LOWER(c.nombres) LIKE LOWER(CONCAT('%', :search, '%'))
+                   OR LOWER(c.apellidos) LIKE LOWER(CONCAT('%', :search, '%'))
+                   OR c.cedula LIKE CONCAT('%', :search, '%')
+                   OR LOWER(c.numeroLicencia) LIKE LOWER(CONCAT('%', :search, '%')))
+            """)
+    Page<Conductor> buscarActivos(@Param("search") String search,
+                                  Pageable pageable);
 }
 \end{lstlisting}
 
@@ -97,7 +102,7 @@ public interface IncidenteRepository
         extends JpaRepository<Incidente, Long> {
 
     @Procedure(name = "Incidente.incidentesPorGravedad")
-    List<IncidenteGravedadDTO> incidentesPorGravedad(
+    List<Object[]> incidentesPorGravedad(
             @Param("p_tipo") String tipo);
 }
 \end{lstlisting}
@@ -108,14 +113,25 @@ El cursor REFCURSOR se lee dentro de la misma transacción JDBC, por lo que \tex
 
 Las funciones SQL se invocan con \texttt{SELECT}. El siguiente listado muestra la función \texttt{fn\_total\_programaciones}:
 
-\begin{lstlisting}[language=Java, caption={Invocación de función SQL escalar.}, label={lst:fn-programaciones}]
+\begin{lstlisting}[language=Java, caption={Consultas nativas en ProgramacionRepository.}, label={lst:fn-programaciones}]
 @Repository
 public interface ProgramacionRepository
-        extends JpaRepository<Programacion, Long> {
+        extends JpaRepository<Programacion, Integer> {
 
-    @Query(value = "SELECT fn_total_programaciones(:estado)",
+    @Query(value = "SELECT estado AS clave, COUNT(*) AS total "
+                 + "FROM programacion GROUP BY estado "
+                 + "ORDER BY total DESC",
            nativeQuery = true)
-    Long totalProgramaciones(@Param("estado") String estado);
+    List<ConteoProjection> contarPorEstado();
+
+    @Query(value = """
+            SELECT TO_CHAR(fecha, 'YYYY-MM') AS clave, COUNT(*) AS total
+            FROM programacion
+            WHERE fecha >= CURRENT_DATE - INTERVAL '180 days'
+            GROUP BY TO_CHAR(fecha, 'YYYY-MM')
+            ORDER BY clave
+            """, nativeQuery = true)
+    List<ConteoProjection> contarPorMes();
 }
 \end{lstlisting}
 
